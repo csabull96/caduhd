@@ -41,7 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DroneMovement.cs" />
     <Compile Include="IDrone.cs" />
+    <Compile Include="IDroneMovement.cs" />
+    <Compile Include="IStreamable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tello.cs" />
   </ItemGroup>

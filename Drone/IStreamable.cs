@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace Caduhd.Drone
 {
-    interface IDrone
+    interface IStreamable
     {
-        void Connect();
-        void TakeOff();
-        void SetMovement(IDroneMovement movement);
-        void Land();
-        void Disconnect();
         void StartVideoStream();
         void StopVideoStream();
+        string GetVideoStreamAddress();
     }
 }
