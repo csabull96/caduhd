@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DroneMovement.cs" />
+    <Compile Include="DroneState.cs" />
     <Compile Include="IDrone.cs" />
     <Compile Include="IDroneMovement.cs" />
     <Compile Include="IStreamable.cs" />

@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace Caduhd.Drone
 {
-    class Class1
-    {
-    }
+    public enum DroneState { Grounded, Flying }
 }
