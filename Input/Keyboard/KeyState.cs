@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Caduhd.Drone
+namespace Caduhd.Input.Keyboard
 {
-    class DroneMovement
-    {
-    }
+    public enum KeyState { Down, Up }
 }

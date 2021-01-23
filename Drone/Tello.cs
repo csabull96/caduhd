@@ -10,7 +10,7 @@ namespace Caduhd.Drone
 {
     class Tello : IDrone, IStreamable
     {
-        private IDroneMovement m_droneMovement;
+        private IDroneControllerState m_controllerState;
         public DroneState State { get; set; }
 
 
@@ -53,12 +53,12 @@ namespace Caduhd.Drone
             udpClient.Send(sendbuf, sendbuf.Length, new IPEndPoint(IPAddress.Parse("192.168.10.1"), 8889));
         }
 
-        public void SetMovement(IDroneMovement movement)
+        public void SetMovement(IDroneControllerState controllerState)
         {
             // 1) check the values (-100; 100)
-            m_droneMovement = movement;
+            m_controllerState = controllerState;
             UdpClient udpClient = new UdpClient();
-            byte[] sendbuf = Encoding.ASCII.GetBytes($"rc {m_droneMovement.Horizontal} {m_droneMovement.Longitudinal} {m_droneMovement.Vertical} {m_droneMovement.Yaw}");
+            byte[] sendbuf = Encoding.ASCII.GetBytes($"rc {m_controllerState.Horizontal} {m_controllerState.Longitudinal} {m_controllerState.Vertical} {m_controllerState.Yaw}");
             udpClient.Send(sendbuf, sendbuf.Length, new IPEndPoint(IPAddress.Parse("192.168.10.1"), 8889));
         }
 

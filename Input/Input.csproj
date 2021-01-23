@@ -49,6 +49,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
     <Reference Include="ZedGraph, Version=5.1.7.430, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
       <HintPath>..\packages\ZedGraph.5.1.7\lib\net35-Client\ZedGraph.dll</HintPath>
     </Reference>
@@ -56,7 +57,10 @@
   <ItemGroup>
     <Compile Include="Camera\WebCamera.cs" />
     <Compile Include="Camera\WebCameraEventArgs.cs" />
+    <Compile Include="Keyboard\IKeyboardState.cs" />
     <Compile Include="Keyboard\KeyboardState.cs" />
+    <Compile Include="Keyboard\KeyboardStateChangedEventArgs.cs" />
+    <Compile Include="Keyboard\KeyState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

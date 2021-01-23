@@ -41,10 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DroneMovement.cs" />
+    <Compile Include="DroneControllerState.cs" />
     <Compile Include="DroneState.cs" />
     <Compile Include="IDrone.cs" />
-    <Compile Include="IDroneMovement.cs" />
+    <Compile Include="IDroneControllerState.cs" />
     <Compile Include="IStreamable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tello.cs" />
