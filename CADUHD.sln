@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserInterface", "UserInterface\UserInterface.csproj", "{5612E45B-F910-402D-80AF-1D707FFD944B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneController", "DroneController\DroneController.csproj", "{4F577257-83F2-4FAE-B205-E776E1A397B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controller", "DroneController\Controller.csproj", "{4F577257-83F2-4FAE-B205-E776E1A397B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandDetector", "HandDetector\HandDetector.csproj", "{A623CE8B-853A-447E-8AE1-7F5546713047}"
 EndProject

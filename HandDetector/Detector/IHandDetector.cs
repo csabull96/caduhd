@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Caduhd.HandDetector.Detector
 {
-    interface IHandDetector
+    public interface IHandDetector
     {
         Hands DetectHands(Bitmap frame);
     }

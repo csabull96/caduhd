@@ -10,16 +10,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace Input.Camera
+namespace Caduhd.Input.Camera
 {
-    public class WebCamera
+    public class WebCamera : IWebCamera
     {
         private VideoCapture m_videoCapture;
 
-        public delegate void WebCameraEventHandler(object sender, WebCameraEventArgs args);
         public event WebCameraEventHandler Feed;
 
-        public int FPS { get; set; }
+        public int FPS { get; }
 
         private Timer m_timer;
 

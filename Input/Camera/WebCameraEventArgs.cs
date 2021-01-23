@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Input.Camera
+namespace Caduhd.Input.Camera
 {
     public class WebCameraEventArgs : EventArgs
     {

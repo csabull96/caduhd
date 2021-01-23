@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera\IWebCamera.cs" />
     <Compile Include="Camera\WebCamera.cs" />
     <Compile Include="Camera\WebCameraEventArgs.cs" />
     <Compile Include="Keyboard\IKeyboardState.cs" />

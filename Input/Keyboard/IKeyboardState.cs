@@ -10,7 +10,7 @@ namespace Caduhd.Input.Keyboard
 {
     public delegate void KeyboardStateEventHandler(object sender, KeyboardStateChangedEventArgs args);
 
-    interface IKeyboardState
+    public interface IKeyboardState
     {
         event KeyboardStateEventHandler KeyboardStateChanged;
         void SetKeyState(Key key, KeyState keyState);

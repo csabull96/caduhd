@@ -7,7 +7,7 @@
     <ProjectGuid>{4F577257-83F2-4FAE-B205-E776E1A397B9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Caduhd.DroneController</RootNamespace>
+    <RootNamespace>Caduhd.Controller</RootNamespace>
     <AssemblyName>DroneController</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -41,8 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DroneController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\HandDetector\HandDetector.csproj">
+      <Project>{a623ce8b-853a-447e-8ae1-7f5546713047}</Project>
+      <Name>HandDetector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Input\Input.csproj">
+      <Project>{fab1dc2d-74e6-4161-b1ab-562e5095cc37}</Project>
+      <Name>Input</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
