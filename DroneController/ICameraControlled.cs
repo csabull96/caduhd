@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Caduhd.UserInterface
+namespace Caduhd.Controller
 {
-    class MainViewModel
+    public interface ICameraControlled
     {
+        void HandleInput(Bitmap frame);
     }
 }

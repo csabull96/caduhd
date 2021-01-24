@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Caduhd.Input.Keyboard;
+using Caduhd.UserInterface.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,9 +19,27 @@ namespace Caduhd.UserInterface
 {
     public partial class MainWindow : Window
     {
+        private MainViewModel m_mainViewModel;
+
         public MainWindow()
         {
             InitializeComponent();
+            m_mainViewModel = Resources["MainViewModel"] as MainViewModel;
+        }
+
+        private void Connect(object sender, RoutedEventArgs e)
+        {
+            m_mainViewModel.DroneController.Connect();
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            m_mainViewModel.HandleKeyEvent(e.Key, KeyStatus.Down);
+        }
+
+        private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            m_mainViewModel.HandleKeyEvent(e.Key, KeyStatus.Up);
         }
     }
 }

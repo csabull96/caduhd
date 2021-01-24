@@ -10,7 +10,7 @@ namespace Caduhd.Drone
     {
         void Connect();
         void TakeOff();
-        void SetMovement(IDroneControllerState controllerState);
+        void Move(IDroneMovement controllerState);
         void Land();
         void Disconnect();
         void StartVideoStream();

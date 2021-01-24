@@ -4,9 +4,53 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Caduhd.UserInterface"
+        xmlns:viewModel="clr-namespace:Caduhd.UserInterface.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="MainWindow"
+        Height="450"
+        Width="800"
+        WindowState="Maximized"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        PreviewKeyUp="Window_PreviewKeyUp">
+    <Window.Resources>
+        <viewModel:MainViewModel x:Key="MainViewModel" />
+    </Window.Resources>
+    <Grid DataContext="{StaticResource MainViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0"
+              Grid.Column="0"
+              Grid.ColumnSpan="3"
+              Background="DodgerBlue">
+            <Image Source="{Binding CurrentWebCameraFrame}"
+                   Stretch="UniformToFill" />
+        </Grid>
+        <Grid Grid.Row="0"
+              Grid.Column="1"
+              Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Button Content="connect"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="75"
+                    Click="Connect" />
+            <Image Grid.Row="1"
+                   Grid.Column="0"
+                   Grid.RowSpan="2"
+                   Stretch="UniformToFill"
+                   Source="{Binding CurrentDroneCameraFrame}"/> 
+            <Label Content="{Binding Label}"
+                   HorizontalAlignment="Center"
+                   Grid.Row="3"
+                   VerticalAlignment="Center" />
+        </Grid>
     </Grid>
 </Window>

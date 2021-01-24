@@ -58,10 +58,11 @@
     <Compile Include="Camera\IWebCamera.cs" />
     <Compile Include="Camera\WebCamera.cs" />
     <Compile Include="Camera\WebCameraEventArgs.cs" />
+    <Compile Include="Keyboard\ReadonlyInputKeys.cs" />
     <Compile Include="Keyboard\IKeyboardState.cs" />
-    <Compile Include="Keyboard\KeyboardState.cs" />
-    <Compile Include="Keyboard\KeyboardStateChangedEventArgs.cs" />
-    <Compile Include="Keyboard\KeyState.cs" />
+    <Compile Include="Keyboard\InputKeys.cs" />
+    <Compile Include="Keyboard\KeyStatusChangedEventArgs.cs" />
+    <Compile Include="Keyboard\KeyStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

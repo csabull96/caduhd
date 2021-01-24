@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Caduhd.Input.Keyboard
 {
-    public enum KeyState { Down, Up }
+    public enum KeyStatus { Down, Up }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Caduhd.Drone
 {
-    interface IDroneControllerState
+    public interface IDroneMovement
     {
-        int Horizontal { get; set; }
+        int Lateral { get; set; }
         int Vertical { get; set; }
         int Longitudinal { get; set; }
         int Yaw { get; set; }

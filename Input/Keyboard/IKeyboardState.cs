@@ -8,11 +8,11 @@ using Caduhd.Input.Keyboard;
 
 namespace Caduhd.Input.Keyboard
 {
-    public delegate void KeyboardStateEventHandler(object sender, KeyboardStateChangedEventArgs args);
+    public delegate void KeyStatusChangedEventHandler(object sender, KeyStatusChangedEventArgs args);
 
     public interface IKeyboardState
     {
-        event KeyboardStateEventHandler KeyboardStateChanged;
-        void SetKeyState(Key key, KeyState keyState);
+        event KeyStatusChangedEventHandler KeyStatusChanged;
+        void UpdateKeyState(Key key, KeyStatus keyState);
     }
 }

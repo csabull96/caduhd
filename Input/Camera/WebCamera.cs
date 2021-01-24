@@ -33,7 +33,7 @@ namespace Caduhd.Input.Camera
 
         private void OnElapsed(object sender, ElapsedEventArgs e)
         {
-            Bitmap frame = m_videoCapture.QueryFrame().Bitmap;        
+            Bitmap frame = m_videoCapture.QueryFrame().ToImage<Bgr, byte>().Flip(FlipType.Horizontal).Bitmap;        
             Feed?.Invoke(this, new WebCameraEventArgs(frame));
         }
 
