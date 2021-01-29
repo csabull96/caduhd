@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Caduhd.Drone
+namespace Caduhd.Input.Camera
 {
-    public class DroneVideoEventArgs : EventArgs
+    public class NewWebCameraFrameEventArgs : EventArgs
     {
         public Bitmap Frame { get; private set; }
 
-        public DroneVideoEventArgs(Bitmap frame)
+        public NewWebCameraFrameEventArgs(Bitmap frame)
         {
             Frame = frame;
         }

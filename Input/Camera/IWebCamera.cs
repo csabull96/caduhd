@@ -7,11 +7,12 @@ using System.Timers;
 
 namespace Caduhd.Input.Camera
 {
-    public delegate void WebCameraEventHandler(object sender, WebCameraEventArgs args);
+    public delegate void NewWebCameraFrameEventHandler(object sender, NewWebCameraFrameEventArgs args);
 
     public interface IWebCamera
     {
-        event WebCameraEventHandler Feed;
+        bool IsOn { get; }
+        event NewWebCameraFrameEventHandler NewFrame;
         void TurnOn();
         void TurnOff();
     }

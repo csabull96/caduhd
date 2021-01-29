@@ -6,13 +6,53 @@ using System.Threading.Tasks;
 
 namespace Caduhd.Drone
 {
-    public class DroneMovement : IDroneMovement
+    public class DroneMovement
     {
-        public int Lateral { get; set; } = 0;
-        public int Vertical { get; set; } = 0;
-        public int Longitudinal { get; set; } = 0;
-        public int Yaw { get; set; } = 0;
+        private const int DEFAULT = 0;
+        private const int MIN = -100;
+        private const int MAX = 100;
 
-        public static IDroneMovement Idle => new DroneMovement();
+        private int m_lateral = DEFAULT;
+        public int Lateral
+        {
+            get { return m_lateral; }
+            set { m_lateral = AdjustValueIfWrong(value); }
+        }
+
+        private int m_vertical = DEFAULT;
+        public int Vertical
+        {
+            get { return m_vertical; }
+            set { m_vertical = AdjustValueIfWrong(value); }
+        }
+
+        private int m_longitudinal = DEFAULT;
+        public int Longitudinal
+        {
+            get { return m_longitudinal; }
+            set { m_longitudinal = AdjustValueIfWrong(value); }
+        }
+
+        private int m_yaw = DEFAULT;
+        public int Yaw
+        {
+            get { return m_yaw; }
+            set { m_yaw = AdjustValueIfWrong(value); }
+        }
+
+        public static DroneMovement Idle => new DroneMovement();
+
+        private int AdjustValueIfWrong(int original)
+        {
+            if (original < MIN)
+            {
+                return MIN;
+            }
+            else if (MAX < original)
+            {
+                return MAX;
+            }
+            return original;
+        }
     }
 }

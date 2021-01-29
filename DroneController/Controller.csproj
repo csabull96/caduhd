@@ -43,14 +43,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DroneCameraCommand.cs" />
-    <Compile Include="DroneControlCommand.cs" />
+    <Compile Include="Commands\DroneCameraCommand.cs" />
+    <Compile Include="Commands\DroneControlCommand.cs" />
     <Compile Include="DroneController.cs" />
-    <Compile Include="DroneControllerEventArgs.cs" />
-    <Compile Include="ICameraControlled.cs" />
-    <Compile Include="AbstractDroneCommand.cs" />
-    <Compile Include="IKeyboardControlled.cs" />
-    <Compile Include="DroneMovementCommand.cs" />
+    <Compile Include="DroneControllerInputEvaluatedEventArgs.cs" />
+    <Compile Include="IWebCameraInputHandler.cs" />
+    <Compile Include="Commands\AbstractDroneCommand.cs" />
+    <Compile Include="IKeyboardInputHandler.cs" />
+    <Compile Include="Commands\DroneMovementCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -29,17 +29,40 @@ namespace Caduhd.UserInterface
 
         private void Connect(object sender, RoutedEventArgs e)
         {
-            m_mainViewModel.DroneController.Connect();
+            m_mainViewModel.ConnectToDrone();
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            m_mainViewModel.HandleKeyEvent(e.Key, KeyStatus.Down);
+            e.Handled = true;
+            m_mainViewModel.HandleKeyEvent(e.Key, KeyState.Down);
+
         }
 
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            m_mainViewModel.HandleKeyEvent(e.Key, KeyStatus.Up);
+            e.Handled = true;
+            m_mainViewModel.HandleKeyEvent(e.Key, KeyState.Up);
+        }
+
+        private void StartStreamingDroneVideo(object sender, RoutedEventArgs e)
+        {
+            m_mainViewModel.StartStreamingDroneVideo();
+        }
+
+        private void StopStreamingDroneVideo(object sender, RoutedEventArgs e)
+        {
+            m_mainViewModel.StopStreamingDroneVideo();
+        }
+
+        private void TurnOnWebCamera(object sender, RoutedEventArgs e)
+        {
+            m_mainViewModel.TurnOnWebCamera();
+        }
+
+        private void TurnOffWebCamera(object sender, RoutedEventArgs e)
+        {
+            m_mainViewModel.TurnOffWebCamera();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Caduhd.Controller
+namespace Caduhd.Controller.Commands
 {
     public enum DroneControlCommandType { Connect }
 

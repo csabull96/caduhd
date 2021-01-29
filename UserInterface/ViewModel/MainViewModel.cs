@@ -1,4 +1,5 @@
 ﻿using Caduhd.Controller;
+using Caduhd.Controller.Commands;
 using Caduhd.Drone;
 using Caduhd.HandDetector.Detector;
 using Caduhd.Input.Camera;
@@ -22,131 +23,125 @@ namespace Caduhd.UserInterface.ViewModel
 {
     public class MainViewModel : BaseViewModel
     {
-        public IWebCamera WebCamera { get; set; }
-
-        public DroneController DroneController { get; private set; }
-
-        private BitmapSource _currentWebCameraFrame;
-        public BitmapSource CurrentWebCameraFrame
-        {
-            get { return _currentWebCameraFrame; }
-            set
-            {
-                _currentWebCameraFrame = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private BitmapSource _currentDroneCameraFrame;
-        public BitmapSource CurrentDroneCameraFrame
-        {
-            get { return _currentDroneCameraFrame; }
-            set
-            {
-                _currentDroneCameraFrame = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string label;
-        public string Label
-        {
-            get { return label; }
-            set 
-            { 
-                label = value;
-                OnPropertyChanged();
-            }
-        }
-
+        public UserInterfaceConnector UserInterfaceConnector { get; private set; } = new UserInterfaceConnector();
+        private IWebCamera m_webCamera = new WebCamera();
+        private AbstractDrone m_drone = new Tello();
+        private IHandDetector m_handDetector = new Caduhd.HandDetector.Detector.HandDetector();
+        private DroneController m_droneController;
 
         public MainViewModel()
         {
-            WebCamera = new WebCamera(30);
-            WebCamera.TurnOn();      
-            WebCamera.Feed += (s, args) =>
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    CurrentWebCameraFrame = BitmapToBitmapSource(args.Frame, PixelFormats.Bgr24);
-                });
-                DroneController.HandleInput(args.Frame);
-            };
-
-            Tello tello = new Tello();
-
-            IHandDetector handDetector = new Caduhd.HandDetector.Detector.HandDetector();
-            DroneController = new DroneController(handDetector);
-            DroneController.ControlDrone += (s, args) =>
-            {
-                if (args.DroneCommand is DroneControlCommand)
-                {
-                    var controlCommand = args.DroneCommand as DroneControlCommand;
-                    switch (controlCommand.Type)
-                    {
-                        case DroneControlCommandType.Connect:
-                            tello.Connect();
-
-
-                            tello.StartVideoStream();
-                            tello.Feed += Tello_Feed;
-                            break;
-                    }
-                }
-                else if (args.DroneCommand is DroneCameraCommand)
-                {
-                    var cameraCommand = args.DroneCommand as DroneCameraCommand;
-                    switch (cameraCommand.Type)
-                    {
-                        case DroneCameraCommandType.TurnOn:
-                            tello.StartVideoStream();
-                            tello.Feed += Tello_Feed;
-                            break;
-                        case DroneCameraCommandType.TurnOff:
-                            tello.StopVideoStream();
-                            tello.Feed -= Tello_Feed;
-                            break;
-                    }
-                }
-                else if (args.DroneCommand is DroneMovementCommand)
-                {
-                    var movementCommand = args.DroneCommand as DroneMovementCommand;
-                    switch (movementCommand.MovementType)
-                    {
-                        case DroneMovementCommandType.TakeOff:
-                            tello.TakeOff();
-                            break;
-                        case DroneMovementCommandType.Land:
-                            tello.Land();
-                            break;
-                        case DroneMovementCommandType.Move:
-                            tello.Move(movementCommand.Movement);
-                            break;
-                    }
-                }
-            };
+            m_webCamera.NewFrame += HandleWebCameraFrame;
+            m_drone.NewDroneCameraFrame += HandleDroneCameraFrame;
+            m_drone.StateChanged += HandleDroneStateChanged;
+            m_droneController = new DroneController(m_handDetector);
+            m_droneController.InputEvaluated += ControlDrone;
         }
 
-        private void Tello_Feed(object source, DroneVideoEventArgs args)
+        private void HandleWebCameraFrame(object sender, NewWebCameraFrameEventArgs args)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                CurrentDroneCameraFrame = BitmapToBitmapSource(args.Frame, PixelFormats.Bgr24);
+                UserInterfaceConnector.CurrentWebCameraFrame = BitmapToBitmapSource(args.Frame, PixelFormats.Bgr24);
+            });
+
+            m_droneController.HandleWebCameraInput(args.Frame);
+        }
+
+        private void HandleDroneCameraFrame(object source, NewDroneCameraFrameEventArgs evetArgs)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                UserInterfaceConnector.CurrentDroneCameraFrame = BitmapToBitmapSource(evetArgs.Frame, PixelFormats.Bgr24);
             });
         }
 
-        public void HandleKeyEvent(Key key, KeyStatus status)
+        private void HandleDroneStateChanged(object source, DroneStateChangedEventArgs eventArgs)
         {
-            DroneController.HandleInput(key, status);
+            UserInterfaceConnector.SetSpeed(eventArgs.DroneState.Speed);
+            UserInterfaceConnector.SetHeight(eventArgs.DroneState.Height);
+            UserInterfaceConnector.SetBatteryLevel(eventArgs.DroneState.Battery);
         }
 
-        private BitmapSource BitmapToBitmapSource(Bitmap bmp, System.Windows.Media.PixelFormat pixelFormat)
+        private void ControlDrone(object source, DroneControllerInputEvaluatedEventArgs eventArgs)
         {
-            var bitmapData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
+            if (eventArgs.DroneCommand is DroneControlCommand)
+            {
+                var controlCommand = eventArgs.DroneCommand as DroneControlCommand;
+                switch (controlCommand.Type)
+                {
+                    case DroneControlCommandType.Connect:
+                        m_drone.Connect();
+                        break;
+                }
+            }
+            else if (eventArgs.DroneCommand is DroneCameraCommand)
+            {
+                var cameraCommand = eventArgs.DroneCommand as DroneCameraCommand;
+                switch (cameraCommand.Type)
+                {
+                    case DroneCameraCommandType.TurnOn:
+                        m_drone.StartStreamingVideo();
+                        break;
+                    case DroneCameraCommandType.TurnOff:
+                        m_drone.StopStreamingVideo();
+                        // remove the actual picture from screen
+                        break;
+                }
+            }
+            else if (eventArgs.DroneCommand is DroneMovementCommand)
+            {
+                var movementCommand = eventArgs.DroneCommand as DroneMovementCommand;
+                switch (movementCommand.MovementType)
+                {
+                    case DroneMovementCommandType.TakeOff:
+                        m_drone.TakeOff();
+                        break;
+                    case DroneMovementCommandType.Land:
+                        m_drone.Land();
+                        break;
+                    case DroneMovementCommandType.Move:
+                        m_drone.Move(movementCommand.Movement);
+                        break;
+                }
+            }
+        }
 
+        public void HandleKeyEvent(Key key, KeyState status)
+        {
+            m_droneController.HandleKeyboardInput(key, status);
+        }
+
+        public void ConnectToDrone()
+        {
+            m_droneController.Connect();
+        }
+
+        public void TurnOnWebCamera()
+        {
+            m_webCamera.TurnOn();
+        }
+
+        public void TurnOffWebCamera()
+        {
+            m_webCamera.TurnOff();
+        }
+
+        public void StartStreamingDroneVideo()
+        {
+            m_droneController.StartStreamingVideo();
+        }
+
+        public void StopStreamingDroneVideo()
+        {
+            m_droneController.StopStreamingVideo();
+        }
+
+        private BitmapSource BitmapToBitmapSource(Bitmap bitmap, System.Windows.Media.PixelFormat pixelFormat)
+        {
+            var bitmapData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
             var bitmapSource = BitmapSource.Create(bitmapData.Width, bitmapData.Height, 96, 96, pixelFormat, null, bitmapData.Scan0, bitmapData.Stride * bitmapData.Height, bitmapData.Stride);
-
-            bmp.UnlockBits(bitmapData);
+            bitmap.UnlockBits(bitmapData);
             return bitmapSource;
         }
     }

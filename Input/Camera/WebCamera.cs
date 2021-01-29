@@ -14,39 +14,49 @@ namespace Caduhd.Input.Camera
 {
     public class WebCamera : IWebCamera
     {
-        private VideoCapture m_videoCapture;
-
-        public event WebCameraEventHandler Feed;
-
-        public int FPS { get; }
-
         private Timer m_timer;
+        private VideoCapture m_videoCapture;
+        public event NewWebCameraFrameEventHandler NewFrame;
+        public bool IsOn { get; private set; }
+
+        public WebCamera() : this(30) { }
 
         public WebCamera(int fps)
         {
-            m_videoCapture = new VideoCapture(0, VideoCapture.API.DShow);
-            FPS = fps;
-            int interval = 1000 / FPS;
+            IsOn = false;
+            int interval = 1000 / fps;
             m_timer = new Timer(interval);
             m_timer.Elapsed += OnElapsed;
         }
 
         private void OnElapsed(object sender, ElapsedEventArgs e)
         {
-            Bitmap frame = m_videoCapture.QueryFrame().ToImage<Bgr, byte>().Flip(FlipType.Horizontal).Bitmap;        
-            Feed?.Invoke(this, new WebCameraEventArgs(frame));
+            Bitmap frame = m_videoCapture.QueryFrame()
+                .ToImage<Bgr, byte>()
+                .Flip(FlipType.Horizontal)
+                .Bitmap;
+            
+            NewFrame?.Invoke(this, new NewWebCameraFrameEventArgs(frame));
         }
 
         public void TurnOn()
         {
-            m_timer.Start();
+            if (!IsOn)
+            {
+                m_videoCapture = new VideoCapture(0, VideoCapture.API.DShow);
+                m_timer.Start();
+                IsOn = true;
+            }
         }
 
         public void TurnOff()
         {
-            m_timer.Stop();
-            // if we turn on again we have to reconstruct the VideoCapture?!
-            m_videoCapture.Dispose();
+            if (IsOn)
+            {
+                m_timer.Stop();
+                m_videoCapture.Dispose();
+                IsOn = false;
+            }
         }
     }
 }

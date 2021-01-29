@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Caduhd.UserInterface
+namespace Caduhd.Input.Keyboard
 {
-    class UserInterfaceState
-    {
-    }
+    public enum KeyState { Down, Up }
 }

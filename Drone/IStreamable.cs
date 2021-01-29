@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Caduhd.Drone
 {
-    public delegate void DroneVideoEventHandler(object source, DroneVideoEventArgs evetArgs);
+    public delegate void NewDroneVideoFrameEventHandler(object source, NewDroneCameraFrameEventArgs evetArgs);
 
     interface IStreamable
     {
-        event DroneVideoEventHandler Feed; 
-        void StartVideoStream();
-        void StopVideoStream();
-        string GetVideoStreamAddress();
+        bool IsStreamingVideo { get; }
+        event NewDroneVideoFrameEventHandler NewDroneCameraFrame; 
+        void StartStreamingVideo();
+        void StopStreamingVideo();
     }
 }

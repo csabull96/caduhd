@@ -8,8 +8,8 @@ using System.Windows.Input;
 
 namespace Caduhd.Controller
 {
-    public interface IKeyboardControlled
+    public interface IKeyboardInputHandler
     {
-        void HandleInput(Key key, KeyStatus status);
+        void HandleKeyboardInput(Key key, KeyState status);
     }
 }

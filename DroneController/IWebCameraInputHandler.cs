@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Caduhd.Controller
 {
-    public interface ICameraControlled
+    public interface IWebCameraInputHandler
     {
-        void HandleInput(Bitmap frame);
+        void HandleWebCameraInput(Bitmap frame);
     }
 }
