@@ -2,6 +2,7 @@
 using Caduhd.Controller.Commands;
 using Caduhd.Drone;
 using Caduhd.HandDetector.Detector;
+using Caduhd.HandDetector.Model;
 using Caduhd.Input.Camera;
 using Caduhd.Input.Keyboard;
 using System;
@@ -24,7 +25,7 @@ namespace Caduhd.UserInterface.ViewModel
     public class MainViewModel : BaseViewModel
     {
         public UserInterfaceConnector UserInterfaceConnector { get; private set; } = new UserInterfaceConnector();
-        private IWebCamera m_webCamera = new WebCamera();
+        private IWebCamera m_webCamera = new WebCamera(5);
         private AbstractDrone m_drone = new Tello();
         private IHandDetector m_handDetector = new Caduhd.HandDetector.Detector.HandDetector();
         private DroneController m_droneController;
@@ -32,19 +33,41 @@ namespace Caduhd.UserInterface.ViewModel
         public MainViewModel()
         {
             m_webCamera.NewFrame += HandleWebCameraFrame;
+            m_webCamera.TurnOn();
+
             m_drone.NewDroneCameraFrame += HandleDroneCameraFrame;
             m_drone.StateChanged += HandleDroneStateChanged;
+
             m_droneController = new DroneController(m_handDetector);
             m_droneController.InputEvaluated += ControlDrone;
+            m_droneController.HandDetectorStateChanged += HandleHandDetectorStateChanged;
+            m_droneController.WebCameraFrameProcessed += HandleWebCameraFrameProcessed;
+
+            // only for debugging purposes
+            m_droneController.HandsDetected += (s, args) =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Hand left = (s as Hands).Left;
+                    Hand right = (s as Hands).Right;
+
+                    UserInterfaceConnector.LeftHand = $"{left.Position.X}/{left.Position.Y}/{left.Weight}";
+                    UserInterfaceConnector.RightHand = $"{right.Position.X}/{right.Position.Y}/{right.Weight}";
+                    UserInterfaceConnector.Direction = $"{args.Movement}";
+                });
+            };
+        }
+
+        private void HandleWebCameraFrameProcessed(object sender, InputProcessedEventArgs eventArgs)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                UserInterfaceConnector.CurrentWebCameraFrame = BitmapToBitmapSource(eventArgs.ProcessedFrame, PixelFormats.Bgr24);
+            });
         }
 
         private void HandleWebCameraFrame(object sender, NewWebCameraFrameEventArgs args)
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                UserInterfaceConnector.CurrentWebCameraFrame = BitmapToBitmapSource(args.Frame, PixelFormats.Bgr24);
-            });
-
             m_droneController.HandleWebCameraInput(args.Frame);
         }
 
@@ -94,17 +117,25 @@ namespace Caduhd.UserInterface.ViewModel
                 var movementCommand = eventArgs.DroneCommand as DroneMovementCommand;
                 switch (movementCommand.MovementType)
                 {
-                    case DroneMovementCommandType.TakeOff:
+                    case DroneMovementType.TakeOff:
                         m_drone.TakeOff();
                         break;
-                    case DroneMovementCommandType.Land:
+                    case DroneMovementType.Land:
                         m_drone.Land();
                         break;
-                    case DroneMovementCommandType.Move:
+                    case DroneMovementType.Move:
                         m_drone.Move(movementCommand.Movement);
                         break;
                 }
             }
+        }
+
+        private void HandleHandDetectorStateChanged(object source, HandDetectorStateChangedEventArgs eventArgs)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                UserInterfaceConnector.HandDetectorStatus = eventArgs.HandDetectorStatus;
+            });
         }
 
         public void HandleKeyEvent(Key key, KeyState status)
@@ -135,6 +166,12 @@ namespace Caduhd.UserInterface.ViewModel
         public void StopStreamingDroneVideo()
         {
             m_droneController.StopStreamingVideo();
+        }
+
+        public void Closed()
+        {
+            m_webCamera.TurnOff();
+            m_drone.StopStreamingVideo();
         }
 
         private BitmapSource BitmapToBitmapSource(Bitmap bitmap, System.Windows.Media.PixelFormat pixelFormat)

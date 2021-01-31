@@ -47,6 +47,7 @@
     <Compile Include="Commands\DroneControlCommand.cs" />
     <Compile Include="DroneController.cs" />
     <Compile Include="DroneControllerInputEvaluatedEventArgs.cs" />
+    <Compile Include="HandsDetectedEventArgs.cs" />
     <Compile Include="IWebCameraInputHandler.cs" />
     <Compile Include="Commands\AbstractDroneCommand.cs" />
     <Compile Include="IKeyboardInputHandler.cs" />

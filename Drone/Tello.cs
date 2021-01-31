@@ -140,6 +140,8 @@ namespace Caduhd.Drone
         {
             if (IsStreamingVideo)
             {
+                m_isStreamingVideo = false;
+
                 m_videoStreamCancellationTokenSource.Cancel();
                 m_videoStreamCancellationTokenSource.Dispose();
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Caduhd.HandDetector.Detector;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -35,6 +36,58 @@ namespace Caduhd.UserInterface
             }
         }
 
+
+
+
+
+        private HandDetectorState m_handDetectorStatus;
+        public HandDetectorState HandDetectorStatus
+        {
+            get { return m_handDetectorStatus; }
+            set 
+            { 
+                m_handDetectorStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        private string m_leftHand;
+        public string LeftHand
+        {
+            get { return m_leftHand; }
+            set 
+            { 
+                m_leftHand = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string m_rightHand;
+        public string RightHand
+        {
+            get { return m_rightHand; }
+            set
+            {
+                m_rightHand = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string m_direction;
+        public string Direction
+        {
+            get { return m_direction; }
+            set
+            {
+                m_direction = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
+
         private int m_batteryLevel = 0;
         public void SetBatteryLevel(int batteryLevel)
         {
@@ -60,6 +113,11 @@ namespace Caduhd.UserInterface
             OnPropertyChanged(nameof(Height));
         }
         public string Height { get { return $"Height: {m_relativeHeight} cm"; } }
+
+        public UserInterfaceConnector()
+        {
+            //CurrentWebCameraFrame = new BitmapImage(new Uri(@"Resources\Images\webcam_placeholder.jpg", UriKind.Relative));
+        }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {

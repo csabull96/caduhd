@@ -64,5 +64,10 @@ namespace Caduhd.UserInterface
         {
             m_mainViewModel.TurnOffWebCamera();
         }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            m_mainViewModel.Closed();
+        }
     }
 }

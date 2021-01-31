@@ -16,5 +16,7 @@ namespace Caduhd.Controller.Commands
         {
             Type = type;
         }
+
+        public override AbstractDroneCommand Copy() => new DroneControlCommand(Type);
     }
 }

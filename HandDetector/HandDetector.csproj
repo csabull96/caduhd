@@ -53,14 +53,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Calibrator\ColorCalibrator.cs" />
+    <Compile Include="Calibrator\ColorCharacteristics.cs" />
+    <Compile Include="Calibrator\Histogram.cs" />
+    <Compile Include="Calibrator\DoubleRange.cs" />
+    <Compile Include="Detector\HandDetectorState.cs" />
+    <Compile Include="Detector\HandDetectorStateChangedEventArgs.cs" />
+    <Compile Include="Detector\InputProcessedEventArgs.cs" />
     <Compile Include="Detector\HandDetector.cs" />
     <Compile Include="Detector\IHandDetector.cs" />
+    <Compile Include="ImageExtensions.cs" />
     <Compile Include="Model\Hand.cs" />
     <Compile Include="Model\Hands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Calibrator\" />
     <Folder Include="Converter\" />
   </ItemGroup>
   <ItemGroup>

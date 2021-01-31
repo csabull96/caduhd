@@ -8,5 +8,6 @@ namespace Caduhd.Controller.Commands
 {
     public abstract class AbstractDroneCommand
     {
+        public abstract AbstractDroneCommand Copy();
     }
 }

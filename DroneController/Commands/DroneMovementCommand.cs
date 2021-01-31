@@ -7,19 +7,32 @@ using System.Threading.Tasks;
 
 namespace Caduhd.Controller.Commands
 {
-    public enum DroneMovementCommandType { Land, TakeOff, Move }
+    public enum DroneMovementType { Land, TakeOff, Move }
 
     public class DroneMovementCommand : AbstractDroneCommand
     {
-        public DroneMovementCommandType MovementType { get; set; }
+        public DroneMovementType MovementType { get; set; }
         public DroneMovement Movement { get; private set; }
 
-        public DroneMovementCommand(DroneMovementCommandType movementType) : this(movementType, DroneMovement.Idle) { }
+        public DroneMovementCommand(DroneMovementType movementType) : this(movementType, DroneMovement.Idle) { }
 
-        public DroneMovementCommand(DroneMovementCommandType movementType, DroneMovement movement)
+        public DroneMovementCommand(DroneMovementType movementType, DroneMovement movement)
         {
             MovementType = movementType;
             Movement = movement;
+        }
+
+        public override AbstractDroneCommand Copy()
+        {
+            DroneMovement movement = new DroneMovement()
+            {
+                Longitudinal = Movement.Longitudinal,
+                Lateral = Movement.Lateral,
+                Vertical = Movement.Vertical,
+                Yaw = Movement.Yaw
+            };
+
+            return new DroneMovementCommand(MovementType, movement);
         }
     }
 }

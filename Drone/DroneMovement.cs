@@ -40,6 +40,10 @@ namespace Caduhd.Drone
             set { m_yaw = AdjustValueIfWrong(value); }
         }
 
+        public bool Still => m_lateral == 0 && m_vertical == 0 && m_longitudinal == 0 && m_yaw == 0;
+
+        public bool Moving => m_lateral != 0 || m_vertical != 0 || m_longitudinal != 0 || m_yaw != 0;
+
         public static DroneMovement Idle => new DroneMovement();
 
         private int AdjustValueIfWrong(int original)

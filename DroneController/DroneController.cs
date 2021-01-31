@@ -16,26 +16,42 @@ namespace Caduhd.Controller
 {
     public class DroneController : IWebCameraInputHandler, IKeyboardInputHandler
     {
+        // min:0 max:100
+        private const int SPEED = 60;
+
         private InputKeys m_inputKeys;
         private IHandDetector m_handDetector;
-        private AbstractDroneCommand m_latestDroneCommandFromKeyboard;
-        private AbstractDroneCommand m_latestDroneCommandFromWebCamera;
 
-        public delegate void InputEvaluatedEventHandler(object source, DroneControllerInputEvaluatedEventArgs eventArgs);
-        public event InputEvaluatedEventHandler InputEvaluated;
+        private AbstractDroneCommand m_latestDroneCommandFromKeyboard;
+        private DroneMovementCommand m_latestDroneMovementCommandFromWebCamera;
+
+        public delegate void DroneControllerInputEvaluatedEventHandler(object source, DroneControllerInputEvaluatedEventArgs eventArgs);
+        public event DroneControllerInputEvaluatedEventHandler InputEvaluated;
+
+        public event HandDetectorStateChangedEventHandler HandDetectorStateChanged;
+        public event HandDetectorInputProcessedEventHandler WebCameraFrameProcessed;
+
+        // this is only here for now, for debugging purposes
+        public delegate void HandsDetectedEventHandler(object sender, HandsDetectedEventArgs eventArgs);
+        public event HandsDetectedEventHandler HandsDetected;
 
         public DroneController(IHandDetector handDetector)
         {
             m_inputKeys = new InputKeys();
             m_handDetector = handDetector;
-        }
+            m_handDetector.InputProcessed += (s, args) =>
+            {
+                WebCameraFrameProcessed?.Invoke(s, args);
+            };
+            m_handDetector.StateChanged += (s, args) =>
+            {
+                // be careful here because i intended to hide the hand controller from outside of the drone controler
+                // but if we pass forward as event source we can access it from outside
+                // but even with the object that we creatae with from the view model so 
+                // maybe i should rethink this hiding thing
 
-        public void HandleWebCameraInput(Bitmap frame)
-        {
-            // should be an async method?
-            Hands handsDetected = m_handDetector.DetectHands(frame);
-            m_latestDroneCommandFromWebCamera = EvaluateDetectedHands(handsDetected);
-            EvaluateCommands();
+                HandDetectorStateChanged?.Invoke(s, args);
+            };
         }
 
         public void HandleKeyboardInput(Key key, KeyState keyState)
@@ -43,90 +59,195 @@ namespace Caduhd.Controller
             if (m_inputKeys.TryUpdate(key, keyState))
             {
                 m_latestDroneCommandFromKeyboard = EvaluateInputKeys(m_inputKeys.Keys);
-                EvaluateCommands();       
+                Evaluate();       
             }         
         }
 
-        private AbstractDroneCommand EvaluateDetectedHands(Hands hands)
+        public void HandleWebCameraInput(Bitmap frame)
         {
-            // todo
-            return null;
+            switch (m_handDetector.State)
+            {
+                case HandDetectorState.NeedsCalibrating:
+                case HandDetectorState.NeedsReCalibrating:
+                case HandDetectorState.ReadyToCaptureBackground:
+                    m_handDetector.CaptureBackground(frame);
+                    WebCameraFrameProcessed?.Invoke(this, new InputProcessedEventArgs(frame));
+                    break;
+                case HandDetectorState.ReadyToAnalyzeLeftHand:
+                    m_handDetector.AnalyzeLeftHand(frame);
+                    break;
+                case HandDetectorState.ReadyToAnalyzeRightHand:
+                    m_handDetector.AnalyzeRightHand(frame);
+                    break;
+                case HandDetectorState.Calibrated:
+                    WebCameraFrameProcessed?.Invoke(this, new InputProcessedEventArgs(frame));
+                    break;
+                case HandDetectorState.Enabled:
+                    Hands handsDetected = m_handDetector.DetectHands(frame);
+                    m_latestDroneMovementCommandFromWebCamera = EvaluateHands(handsDetected);
+                    Evaluate();
+                    break;
+            }  
         }
 
         private AbstractDroneCommand EvaluateInputKeys(IDictionary<Key, KeyState> inputKeyStates)
         {
-            DroneMovement movement = new DroneMovement();
-            int speed = 60;
-
             if (inputKeyStates[Key.Back] == KeyState.Down)
             {
-                return new DroneMovementCommand(DroneMovementCommandType.Land, movement);
+                m_handDetector.ShiftState();
             }
-            else if (inputKeyStates[Key.Enter] == KeyState.Down)
+
+            if (inputKeyStates[Key.Enter] == KeyState.Down)
             {
-                return new DroneMovementCommand(DroneMovementCommandType.TakeOff, movement);
+                return new DroneMovementCommand(DroneMovementType.TakeOff, DroneMovement.Idle);
+            }
+            else if (inputKeyStates[Key.Space] == KeyState.Down)
+            {
+                return new DroneMovementCommand(DroneMovementType.Land, DroneMovement.Idle);
             }
             else
             {
+                DroneMovement movement = new DroneMovement();
+
                 if (inputKeyStates[Key.W] == KeyState.Down)
                 {
-                    movement.Vertical += speed;
+                    movement.Vertical += SPEED;
                 }
                 if (inputKeyStates[Key.S] == KeyState.Down)
                 {
-                    movement.Vertical -= speed;
+                    movement.Vertical -= SPEED;
                 }
                 if (inputKeyStates[Key.A] == KeyState.Down)
                 {
-                    movement.Yaw -= speed;
+                    movement.Yaw -= SPEED;
                 }
                 if (inputKeyStates[Key.D] == KeyState.Down)
                 {
-                    movement.Yaw += speed;
+                    movement.Yaw += SPEED;
                 }
                 if (inputKeyStates[Key.Up] == KeyState.Down)
                 {
-                    movement.Longitudinal += speed;
+                    movement.Longitudinal += SPEED;
                 }
                 if (inputKeyStates[Key.Down] == KeyState.Down)
                 {
-                    movement.Longitudinal -= speed;
+                    movement.Longitudinal -= SPEED;
                 }
                 if (inputKeyStates[Key.Left] == KeyState.Down)
                 {
-                    movement.Lateral -= speed;
+                    movement.Lateral -= SPEED;
                 }
                 if (inputKeyStates[Key.Right] == KeyState.Down)
                 {
-                    movement.Lateral += speed;
+                    movement.Lateral += SPEED;
                 }
 
-                return new DroneMovementCommand(DroneMovementCommandType.Move, movement);
+                return new DroneMovementCommand(DroneMovementType.Move, movement);
             }
         }
 
-        private void EvaluateCommands()
+        private DroneMovementCommand EvaluateHands(Hands hands)
         {
-            // evaluate the m_latestDroneCommandFromWebCamera and the m_latestDroneCommandFromKeyboard together
-            InputEvaluated?.Invoke(this, new DroneControllerInputEvaluatedEventArgs(m_latestDroneCommandFromKeyboard));
+            DroneMovement movement = new DroneMovement();
+
+            if (1000 < hands.Left.Weight && 1000 < hands.Right.Weight)
+            {
+                //longitudinal
+                if (4500 < hands.Left.Weight && 4500 < hands.Right.Weight)
+                {
+                    movement.Longitudinal += SPEED;
+                }
+                else if (hands.Left.Weight < 3000 && hands.Right.Weight < 3000)
+                {
+                    movement.Longitudinal -= SPEED;
+                }
+
+                //lateral
+                if (Math.Abs(hands.Left.Position.Y - hands.Right.Position.Y) > 50)
+                {
+                    if (hands.Left.Position.Y > hands.Right.Position.Y)
+                    {
+                        movement.Lateral -= SPEED;
+                    }
+                    else
+                    {
+                        movement.Lateral += SPEED;
+                    }
+                }
+
+                // yaw
+                if (Math.Abs(hands.Left.Weight - hands.Right.Weight) > 2500)
+                {
+                    if (hands.Left.Weight > hands.Right.Weight)
+                    {
+                        movement.Yaw += SPEED;
+                    }
+                    else
+                    {
+                        movement.Yaw -= SPEED;
+                    }
+                }      
+            }
+
+            // vertical
+            if (hands.Left.Weight > 1000 && hands.Right.Weight > 1000)
+            {
+                if (hands.Left.Position.Y < 50 && hands.Right.Position.Y < 50)
+                {
+                    movement.Vertical += SPEED;
+                }
+                else if (140 < hands.Left.Position.Y && 140 < hands.Right.Position.Y)
+                {
+                    movement.Vertical -= SPEED;
+                }
+            }
+            
+            string toString = $"l/r:{movement.Lateral} f/b:{movement.Longitudinal} u/d:{movement.Vertical} yaw:{movement.Yaw}";
+            HandsDetected?.Invoke(hands, new HandsDetectedEventArgs(hands, toString));
+
+            return new DroneMovementCommand(DroneMovementType.Move, movement);
+        }
+
+        private void Evaluate()
+        {
+            if (m_latestDroneCommandFromKeyboard is DroneMovementCommand)
+            {
+                DroneMovementCommand droneMovementCommand = m_latestDroneCommandFromKeyboard as DroneMovementCommand;
+
+                if (droneMovementCommand.MovementType == DroneMovementType.TakeOff 
+                    || droneMovementCommand.MovementType == DroneMovementType.Land
+                    || (droneMovementCommand.MovementType == DroneMovementType.Move && droneMovementCommand.Movement.Moving))
+                {
+                    InputEvaluated?.Invoke(this, new DroneControllerInputEvaluatedEventArgs(m_latestDroneCommandFromKeyboard));
+                }
+                else if (droneMovementCommand.MovementType == DroneMovementType.Move)
+                {
+                    if (droneMovementCommand.Movement.Moving
+                        || (droneMovementCommand.Movement.Still && m_latestDroneMovementCommandFromWebCamera == null))
+                    {
+                        InputEvaluated?.Invoke(this, new DroneControllerInputEvaluatedEventArgs(m_latestDroneCommandFromKeyboard));
+                    }
+                    else
+                    {
+                        var copied = m_latestDroneMovementCommandFromWebCamera.Copy();
+                        m_latestDroneMovementCommandFromWebCamera = null;
+                        InputEvaluated?.Invoke(this, new DroneControllerInputEvaluatedEventArgs(copied));
+                    }
+                }
+
+
+               
+            }
+            else if (m_latestDroneCommandFromKeyboard is DroneControlCommand || m_latestDroneCommandFromKeyboard is DroneCameraCommand)
+            {
+                InputEvaluated?.Invoke(this, new DroneControllerInputEvaluatedEventArgs(m_latestDroneCommandFromKeyboard));
+            }
         }
 
         public void Connect()
         {
             var connectCommand = new DroneControlCommand(DroneControlCommandType.Connect);
             InputEvaluated?.Invoke(this, new DroneControllerInputEvaluatedEventArgs(connectCommand));
-        }
-
-        public void TakeOff()
-        {
-            var takeOffCommand = new DroneMovementCommand(DroneMovementCommandType.TakeOff);
-            InputEvaluated?.Invoke(this, new DroneControllerInputEvaluatedEventArgs(takeOffCommand));
-        }
-
-        public void Land()
-        {
-            var landCommand = new DroneMovementCommand(DroneMovementCommandType.Land);
-            InputEvaluated?.Invoke(this, new DroneControllerInputEvaluatedEventArgs(landCommand));
         }
 
         public void StartStreamingVideo()

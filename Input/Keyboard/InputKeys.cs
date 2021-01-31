@@ -16,16 +16,17 @@ namespace Caduhd.Input.Keyboard
         {
             Keys = new Dictionary<Key, KeyState>();
             
-            InitializeKey(Key.W);
-            InitializeKey(Key.S);
-            InitializeKey(Key.A);
-            InitializeKey(Key.D);
-            InitializeKey(Key.Up);
-            InitializeKey(Key.Down);
-            InitializeKey(Key.Left);
-            InitializeKey(Key.Right);
-            InitializeKey(Key.Back);
-            InitializeKey(Key.Enter);
+            Initialize(Key.W);
+            Initialize(Key.S);
+            Initialize(Key.A);
+            Initialize(Key.D);
+            Initialize(Key.Up);
+            Initialize(Key.Down);
+            Initialize(Key.Left);
+            Initialize(Key.Right);
+            Initialize(Key.Space);
+            Initialize(Key.Enter);
+            Initialize(Key.Back);
         }
        
         public bool TryUpdate(Key key, KeyState keyState)
@@ -40,6 +41,6 @@ namespace Caduhd.Input.Keyboard
 
         private bool IsInputKey(Key key) => Keys.ContainsKey(key);
 
-        private void InitializeKey(Key key) => Keys.Add(key, KeyState.Up);
+        private void Initialize(Key key) => Keys.Add(key, KeyState.Up);
     }
 }
