@@ -100,7 +100,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DroneController\Controller.csproj">
+    <ProjectReference Include="..\Controller\Controller.csproj">
       <Project>{4f577257-83f2-4fae-b205-e776e1a397b9}</Project>
       <Name>Controller</Name>
     </ProjectReference>
