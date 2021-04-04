@@ -16,7 +16,7 @@
         d:DesignHeight="1080">
     <Window.Resources>
         <viewModel:MainViewModel x:Key="MainViewModel" />
-        <converters:HandDetectorStatusToMessageToUserConverter x:Key="HandDetectorStatusToMessageToUserConverter" />
+        <converters:ColorBasedHandDetectorStateToMessageToUserConverter x:Key="HandDetectorStatusToMessageToUserConverter" />
     </Window.Resources>
     <Grid DataContext="{StaticResource MainViewModel}"
           Background="WhiteSmoke">
@@ -115,7 +115,7 @@
                                Grid.Column="0"
                                Margin="10 0 0 0"
                                VerticalAlignment="Center"
-                               Text="{Binding UserInterfaceConnector.HandDetectorStatus, Converter={StaticResource HandDetectorStatusToMessageToUserConverter}}" />
+                               Text="{Binding UserInterfaceConnector.HandDetectorState, Converter={StaticResource HandDetectorStatusToMessageToUserConverter}}" />
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />

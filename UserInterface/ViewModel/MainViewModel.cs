@@ -1,146 +1,136 @@
 ﻿using Caduhd.Controller;
 using Caduhd.Controller.Commands;
+using Caduhd.Controller.InputEvaluator;
 using Caduhd.Drone;
-using Caduhd.HandDetector.Detector;
-using Caduhd.HandDetector.Model;
-using Caduhd.Input.Camera;
-using Caduhd.Input.Keyboard;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using Ksvydo.HandDetector;
+using Ksvydo.HandDetector.Calibrator;
+using Ksvydo.HandDetector.Model;
+using Ksvydo.Input.Camera;
+using Ksvydo.Input.Keyboard;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 
 namespace Caduhd.UserInterface.ViewModel
 {
     public class MainViewModel : BaseViewModel
     {
-        public UserInterfaceConnector UserInterfaceConnector { get; private set; } = new UserInterfaceConnector();
-        private IWebCamera m_webCamera = new WebCamera(5);
-        private AbstractDrone m_drone = new Tello();
-        private IHandDetector m_handDetector = new Caduhd.HandDetector.Detector.HandDetector();
-        private DroneController m_droneController;
+        private ColorBasedHandDetector m_handDetector;
+        private Tello m_tello;
+        private HandsDroneController m_droneController;
+        private KeyEventProcessor m_keyEventProcessor;
+        private IWebCamera m_webCamera;
 
+        public UserInterfaceConnector UserInterfaceConnector { get; private set; } = new UserInterfaceConnector();
+        
         public MainViewModel()
         {
-            m_webCamera.NewFrame += HandleWebCameraFrame;
+            m_handDetector = new ColorBasedHandDetector(new ColorCalibrator());
+            m_handDetector.StateChanged += HandleHandDetectorStateChanged;
+            
+            m_tello = new Tello();
+            m_tello.StateChanged += HandleDroneStateChanged;
+            m_tello.NewCameraFrame += ProcessDroneCameraFrame;
+
+            DroneControllerKeyInputEvaluatorFactory factory = new DroneControllerKeyInputEvaluatorFactory();
+            var droneControllerKeyInputEvaluator = factory.GetDroneControllerKeyInputEvaluator(m_tello);
+            m_droneController = 
+                new HandsDroneController(m_tello, new DroneHandsInputEvaluator(), 
+                    droneControllerKeyInputEvaluator);
+
+            m_keyEventProcessor = new KeyEventProcessor();
+
+            m_webCamera = new WebCamera();
+            m_webCamera.NewFrame += ProcessWebCameraFrame;
             m_webCamera.TurnOn();
+        }
 
-            m_drone.NewDroneCameraFrame += HandleDroneCameraFrame;
-            m_drone.StateChanged += HandleDroneStateChanged;
+        private void HandleHandDetectorStateChanged()
+        {
+            UserInterfaceConnector.HandDetectorState = m_handDetector.State;
+        }
 
-            m_droneController = new DroneController(m_handDetector);
-            m_droneController.InputEvaluated += ControlDrone;
-            m_droneController.HandDetectorStateChanged += HandleHandDetectorStateChanged;
-            m_droneController.WebCameraFrameProcessed += HandleWebCameraFrameProcessed;
+        public void HandleKeyEvent(KeyEventArgs keyEventArgs)
+        {
+            KeyInfo keyInfo = m_keyEventProcessor.ProcessKeyEvent(keyEventArgs);
 
-            // only for debugging purposes
-            m_droneController.HandsDetected += (s, args) =>
+            if (keyInfo.Key == Key.Back)
             {
-                Application.Current.Dispatcher.Invoke(() =>
+                if (keyInfo.KeyState == KeyState.Down)
                 {
-                    Hand left = (s as Hands).Left;
-                    Hand right = (s as Hands).Right;
-
-                    UserInterfaceConnector.LeftHand = $"{left.Position.X}/{left.Position.Y}/{left.Weight}";
-                    UserInterfaceConnector.RightHand = $"{right.Position.X}/{right.Position.Y}/{right.Weight}";
-                    UserInterfaceConnector.Direction = $"{args.Movement}";
-                });
-            };
-        }
-
-        private void HandleWebCameraFrameProcessed(object sender, InputProcessedEventArgs eventArgs)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                UserInterfaceConnector.CurrentWebCameraFrame = BitmapToBitmapSource(eventArgs.ProcessedFrame, PixelFormats.Bgr24);
-            });
-        }
-
-        private void HandleWebCameraFrame(object sender, NewWebCameraFrameEventArgs args)
-        {
-            m_droneController.HandleWebCameraInput(args.Frame);
-        }
-
-        private void HandleDroneCameraFrame(object source, NewDroneCameraFrameEventArgs evetArgs)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                UserInterfaceConnector.CurrentDroneCameraFrame = BitmapToBitmapSource(evetArgs.Frame, PixelFormats.Bgr24);
-            });
-        }
-
-        private void HandleDroneStateChanged(object source, DroneStateChangedEventArgs eventArgs)
-        {
-            UserInterfaceConnector.SetSpeed(eventArgs.DroneState.Speed);
-            UserInterfaceConnector.SetHeight(eventArgs.DroneState.Height);
-            UserInterfaceConnector.SetBatteryLevel(eventArgs.DroneState.Battery);
-        }
-
-        private void ControlDrone(object source, DroneControllerInputEvaluatedEventArgs eventArgs)
-        {
-            if (eventArgs.DroneCommand is DroneControlCommand)
-            {
-                var controlCommand = eventArgs.DroneCommand as DroneControlCommand;
-                switch (controlCommand.Type)
-                {
-                    case DroneControlCommandType.Connect:
-                        m_drone.Connect();
-                        break;
+                    m_handDetector.ShiftState();
                 }
             }
-            else if (eventArgs.DroneCommand is DroneCameraCommand)
+            else
             {
-                var cameraCommand = eventArgs.DroneCommand as DroneCameraCommand;
-                switch (cameraCommand.Type)
-                {
-                    case DroneCameraCommandType.TurnOn:
-                        m_drone.StartStreamingVideo();
-                        break;
-                    case DroneCameraCommandType.TurnOff:
-                        m_drone.StopStreamingVideo();
-                        // remove the actual picture from screen
-                        break;
-                }
-            }
-            else if (eventArgs.DroneCommand is DroneMovementCommand)
-            {
-                var movementCommand = eventArgs.DroneCommand as DroneMovementCommand;
-                switch (movementCommand.MovementType)
-                {
-                    case DroneMovementType.TakeOff:
-                        m_drone.TakeOff();
-                        break;
-                    case DroneMovementType.Land:
-                        m_drone.Land();
-                        break;
-                    case DroneMovementType.Move:
-                        m_drone.Move(movementCommand.Movement);
-                        break;
-                }
+                m_droneController.ProcessKeyInput(keyInfo);
             }
         }
 
-        private void HandleHandDetectorStateChanged(object source, HandDetectorStateChangedEventArgs eventArgs)
+        private void ProcessWebCameraFrame(object sender, NewWebCameraFrameEventArgs args)
         {
+            Bitmap frame = null;
+            Hands hands = null;
+            MoveCommand moveCommand = null;
+
+            switch (m_handDetector.State)
+            {
+                case ColorBasedHandDetectorState.NeedsCalibrating:
+                case ColorBasedHandDetectorState.NeedsReCalibrating:
+                    break;
+                case ColorBasedHandDetectorState.ReadyToCaptureBackground:
+                    frame = m_handDetector.CaptureBackground(args.Frame);               
+                    break;
+                case ColorBasedHandDetectorState.ReadyToAnalyzeLeftHand:
+                    frame = m_handDetector.AnalyzeLeftHand(args.Frame);
+                    break;
+                case ColorBasedHandDetectorState.ReadyToAnalyzeRightHand:
+                    frame = m_handDetector.AnalyzeRightHand(args.Frame);
+                    break;
+                case ColorBasedHandDetectorState.Calibrated:
+                    frame = m_handDetector.Update(args.Frame);
+                    break;
+                case ColorBasedHandDetectorState.Enabled:
+                    HandDetectionResult handDetectionResult = m_handDetector.DetectHands(args.Frame);
+                    frame = handDetectionResult.Frame;
+                    hands = handDetectionResult.Hands;
+
+                    InputProcessResult result = m_droneController.ProcessHandsInput(hands);
+                    moveCommand = (result as DroneControllerHandsInputProcessResult).Result;
+                    break;
+            }
+
             Application.Current.Dispatcher.Invoke(() =>
             {
-                UserInterfaceConnector.HandDetectorStatus = eventArgs.HandDetectorStatus;
+                UserInterfaceConnector.SetCurrentWebCameraFrame(frame ?? args.Frame);
+
+                // in this way
+                // the following values are forwarded to the ui only for debugging purposes (as a developer feedback)
+
+                UserInterfaceConnector.LeftHand = hands == null ? "0/0/0" :
+                    $"{hands.Left.Position.X}/{hands.Left.Position.Y}/{hands.Left.Weight}";
+
+                UserInterfaceConnector.RightHand = hands == null ? "0/0/0" :
+                    $"{hands.Right.Position.X}/{hands.Right.Position.Y}/{hands.Right.Weight}";
+
+                UserInterfaceConnector.Direction = moveCommand == null ? "l/r:0 f/b:0 u/d:0 yaw:0" :
+                    $"l/r:{moveCommand.Lateral} f/b:{moveCommand.Longitudinal} u/d:{moveCommand.Vertical} yaw:{moveCommand.Yaw}";
             });
         }
 
-        public void HandleKeyEvent(Key key, KeyState status)
+        private void HandleDroneStateChanged(object source, DroneStateChangedEventArgs args)
         {
-            m_droneController.HandleKeyboardInput(key, status);
+            UserInterfaceConnector.SetSpeed(args.DroneState.Speed);
+            UserInterfaceConnector.SetHeight(args.DroneState.Height);
+            UserInterfaceConnector.SetBatteryLevel(args.DroneState.Battery);
+        }
+
+        private void ProcessDroneCameraFrame(object source, NewDroneCameraFrameEventArgs args)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                UserInterfaceConnector.SetCurrentDroneCameraFrame(args.Frame);
+            });
         }
 
         public void ConnectToDrone()
@@ -171,15 +161,7 @@ namespace Caduhd.UserInterface.ViewModel
         public void Closed()
         {
             m_webCamera.TurnOff();
-            m_drone.StopStreamingVideo();
-        }
-
-        private BitmapSource BitmapToBitmapSource(Bitmap bitmap, System.Windows.Media.PixelFormat pixelFormat)
-        {
-            var bitmapData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
-            var bitmapSource = BitmapSource.Create(bitmapData.Width, bitmapData.Height, 96, 96, pixelFormat, null, bitmapData.Scan0, bitmapData.Stride * bitmapData.Height, bitmapData.Stride);
-            bitmap.UnlockBits(bitmapData);
-            return bitmapSource;
+            m_droneController.StopStreamingVideo();
         }
     }
 }

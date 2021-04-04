@@ -1,17 +1,12 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Caduhd.HandDetector.Calibrator
+namespace Ksvydo.HandDetector.Calibrator
 {
     public class ColorCalibrator
     {
-        public ColorCharacteristics CreateColorCharacteristics(Image<Bgr, byte> sample, Rectangle mask)
+        public ColorCharacteristics ExtractColorCharacteristics(Image<Bgr, byte> sample, Rectangle mask)
         {
             var blues = new Histogram(sample.Width, sample.Height);
             var greens = new Histogram(sample.Width, sample.Height);
@@ -34,9 +29,6 @@ namespace Caduhd.HandDetector.Calibrator
             }
 
             return new ColorCharacteristics(blues, greens, reds);
-        }
-
-        public ColorCharacteristics ExtractColorCharacteristics(Image<Bgr, byte> sample, Rectangle mask) 
-            => CreateColorCharacteristics(sample, mask);
+        } 
     }
 }

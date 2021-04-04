@@ -1,46 +1,41 @@
-﻿using Caduhd.HandDetector.Detector;
+﻿using Ksvydo.HandDetector;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace Caduhd.UserInterface.Converters
 {
-    public class HandDetectorStatusToMessageToUserConverter : IValueConverter
+    public class ColorBasedHandDetectorStateToMessageToUserConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            HandDetectorState handDetectorStatus = HandDetectorState.NeedsCalibrating;
             string messageToUser = string.Empty;
 
             try
             {
-                handDetectorStatus = (HandDetectorState)value;
+                ColorBasedHandDetectorState colorBasedHandDetectorState = (ColorBasedHandDetectorState)value;
 
-                switch (handDetectorStatus)
+                switch (colorBasedHandDetectorState)
                 {
-                    case HandDetectorState.NeedsCalibrating:
+                    case ColorBasedHandDetectorState.NeedsCalibrating:
                         messageToUser = "The hand detector needs to be calibrated. Please press BS.";
                         break;
-                    case HandDetectorState.NeedsReCalibrating:
+                    case ColorBasedHandDetectorState.NeedsReCalibrating:
                         messageToUser = "The hand detector needs to be recalibrated. Please press BS.";
                         break;
-                    case HandDetectorState.ReadyToCaptureBackground:
+                    case ColorBasedHandDetectorState.ReadyToCaptureBackground:
                         messageToUser = "Lower your hands and press BS to capture the background.";
                         break;
-                    case HandDetectorState.ReadyToAnalyzeLeftHand:
+                    case ColorBasedHandDetectorState.ReadyToAnalyzeLeftHand:
                         messageToUser = "Raise your left hand only and press BS to analyze it.";
                         break;
-                    case HandDetectorState.ReadyToAnalyzeRightHand:
+                    case ColorBasedHandDetectorState.ReadyToAnalyzeRightHand:
                         messageToUser = "Raise your right hand only and press BS to analyze it.";
                         break;
-                    case HandDetectorState.Calibrated:
+                    case ColorBasedHandDetectorState.Calibrated:
                         messageToUser = "The hand detector has been calibrated. Press BS to enable it.";
                         break;
-                    case HandDetectorState.Enabled:
+                    case ColorBasedHandDetectorState.Enabled:
                         messageToUser = "The hand detector is enabled.";
                         break;
                 }

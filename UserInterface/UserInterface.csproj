@@ -56,7 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters\HandDetectorStatusToMessageToUserConverter.cs" />
+    <Compile Include="Converters\ColorBasedHandDetectorStateToMessageToUserConverter.cs" />
     <Compile Include="UserInterfaceConnector.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Caduhd.Drone
+﻿namespace Caduhd.Controller.Commands
 {
-    public class DroneMovement
+    public sealed class MoveCommand : MovementCommand
     {
         private const int DEFAULT = 0;
-        private const int MIN = -100;
-        private const int MAX = 100;
+        private const int MIN = -1;
+        private const int MAX = 1;
 
         private int m_lateral = DEFAULT;
         public int Lateral
@@ -42,9 +36,22 @@ namespace Caduhd.Drone
 
         public bool Still => m_lateral == 0 && m_vertical == 0 && m_longitudinal == 0 && m_yaw == 0;
 
-        public bool Moving => m_lateral != 0 || m_vertical != 0 || m_longitudinal != 0 || m_yaw != 0;
+        public bool Moving => !Still;
 
-        public static DroneMovement Idle => new DroneMovement();
+        public static MoveCommand Idle => new MoveCommand();
+
+        public override DroneCommand GetCopy()
+        {
+            DroneCommand moveCommand = new MoveCommand()
+            {
+                Longitudinal = Longitudinal,
+                Lateral = Lateral,
+                Vertical = Vertical,
+                Yaw = Yaw
+            };
+
+            return moveCommand;
+        }
 
         private int AdjustValueIfWrong(int original)
         {

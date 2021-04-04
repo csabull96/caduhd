@@ -1,11 +1,9 @@
-﻿using Caduhd.HandDetector.Detector;
-using System;
-using System.Collections.Generic;
+﻿using Ksvydo.HandDetector;
 using System.ComponentModel;
-using System.Linq;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Caduhd.UserInterface
@@ -15,42 +13,34 @@ namespace Caduhd.UserInterface
         public event PropertyChangedEventHandler PropertyChanged;
 
         private BitmapSource _currentWebCameraFrame;
-        public BitmapSource CurrentWebCameraFrame
+        public BitmapSource CurrentWebCameraFrame => _currentWebCameraFrame;
+        public void SetCurrentWebCameraFrame(Bitmap bitmap)
         {
-            get { return _currentWebCameraFrame; }
-            set
-            {
-                _currentWebCameraFrame = value;
-                OnPropertyChanged();
-            }
+            _currentWebCameraFrame = BitmapToBitmapSource(bitmap, PixelFormats.Bgr24);
+            OnPropertyChanged(nameof(CurrentWebCameraFrame));
         }
 
         private BitmapSource _currentDroneCameraFrame;
-        public BitmapSource CurrentDroneCameraFrame
+        public BitmapSource CurrentDroneCameraFrame => _currentDroneCameraFrame;
+        public void SetCurrentDroneCameraFrame(Bitmap bitmap)
         {
-            get { return _currentDroneCameraFrame; }
-            set
+            if (bitmap != null)
             {
-                _currentDroneCameraFrame = value;
-                OnPropertyChanged();
+                _currentDroneCameraFrame = BitmapToBitmapSource(bitmap, PixelFormats.Bgr24);
+                OnPropertyChanged(nameof(CurrentDroneCameraFrame));
             }
         }
 
-
-
-
-
-        private HandDetectorState m_handDetectorStatus;
-        public HandDetectorState HandDetectorStatus
+        private ColorBasedHandDetectorState m_handDetectorState;
+        public ColorBasedHandDetectorState HandDetectorState
         {
-            get { return m_handDetectorStatus; }
+            get { return m_handDetectorState; }
             set 
             { 
-                m_handDetectorStatus = value;
+                m_handDetectorState = value;
                 OnPropertyChanged();
             }
         }
-
 
         private string m_leftHand;
         public string LeftHand
@@ -85,9 +75,6 @@ namespace Caduhd.UserInterface
             }
         }
 
-
-
-
         private int m_batteryLevel = 0;
         public void SetBatteryLevel(int batteryLevel)
         {
@@ -117,6 +104,13 @@ namespace Caduhd.UserInterface
         public UserInterfaceConnector()
         {
             //CurrentWebCameraFrame = new BitmapImage(new Uri(@"Resources\Images\webcam_placeholder.jpg", UriKind.Relative));
+        }
+        private BitmapSource BitmapToBitmapSource(Bitmap bitmap, System.Windows.Media.PixelFormat pixelFormat)
+        {
+            var bitmapData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+            var bitmapSource = BitmapSource.Create(bitmapData.Width, bitmapData.Height, 96, 96, pixelFormat, null, bitmapData.Scan0, bitmapData.Stride * bitmapData.Height, bitmapData.Stride);
+            bitmap.UnlockBits(bitmapData);
+            return bitmapSource;
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

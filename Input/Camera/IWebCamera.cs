@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
-
-namespace Caduhd.Input.Camera
+﻿namespace Ksvydo.Input.Camera
 {
     public delegate void NewWebCameraFrameEventHandler(object sender, NewWebCameraFrameEventArgs args);
 

@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -43,24 +44,37 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\DroneCameraCommand.cs" />
-    <Compile Include="Commands\DroneControlCommand.cs" />
-    <Compile Include="DroneController.cs" />
-    <Compile Include="DroneControllerInputEvaluatedEventArgs.cs" />
-    <Compile Include="HandsDetectedEventArgs.cs" />
-    <Compile Include="IWebCameraInputHandler.cs" />
-    <Compile Include="Commands\AbstractDroneCommand.cs" />
-    <Compile Include="IKeyboardInputHandler.cs" />
-    <Compile Include="Commands\DroneMovementCommand.cs" />
+    <Compile Include="AbstractDroneController.cs" />
+    <Compile Include="Commands\CameraCommand.cs" />
+    <Compile Include="Commands\ConnectCommand.cs" />
+    <Compile Include="Commands\ControlCommand.cs" />
+    <Compile Include="Commands\DisconnectCommand.cs" />
+    <Compile Include="Commands\DroneCommand.cs" />
+    <Compile Include="Commands\LandCommand.cs" />
+    <Compile Include="Commands\MoveCommand.cs" />
+    <Compile Include="Commands\MovementCommand.cs" />
+    <Compile Include="Commands\StartStreamingVideoCommand.cs" />
+    <Compile Include="Commands\StopStreamingVideoCommand.cs" />
+    <Compile Include="Commands\TakeOffCommand.cs" />
+    <Compile Include="DroneControllerHandsInputProcessResult.cs" />
+    <Compile Include="DroneControllerKeyInputProcessResult.cs" />
+    <Compile Include="HandsDroneController.cs" />
+    <Compile Include="IControllableDrone.cs" />
+    <Compile Include="InputEvaluator\AbstractDroneInputEvaluator.cs" />
+    <Compile Include="InputEvaluator\DroneHandsInputEvaluator.cs" />
+    <Compile Include="IHandsInputHandler.cs" />
+    <Compile Include="IKeyInputHandler.cs" />
+    <Compile Include="InputEvaluator\IDroneHandsInputEvaluator.cs" />
+    <Compile Include="InputEvaluator\IDroneKeyInputEvaluator.cs" />
+    <Compile Include="InputEvaluator\GeneralDroneKeyInputEvaluator.cs" />
+    <Compile Include="InputEvaluator\TelloKeyInputEvaluator.cs" />
+    <Compile Include="InputProcessResult.cs" />
+    <Compile Include="KeyboardDroneController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Drone\Drone.csproj">
-      <Project>{9c6e775b-b95e-4449-b8d0-88bd50ecb1a3}</Project>
-      <Name>Drone</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HandDetector\HandDetector.csproj">
-      <Project>{a623ce8b-853a-447e-8ae1-7f5546713047}</Project>
+      <Project>{A623CE8B-853A-447E-8AE1-7F5546713047}</Project>
       <Name>HandDetector</Name>
     </ProjectReference>
     <ProjectReference Include="..\Input\Input.csproj">
@@ -68,5 +82,6 @@
       <Name>Input</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

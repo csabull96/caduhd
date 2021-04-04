@@ -1,30 +1,35 @@
 ﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 
-namespace Caduhd.Input.Camera
+namespace Ksvydo.Input.Camera
 {
     public class WebCamera : IWebCamera
     {
+        private const int DEFAULT_WIDTH = 1280;
+        private const int DEFAULT_HEIGHT = 720;
+        private const int DEFAULT_FPS = 30;
+
         private Timer m_timer;
         private VideoCapture m_videoCapture;
+
+        public int FPS { get; private set; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+
         public event NewWebCameraFrameEventHandler NewFrame;
         public bool IsOn { get; private set; }
 
-        public WebCamera() : this(30) { }
-
-        public WebCamera(int fps)
+        public WebCamera(int fps = DEFAULT_FPS, int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT)
         {
+            FPS = fps;
+            Width = width;
+            Height = height;
+
             IsOn = false;
-            int interval = 1000 / fps;
+            int interval = 1000 / FPS;
             m_timer = new Timer(interval);
             m_timer.Elapsed += OnElapsed;
         }
@@ -33,6 +38,7 @@ namespace Caduhd.Input.Camera
         {
             Bitmap frame = m_videoCapture.QueryFrame()
                 .ToImage<Bgr, byte>()
+                .Resize(Width, Height, Inter.Area, false)
                 .Flip(FlipType.Horizontal)
                 .Bitmap;
             

@@ -7,7 +7,7 @@
     <ProjectGuid>{A623CE8B-853A-447E-8AE1-7F5546713047}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Caduhd.HandDetector</RootNamespace>
+    <RootNamespace>Ksvydo.HandDetector</RootNamespace>
     <AssemblyName>HandDetector</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -57,19 +57,15 @@
     <Compile Include="Calibrator\ColorCharacteristics.cs" />
     <Compile Include="Calibrator\Histogram.cs" />
     <Compile Include="Calibrator\DoubleRange.cs" />
-    <Compile Include="Detector\HandDetectorState.cs" />
-    <Compile Include="Detector\HandDetectorStateChangedEventArgs.cs" />
-    <Compile Include="Detector\InputProcessedEventArgs.cs" />
-    <Compile Include="Detector\HandDetector.cs" />
-    <Compile Include="Detector\IHandDetector.cs" />
+    <Compile Include="ColorBasedHandDetectorState.cs" />
+    <Compile Include="ColorBasedHandDetector.cs" />
     <Compile Include="ImageExtensions.cs" />
+    <Compile Include="Model\HandDetectionResult.cs" />
     <Compile Include="Model\Hand.cs" />
     <Compile Include="Model\Hands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Converter\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="License-LGPL.txt" />
   </ItemGroup>

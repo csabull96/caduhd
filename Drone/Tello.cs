@@ -1,8 +1,7 @@
-﻿using Emgu.CV;
+﻿using Caduhd.Controller;
+using Caduhd.Controller.Commands;
+using Emgu.CV;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -11,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Caduhd.Drone
 {
-    public class Tello : AbstractDrone
+    public class Tello : IControllableDrone
     {
         private const string CONNECT = "command";
         private const string TAKE_OFF = "takeoff";
@@ -27,18 +26,72 @@ namespace Caduhd.Drone
         private byte[] m_messageBuffer = default;
         private byte[] m_telloStateData = default;
 
-        public override event NewDroneVideoFrameEventHandler NewDroneCameraFrame;
-        public override event DroneStateEventHandler StateChanged;
+        private const int MIN_SPEED = 0;
+        private const int MAX_SPEED = 100;
+        private const int DEFAULT_SPEED = 100;
+        private int m_speed = DEFAULT_SPEED;
+        public int Speed 
+        {
+            get => m_speed;
+            set => m_speed = AdjustSpeed(value);
+        }
+
+        public delegate void NewDroneVideoFrameEventHandler(object source, NewDroneCameraFrameEventArgs args);
+        public event NewDroneVideoFrameEventHandler NewCameraFrame;
+
+        public delegate void DroneStateEventHandler(object source, DroneStateChangedEventArgs args);
+        public event DroneStateEventHandler StateChanged;
 
         private CancellationTokenSource m_videoStreamCancellationTokenSource;
 
         private DroneState telloState = new DroneState();
 
         private bool m_isStreamingVideo = false;
-        public override bool IsStreamingVideo => m_isStreamingVideo;
+        public bool IsStreamingVideo => m_isStreamingVideo;
 
         public Tello() { }
     
+        public void Control(DroneCommand droneCommand)
+        {
+            if (droneCommand is MovementCommand)
+            {
+                if (droneCommand is TakeOffCommand)
+                {
+                    TakeOff();
+                }
+                else if (droneCommand is LandCommand)
+                {
+                   Land();
+                }
+                else if (droneCommand is MoveCommand)
+                {
+                    Move(droneCommand as MoveCommand);
+                }
+            }
+            else if (droneCommand is ControlCommand)
+            {
+                if (droneCommand is ConnectCommand)
+                {
+                    Connect();
+                }
+                else if (droneCommand is DisconnectCommand)
+                {
+                    // not handled yet
+                }
+            }
+            else if (droneCommand is CameraCommand)
+            {
+                if (droneCommand is StartStreamingVideoCommand)
+                {
+                    StartStreamingVideo();
+                }
+                else if (droneCommand is StopStreamingVideoCommand)
+                {
+                    StopStreamingVideo();
+                }
+            }
+        }
+
         private void StartDroneStateReceiver()
         {
             Task.Factory.StartNew(() =>
@@ -78,35 +131,40 @@ namespace Caduhd.Drone
             }, TaskCreationOptions.LongRunning);
         }
 
-        public override void Connect()
+        private void Connect()
         {
             TellTelloTo(CONNECT);
             // we should only continue if there was an okay response
             StartDroneStateReceiver();
         }
 
-        public override void Disconnect()
+        private void Disconnect()
         {
             throw new NotImplementedException();
         }
 
-        public override void TakeOff()
+        private void TakeOff()
         {
             TellTelloTo(TAKE_OFF);           
         }
 
-        public override void Land()
+        private void Land()
         {
             TellTelloTo(LAND);
         }
 
-        public override void Move(DroneMovement movement)
+        private void Move(MoveCommand moveCommand)
         {
-            TellTelloTo(string.Format(MOVE, movement.Lateral, movement.Longitudinal, movement.Vertical, movement.Yaw));
+            TellTelloTo(string.Format(MOVE, 
+                moveCommand.Lateral * Speed,
+                moveCommand.Longitudinal * Speed,
+                moveCommand.Vertical * Speed,
+                moveCommand.Yaw * Speed));
         }
 
-        public override void StartStreamingVideo()
+        private void StartStreamingVideo()
         {
+            // i should probably always check if the connection is still alive
             if (!IsStreamingVideo)
             {
                 TellTelloTo(START_STREAMING_VIDEO);
@@ -129,14 +187,14 @@ namespace Caduhd.Drone
                             // var frameCount = vc.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameCount);
                             Mat frame = new Mat();
                             videoCapture.Read(frame);
-                            NewDroneCameraFrame?.Invoke(this, new NewDroneCameraFrameEventArgs(frame.Bitmap));
+                            NewCameraFrame?.Invoke(this, new NewDroneCameraFrameEventArgs(frame.Bitmap));
                         }
                     }
                 }, m_videoStreamCancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
             }
         }
 
-        public override void StopStreamingVideo()
+        private void StopStreamingVideo()
         {
             if (IsStreamingVideo)
             {
@@ -155,6 +213,19 @@ namespace Caduhd.Drone
             m_udpClient.Send(m_messageBuffer, m_messageBuffer.Length, m_telloIPEndPoint);
 
             // throws error if wifi not conencted
+        }
+
+        private int AdjustSpeed(int original)
+        {
+            if (original < MIN_SPEED)
+            {
+                return MIN_SPEED;
+            }
+            else if (MAX_SPEED < original)
+            {
+                return MAX_SPEED;
+            }
+            return original;
         }
     }
 }

@@ -1,18 +1,14 @@
-﻿using Caduhd.HandDetector.Model;
-using System;
-using System.Collections.Generic;
-using Emgu.CV;
+﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
+using Ksvydo.HandDetector.Calibrator;
+using Ksvydo.HandDetector.Model;
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Caduhd.HandDetector.Calibrator;
 
-namespace Caduhd.HandDetector.Detector
+namespace Ksvydo.HandDetector
 {
-    public class HandDetector : IHandDetector
+    public class ColorBasedHandDetector
     {
         private const int WIDTH = 320;
         private const int HEIGHT = 180;
@@ -24,79 +20,86 @@ namespace Caduhd.HandDetector.Detector
         private ColorCharacteristics m_leftHandColorCharacteristics;
         private ColorCharacteristics m_rightHandColorCharacteristics;
 
-        private Image<Bgr, byte> m_background;
-
-        public event HandDetectorInputProcessedEventHandler InputProcessed;
+        public delegate void HandDetectorStateChangedEventHandler();
         public event HandDetectorStateChangedEventHandler StateChanged;
 
-        public HandDetectorState State { get; private set; }
+        public ColorBasedHandDetectorState State { get; private set; }
 
-        // should use dependency injection later
-        private ColorCalibrator m_colorCalibrator = new ColorCalibrator();
+        private Image<Bgr, byte> m_background;
+
+        ColorCalibrator m_colorCalibrator;
+
+        public ColorBasedHandDetector(ColorCalibrator colorCalibrator)
+        {
+            m_colorCalibrator = colorCalibrator;
+        }
 
         public void ShiftState()
         {
             switch (State)
             {
-                case HandDetectorState.NeedsCalibrating:
-                    State = HandDetectorState.ReadyToCaptureBackground;
+                case ColorBasedHandDetectorState.NeedsCalibrating:
+                    State = ColorBasedHandDetectorState.ReadyToCaptureBackground;
                     break;
-                case HandDetectorState.NeedsReCalibrating:
-                    State = HandDetectorState.ReadyToCaptureBackground;
+                case ColorBasedHandDetectorState.NeedsReCalibrating:
+                    State = ColorBasedHandDetectorState.ReadyToCaptureBackground;
                     break;
-                case HandDetectorState.ReadyToCaptureBackground:
-                    State = HandDetectorState.ReadyToAnalyzeLeftHand;
+                case ColorBasedHandDetectorState.ReadyToCaptureBackground:
+                    State = ColorBasedHandDetectorState.ReadyToAnalyzeLeftHand;
                     break;
-                case HandDetectorState.ReadyToAnalyzeLeftHand:
-                    State = HandDetectorState.ReadyToAnalyzeRightHand;
+                case ColorBasedHandDetectorState.ReadyToAnalyzeLeftHand:
+                    State = ColorBasedHandDetectorState.ReadyToAnalyzeRightHand;
                     break;
-                case HandDetectorState.ReadyToAnalyzeRightHand:
-                    State = HandDetectorState.Calibrated;
+                case ColorBasedHandDetectorState.ReadyToAnalyzeRightHand:
+                    State = ColorBasedHandDetectorState.Calibrated;
                     break;
-                case HandDetectorState.Calibrated:
-                    State = HandDetectorState.Enabled;
+                case ColorBasedHandDetectorState.Calibrated:
+                    State = ColorBasedHandDetectorState.Enabled;
                     break;
-                case HandDetectorState.Enabled:
-                    State = HandDetectorState.NeedsReCalibrating;
+                case ColorBasedHandDetectorState.Enabled:
+                    State = ColorBasedHandDetectorState.NeedsReCalibrating;
                     break;
             }
 
-            StateChanged?.Invoke(this, new HandDetectorStateChangedEventArgs(State));
+            StateChanged?.Invoke();
         }
 
-        public void CaptureBackground(Bitmap frame)
+        public Bitmap CaptureBackground(Bitmap frame)
         {
             Image<Bgr, byte> sample = PreProcess(frame);
 
+            // csandor: check why is the disposal necessary here
             m_background?.Dispose();
             m_background = sample.Copy();
 
-            InputProcessed?.Invoke(this, new InputProcessedEventArgs(sample.Bitmap));
+            return sample.Bitmap;
         }
 
-        public void AnalyzeLeftHand(Bitmap frame)
-        {
-
-            m_leftHandColorCharacteristics = AnalyzeHand(frame, m_maskForLeftHand);
-        }
-
-        public void AnalyzeRightHand(Bitmap frame) => m_rightHandColorCharacteristics = AnalyzeHand(frame, m_maskForRightHand);
-
-        private ColorCharacteristics AnalyzeHand(Bitmap frame, Rectangle mask)
+        public Bitmap AnalyzeLeftHand(Bitmap frame)
         {
             Image<Bgr, byte> sample = PreProcess(frame);
-
-            ColorCharacteristics result = m_colorCalibrator.ExtractColorCharacteristics(sample, mask);
-            sample.Draw(mask, new Bgr(Color.LimeGreen), 2);
-
-            InputProcessed?.Invoke(this, new InputProcessedEventArgs(sample.Bitmap));
-            return result;
+            m_leftHandColorCharacteristics = m_colorCalibrator.ExtractColorCharacteristics(sample, m_maskForLeftHand);
+            sample.Draw(m_maskForLeftHand, new Bgr(Color.LimeGreen), 2);
+            return sample.Bitmap;
         }
 
-        public Hands DetectHands(Bitmap frame)
+        public Bitmap AnalyzeRightHand(Bitmap frame)
         {
             Image<Bgr, byte> sample = PreProcess(frame);
+            m_rightHandColorCharacteristics = m_colorCalibrator.ExtractColorCharacteristics(sample, m_maskForRightHand);
+            sample.Draw(m_maskForRightHand, new Bgr(Color.LimeGreen), 2);
+            return sample.Bitmap;
+        }
 
+        public Bitmap Update(Bitmap frame)
+        {
+            Image<Bgr, byte> sample = PreProcess(frame);
+            return sample.Bitmap;
+        }
+
+        public HandDetectionResult DetectHands(Bitmap frame)
+        {
+            Image<Bgr, byte> sample = PreProcess(frame);
             return DetectHandsInternally(sample);
         }
 
@@ -108,28 +111,7 @@ namespace Caduhd.HandDetector.Detector
             return image;
         }
 
-        private bool NotBackgroundAt(Bgr pixel, int x, int y)
-        {
-            Bgr backgroundReferencePixel = m_background.GetPixelAt(x, y);
-
-            double deltaBlue = Math.Abs(backgroundReferencePixel.Blue - pixel.Blue);
-            double deltaGreen = Math.Abs(backgroundReferencePixel.Green - pixel.Green);
-            double deltaRed = Math.Abs(backgroundReferencePixel.Red - pixel.Red);
-
-            return 20 <= deltaBlue || 20 <= deltaGreen || 20 <= deltaRed;
-        }
-
-        private bool MatchesColorCharacteristics(Bgr pixel, ColorCharacteristics colorCharacteristics)
-        {
-            return colorCharacteristics.Blue.IsWithinRange(pixel.Blue) &&
-                   colorCharacteristics.Green.IsWithinRange(pixel.Green) &&
-                   colorCharacteristics.Red.IsWithinRange(pixel.Red) &&
-                   colorCharacteristics.BluePerGreen.IsWithinRange(pixel.Blue / pixel.Green) &&
-                   colorCharacteristics.BluePerRed.IsWithinRange(pixel.Blue / pixel.Red) &&
-                   colorCharacteristics.GreenPerRed.IsWithinRange(pixel.Green / pixel.Red);
-        }
-
-        private Hands DetectHandsInternally(Image<Bgr, byte> sample)
+        private HandDetectionResult DetectHandsInternally(Image<Bgr, byte> sample)
         {
             Hand left = new Hand();
             Hand right = new Hand();
@@ -193,9 +175,28 @@ namespace Caduhd.HandDetector.Detector
             sample.Draw(new CircleF(new PointF(left.Position.X, left.Position.Y), 3), new Bgr(Color.Yellow), 3);
             sample.Draw(new CircleF(new PointF(right.Position.X, right.Position.Y), 3), new Bgr(Color.Yellow), 3);
 
-            InputProcessed?.Invoke(this, new InputProcessedEventArgs(sample.Bitmap));
+            return new HandDetectionResult(new Hands(left, right), sample.Bitmap);
+        }
 
-            return new Hands(left, right);
+        private bool NotBackgroundAt(Bgr pixel, int x, int y)
+        {
+            Bgr backgroundReferencePixel = m_background.GetPixelAt(x, y);
+
+            double deltaBlue = Math.Abs(backgroundReferencePixel.Blue - pixel.Blue);
+            double deltaGreen = Math.Abs(backgroundReferencePixel.Green - pixel.Green);
+            double deltaRed = Math.Abs(backgroundReferencePixel.Red - pixel.Red);
+
+            return 20 <= deltaBlue || 20 <= deltaGreen || 20 <= deltaRed;
+        }
+
+        private bool MatchesColorCharacteristics(Bgr pixel, ColorCharacteristics colorCharacteristics)
+        {
+            return colorCharacteristics.Blue.IsWithinRange(pixel.Blue) &&
+                   colorCharacteristics.Green.IsWithinRange(pixel.Green) &&
+                   colorCharacteristics.Red.IsWithinRange(pixel.Red) &&
+                   colorCharacteristics.BluePerGreen.IsWithinRange(pixel.Blue / pixel.Green) &&
+                   colorCharacteristics.BluePerRed.IsWithinRange(pixel.Blue / pixel.Red) &&
+                   colorCharacteristics.GreenPerRed.IsWithinRange(pixel.Green / pixel.Red);
         }
     }
 }

@@ -1,19 +1,7 @@
-﻿using Caduhd.Input.Keyboard;
-using Caduhd.UserInterface.ViewModel;
+﻿using Caduhd.UserInterface.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Caduhd.UserInterface
 {
@@ -34,15 +22,23 @@ namespace Caduhd.UserInterface
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            e.Handled = true;
-            m_mainViewModel.HandleKeyEvent(e.Key, KeyState.Down);
-
+            HandleKeyEvent(e);
         }
 
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            e.Handled = true;
-            m_mainViewModel.HandleKeyEvent(e.Key, KeyState.Up);
+            HandleKeyEvent(e);
+        }
+
+        private void HandleKeyEvent(KeyEventArgs keyEventArgs)
+        {
+            keyEventArgs.Handled = true;
+
+            // if a key is held down, this (PreviewKeyDown) will keep being raised
+            // not sure this makes any sense with the PreviewKeyUp event
+            if (keyEventArgs.IsRepeat) return;
+
+            m_mainViewModel.HandleKeyEvent(keyEventArgs);
         }
 
         private void StartStreamingDroneVideo(object sender, RoutedEventArgs e)

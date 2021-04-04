@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Caduhd.HandDetector.Calibrator
+﻿namespace Ksvydo.HandDetector.Calibrator
 {
     public class Histogram
     {
