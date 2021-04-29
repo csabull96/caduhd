@@ -1,5 +1,4 @@
-﻿using Ksvydo.HandDetector;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
@@ -31,79 +30,79 @@ namespace Caduhd.UserInterface
             }
         }
 
-        private ColorBasedHandDetectorState m_handDetectorState;
-        public ColorBasedHandDetectorState HandDetectorState
+        private string _tuningState;
+        public string TuningState
         {
-            get { return m_handDetectorState; }
+            get { return _tuningState; }
             set 
             { 
-                m_handDetectorState = value;
+                _tuningState = value;
                 OnPropertyChanged();
             }
         }
 
-        private string m_leftHand;
+        private string _leftHand;
         public string LeftHand
         {
-            get { return m_leftHand; }
+            get { return _leftHand; }
             set 
             { 
-                m_leftHand = value;
+                _leftHand = value;
                 OnPropertyChanged();
             }
         }
 
-        private string m_rightHand;
+        private string _rightHand;
         public string RightHand
         {
-            get { return m_rightHand; }
+            get { return _rightHand; }
             set
             {
-                m_rightHand = value;
+                _rightHand = value;
                 OnPropertyChanged();
             }
         }
 
-        private string m_direction;
+        private string _direction;
         public string Direction
         {
-            get { return m_direction; }
+            get { return _direction; }
             set
             {
-                m_direction = value;
+                _direction = value;
                 OnPropertyChanged();
             }
         }
 
-        private int m_batteryLevel = 0;
+        private int _batteryLevel = 0;
         public void SetBatteryLevel(int batteryLevel)
         {
-            m_batteryLevel = batteryLevel;
+            _batteryLevel = batteryLevel;
             OnPropertyChanged(nameof(BatteryLevel));
             OnPropertyChanged(nameof(BatteryPercentage));
         }
-        public int BatteryLevel => m_batteryLevel;
-        public string BatteryPercentage => $"{m_batteryLevel}%";
+        public int BatteryLevel => _batteryLevel;
+        public string BatteryPercentage => $"{_batteryLevel}%";
 
-        private double m_speed = 0;
+        private double _speed = 0;
         public void SetSpeed(double speed)
         {
-            m_speed = speed;
+            _speed = speed;
             OnPropertyChanged(nameof(Speed));
         }
-        public string Speed { get { return $"Speed: {m_speed.ToString("F1")} m/s"; } }
+        public string Speed { get { return $"Speed: {_speed.ToString("F1")} m/s"; } }
 
-        private int m_relativeHeight = 0;
+        private int _relativeHeight = 0;
         public void SetHeight(int height)
         {
-            m_relativeHeight = height;
+            _relativeHeight = height;
             OnPropertyChanged(nameof(Height));
         }
-        public string Height { get { return $"Height: {m_relativeHeight} cm"; } }
+        public string Height { get { return $"Height: {_relativeHeight} cm"; } }
 
         public UserInterfaceConnector()
         {
-            //CurrentWebCameraFrame = new BitmapImage(new Uri(@"Resources\Images\webcam_placeholder.jpg", UriKind.Relative));
+            //CurrentWebCameraFrame = new BitmapImage(new Uri(@"Resources\Images\webca_placeholder.jpg", UriKind.Relative));
         }
         private BitmapSource BitmapToBitmapSource(Bitmap bitmap, System.Windows.Media.PixelFormat pixelFormat)
         {

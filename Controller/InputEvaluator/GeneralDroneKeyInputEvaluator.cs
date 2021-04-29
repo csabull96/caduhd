@@ -1,5 +1,5 @@
-﻿using Caduhd.Controller.Commands;
-using Ksvydo.Input.Keyboard;
+﻿using Caduhd.Controller.Command;
+using Caduhd.Input.Keyboard;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;

@@ -1,5 +1,5 @@
-﻿using Caduhd.Controller.Commands;
-using Ksvydo.Input.Keyboard;
+﻿using Caduhd.Controller.Command;
+using Caduhd.Input.Keyboard;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,11 +9,11 @@ namespace Caduhd.Controller.InputEvaluator
 {
     public class TelloKeyInputEvaluator : GeneralDroneKeyInputEvaluator
     {
-        private const Key START_STREAMING_VIDEO = Key.RightShift;
-        private const Key STOP_STREAMING_VIDEO = Key.LeftShift;
+        private const Key START_STREAMING_VIDEO_KEY = Key.RightShift;
+        private const Key STOP_STREAMING_VIDEO_KEY = Key.LeftShift;
 
-        protected KeyInfo StartStreamingVideo { get; private set; } = new KeyInfo(START_STREAMING_VIDEO);
-        protected KeyInfo StopStreamingVideo { get; private set; } = new KeyInfo(STOP_STREAMING_VIDEO);
+        protected KeyInfo StartStreamingVideo { get; private set; } = new KeyInfo(START_STREAMING_VIDEO_KEY);
+        protected KeyInfo StopStreamingVideo { get; private set; } = new KeyInfo(STOP_STREAMING_VIDEO_KEY);
 
         protected override DroneCommand EvaluateInputKeys()
         {

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Drawing;
+﻿using Caduhd.Common;
+using System;
 
-namespace Ksvydo.Input.Camera
+namespace Caduhd.Input.Camera
 {
     public class NewWebCameraFrameEventArgs : EventArgs
     {
-        public Bitmap Frame { get; private set; }
+        public BgrImage Frame { get; private set; }
 
-        public NewWebCameraFrameEventArgs(Bitmap frame)
+        public NewWebCameraFrameEventArgs(BgrImage frame)
         {
             Frame = frame;
         }

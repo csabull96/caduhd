@@ -1,28 +1,26 @@
-﻿using Caduhd.Controller.Commands;
+﻿using Caduhd.Controller.Command;
 using Caduhd.Controller.InputEvaluator;
-using Ksvydo.HandDetector.Model;
+using Caduhd.HandsDetector;
 
 namespace Caduhd.Controller
 {
     public class HandsDroneController : KeyboardDroneController, IHandsInputHandler
     {
-        private MoveCommand m_latestEvaluatedHandsInput;
-        private readonly IDroneHandsInputEvaluator m_handsInputEvaluator;
+        private MoveCommand _latestHandsInputEvaluated;
+        private readonly IDroneHandsInputEvaluator _handsInputEvaluator;
 
         public HandsDroneController(IControllableDrone drone, 
-            IDroneHandsInputEvaluator hie, IDroneKeyInputEvaluator kie) : base(drone, kie)
+            IDroneHandsInputEvaluator handsInputEvaluator, 
+            IDroneKeyInputEvaluator keyInputEvaluator) : base(drone, keyInputEvaluator)
         {
-            m_handsInputEvaluator = hie;
+            _handsInputEvaluator = handsInputEvaluator;
         }
 
         public InputProcessResult ProcessHandsInput(Hands hands)
         {
-            // when there are no hands detected
-            // hands should be null
-
-            m_latestEvaluatedHandsInput = m_handsInputEvaluator.EvaluateHands(hands);
+            _latestHandsInputEvaluated = _handsInputEvaluator.EvaluateHands(hands);
             DroneControllerHandsInputProcessResult result =
-                new DroneControllerHandsInputProcessResult(m_latestEvaluatedHandsInput.GetCopy() as MoveCommand);
+                new DroneControllerHandsInputProcessResult(_latestHandsInputEvaluated.GetCopy() as MoveCommand);
             Control();
             return result;
         }
@@ -35,34 +33,37 @@ namespace Caduhd.Controller
 
         private DroneCommand EvaluateInputs()
         {
-            // if the m_latestEvaluatedKeyInput is not null,
-            // then it is always prioritized over the m_latestEvaluatedHandsInput
-            if (m_latestEvaluatedKeyInput != null)
+            // key input has always priority over the hands input
+            if (_latestKeyInputEvaluated != null)
             {
-                DroneCommand copy = m_latestEvaluatedKeyInput.GetCopy();
+                DroneCommand latestKeyInputEvaluatedCopy = _latestKeyInputEvaluated.GetCopy();
 
-                // if the evaluated input from the keyboard was executed, then it has to be set to null, otherwise
-                // the evaluated hands input will never had the chance to be executed
-                // after being evaluated the m_latestEvaluatedKeyInput is always set to null
-                // unless it's a MoveCommand which represents a moving state
-                // why? if the hand detector is enabled but we want to control the drone using the keyboard
-                // imagine: only the left arrow key is held down, we're gonna enter this (ProcessKeyInput) method only once
-                // and also set the m_latestEvaluatedKeyInput to null, meanwhile we're receiving several input per second
-                // from the web camera, which means that even though the left arrow key is still down
-                // (because of m_latestEvaluatedKeyInput was set to null) the evaluated hands input is going to be
-                // executed by the drone and not the one from the keyboard
-                if (!(m_latestEvaluatedKeyInput is MoveCommand moveCommand) || moveCommand.Still)
+                // If the evaluated input from the keyboard was executed, then it has to be set to null,
+                // otherwise the evaluated hands input will never have the chance to get executed.
+                // After being evaluated the _latestKeyInputEvaluated is always set to null
+                // unless it's a MoveCommand which represents a moving state.
+                // Why?
+                // Imagine the following scenario:
+                // The hand detector is enabled but we want to control the drone using the keyboard.               
+                // We are pressing the left key arrow (nothing else).
+                // We are going to enter the KeyboardDroneController.ProcessKeyInput method only once.
+                // Right after the key is evaluated the _latestKeyInputEvaluated is set to null.
+                // At the same time because of the enabled hand detector we're receiving several input per second from the web camera.
+                // This means that even though the left arrow key is still held down, instead of the _latestKeyInputEvaluated
+                // the _latestHandsInputEvaluated is going to be executed.
+                // (Because the _latestKeyInputEvaluated was set to null before.)
+                if (!(_latestKeyInputEvaluated is MoveCommand moveCommand) || moveCommand.Still)
                 {
-                    m_latestEvaluatedKeyInput = null;
+                    _latestKeyInputEvaluated = null;
                 }
 
-                return copy;
+                return latestKeyInputEvaluatedCopy;
             }
-            else if (m_latestEvaluatedHandsInput != null)
+            else if (_latestHandsInputEvaluated != null)
             {
-                DroneCommand copy = m_latestEvaluatedHandsInput.GetCopy();
-                m_latestEvaluatedHandsInput = null;
-                return copy;
+                DroneCommand latestHandsInputEvaluatedCopy = _latestHandsInputEvaluated.GetCopy();
+                _latestHandsInputEvaluated = null;
+                return latestHandsInputEvaluatedCopy;
             }
 
             return null;

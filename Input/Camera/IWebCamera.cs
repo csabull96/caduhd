@@ -1,4 +1,4 @@
-﻿namespace Ksvydo.Input.Camera
+﻿namespace Caduhd.Input.Camera
 {
     public delegate void NewWebCameraFrameEventHandler(object sender, NewWebCameraFrameEventArgs args);
 

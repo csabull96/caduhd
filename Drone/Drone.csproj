@@ -54,11 +54,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DroneControllerKeyInputEvaluatorFactory.cs" />
-    <Compile Include="DroneStateChangedEventArgs.cs" />
-    <Compile Include="NewDroneCameraFrameEventArgs.cs" />
+    <Compile Include="DroneState.cs" />
+    <Compile Include="Event\DroneStateChangedEventArgs.cs" />
+    <Compile Include="Event\NewDroneCameraFrameEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tello.cs" />
-    <Compile Include="DroneState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="License-LGPL.txt" />
@@ -67,6 +67,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{78431359-5BD3-487B-996C-87C0FBE92BFE}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Controller\Controller.csproj">
       <Project>{4f577257-83f2-4fae-b205-e776e1a397b9}</Project>
       <Name>Controller</Name>

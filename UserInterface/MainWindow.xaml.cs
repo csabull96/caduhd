@@ -7,17 +7,17 @@ namespace Caduhd.UserInterface
 {
     public partial class MainWindow : Window
     {
-        private MainViewModel m_mainViewModel;
+        private MainViewModel _mainViewModel;
 
         public MainWindow()
         {
             InitializeComponent();
-            m_mainViewModel = Resources["MainViewModel"] as MainViewModel;
+            _mainViewModel = Resources["MainViewModel"] as MainViewModel;
         }
 
         private void Connect(object sender, RoutedEventArgs e)
         {
-            m_mainViewModel.ConnectToDrone();
+            _mainViewModel.ConnectToDrone();
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -38,32 +38,32 @@ namespace Caduhd.UserInterface
             // not sure this makes any sense with the PreviewKeyUp event
             if (keyEventArgs.IsRepeat) return;
 
-            m_mainViewModel.HandleKeyEvent(keyEventArgs);
+            _mainViewModel.HandleKeyEvent(keyEventArgs);
         }
 
         private void StartStreamingDroneVideo(object sender, RoutedEventArgs e)
         {
-            m_mainViewModel.StartStreamingDroneVideo();
+            _mainViewModel.StartStreamingDroneVideo();
         }
 
         private void StopStreamingDroneVideo(object sender, RoutedEventArgs e)
         {
-            m_mainViewModel.StopStreamingDroneVideo();
+            _mainViewModel.StopStreamingDroneVideo();
         }
 
         private void TurnOnWebCamera(object sender, RoutedEventArgs e)
         {
-            m_mainViewModel.TurnOnWebCamera();
+            _mainViewModel.TurnOnWebCamera();
         }
 
         private void TurnOffWebCamera(object sender, RoutedEventArgs e)
         {
-            m_mainViewModel.TurnOffWebCamera();
+            _mainViewModel.TurnOffWebCamera();
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            m_mainViewModel.Closed();
+            _mainViewModel.Closed();
         }
     }
 }

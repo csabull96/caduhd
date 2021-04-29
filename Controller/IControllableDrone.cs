@@ -1,4 +1,4 @@
-﻿using Caduhd.Controller.Commands;
+﻿using Caduhd.Controller.Command;
 
 namespace Caduhd.Controller
 {

@@ -1,38 +1,39 @@
-﻿using Caduhd.Controller.Commands;
+﻿using Caduhd.Controller.Command;
 using Caduhd.Controller.InputEvaluator;
-using Ksvydo.Input.Keyboard;
+using Caduhd.Input.Keyboard;
 
 namespace Caduhd.Controller
 {
     public class KeyboardDroneController : AbstractDroneController, IKeyInputHandler
     {
-        protected DroneCommand m_latestEvaluatedKeyInput;
-        protected readonly IDroneKeyInputEvaluator m_keyInputEvaluator;
+        protected DroneCommand _latestKeyInputEvaluated;
+        protected readonly IDroneKeyInputEvaluator _keyInputEvaluator;
 
-        public KeyboardDroneController(IControllableDrone drone, IDroneKeyInputEvaluator keyInputEvaluator) : base(drone)
+        public KeyboardDroneController(IControllableDrone drone, 
+            IDroneKeyInputEvaluator keyInputEvaluator) : base(drone)
         {
-            m_keyInputEvaluator = keyInputEvaluator;
+            _keyInputEvaluator = keyInputEvaluator;
         }
 
         public InputProcessResult ProcessKeyInput(KeyInfo keyInfo)
         {
-            DroneCommand keyEvaluated = m_keyInputEvaluator.EvaluateKey(keyInfo);
+            DroneCommand keyEvaluated = _keyInputEvaluator.EvaluateKey(keyInfo);
 
             if (keyEvaluated == null)
             {
                 return null;
             }
 
-            m_latestEvaluatedKeyInput = keyEvaluated;
+            _latestKeyInputEvaluated = keyEvaluated;
             DroneControllerKeyInputProcessResult result =
-                new DroneControllerKeyInputProcessResult(m_latestEvaluatedKeyInput.GetCopy());
+                new DroneControllerKeyInputProcessResult(_latestKeyInputEvaluated.GetCopy());
             Control();
             return result;
         }
 
         public override void Control()
         {
-            InternalControl(m_latestEvaluatedKeyInput);
+            InternalControl(_latestKeyInputEvaluated);
         }
     }
 }

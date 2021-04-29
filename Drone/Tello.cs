@@ -1,5 +1,6 @@
-﻿using Caduhd.Controller;
-using Caduhd.Controller.Commands;
+﻿using Caduhd.Common;
+using Caduhd.Controller;
+using Caduhd.Controller.Command;
 using Emgu.CV;
 using System;
 using System.Net;
@@ -20,20 +21,20 @@ namespace Caduhd.Drone
         private const string MOVE = "rc {0} {1} {2} {3}";
         private const string QUERY_WIFI_SIGNAL_QUALITY = "wifi?";
 
-        private UdpClient m_udpServer = new UdpClient(new IPEndPoint(IPAddress.Parse("0.0.0.0"), 8890));
-        private UdpClient m_udpClient = new UdpClient(11001);
-        private IPEndPoint m_telloIPEndPoint = new IPEndPoint(IPAddress.Parse("192.168.10.1"), 8889);
-        private byte[] m_messageBuffer = default;
-        private byte[] m_telloStateData = default;
+        private UdpClient _udpServer = new UdpClient(new IPEndPoint(IPAddress.Parse("0.0.0.0"), 8890));
+        private UdpClient _udpClient = new UdpClient(11001);
+        private IPEndPoint _telloIPEndPoint = new IPEndPoint(IPAddress.Parse("192.168.10.1"), 8889);
+        private byte[] _messageBuffer = default;
+        private byte[] _telloStateData = default;
 
         private const int MIN_SPEED = 0;
         private const int MAX_SPEED = 100;
         private const int DEFAULT_SPEED = 100;
-        private int m_speed = DEFAULT_SPEED;
+        private int _speed = DEFAULT_SPEED;
         public int Speed 
         {
-            get => m_speed;
-            set => m_speed = AdjustSpeed(value);
+            get => _speed;
+            set => _speed = AdjustSpeed(value);
         }
 
         public delegate void NewDroneVideoFrameEventHandler(object source, NewDroneCameraFrameEventArgs args);
@@ -42,12 +43,12 @@ namespace Caduhd.Drone
         public delegate void DroneStateEventHandler(object source, DroneStateChangedEventArgs args);
         public event DroneStateEventHandler StateChanged;
 
-        private CancellationTokenSource m_videoStreamCancellationTokenSource;
+        private CancellationTokenSource _videoStreamCancellationTokenSource;
 
         private DroneState telloState = new DroneState();
 
-        private bool m_isStreamingVideo = false;
-        public bool IsStreamingVideo => m_isStreamingVideo;
+        private bool _isStreamingVideo = false;
+        public bool IsStreamingVideo => _isStreamingVideo;
 
         public Tello() { }
     
@@ -98,10 +99,10 @@ namespace Caduhd.Drone
             {
                 while (true)
                 {
-                    m_telloStateData = m_udpServer.Receive(ref m_telloIPEndPoint);
+                    _telloStateData = _udpServer.Receive(ref _telloIPEndPoint);
                     try
                     {
-                        var properties = Encoding.ASCII.GetString(m_telloStateData).Split(';');
+                        var properties = Encoding.ASCII.GetString(_telloStateData).Split(';');
 
                         telloState.Pitch = int.Parse(properties[0].Substring(6));
                         telloState.Roll = int.Parse(properties[1].Substring(5));
@@ -169,28 +170,29 @@ namespace Caduhd.Drone
             {
                 TellTelloTo(START_STREAMING_VIDEO);
 
-                m_videoStreamCancellationTokenSource = new CancellationTokenSource();
+                _videoStreamCancellationTokenSource = new CancellationTokenSource();
 
                 Task.Factory.StartNew(() =>
                 {
-                    m_isStreamingVideo = true;
+                    _isStreamingVideo = true;
                     VideoCapture videoCapture = new VideoCapture("udp://0.0.0.0:11111");
                     while (IsStreamingVideo)
                     {
-                        if (m_videoStreamCancellationTokenSource.IsCancellationRequested)
+                        if (_videoStreamCancellationTokenSource.IsCancellationRequested)
                         {
                             videoCapture.Dispose();
-                            m_isStreamingVideo = false;
+                            _isStreamingVideo = false;
                         }
                         else
                         {
                             // var frameCount = vc.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameCount);
                             Mat frame = new Mat();
                             videoCapture.Read(frame);
-                            NewCameraFrame?.Invoke(this, new NewDroneCameraFrameEventArgs(frame.Bitmap));
+                            BgrImage image = new BgrImage(frame);
+                            NewCameraFrame?.Invoke(this, new NewDroneCameraFrameEventArgs(image));
                         }
                     }
-                }, m_videoStreamCancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+                }, _videoStreamCancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
             }
         }
 
@@ -198,10 +200,10 @@ namespace Caduhd.Drone
         {
             if (IsStreamingVideo)
             {
-                m_isStreamingVideo = false;
+                _isStreamingVideo = false;
 
-                m_videoStreamCancellationTokenSource.Cancel();
-                m_videoStreamCancellationTokenSource.Dispose();
+                _videoStreamCancellationTokenSource.Cancel();
+                _videoStreamCancellationTokenSource.Dispose();
 
                 TellTelloTo(STOP_STREAMING_VIDEO);
             }
@@ -209,8 +211,8 @@ namespace Caduhd.Drone
 
         private void TellTelloTo(string command)
         {
-            m_messageBuffer = Encoding.ASCII.GetBytes(command);
-            m_udpClient.Send(m_messageBuffer, m_messageBuffer.Length, m_telloIPEndPoint);
+            _messageBuffer = Encoding.ASCII.GetBytes(command);
+            _udpClient.Send(_messageBuffer, _messageBuffer.Length, _telloIPEndPoint);
 
             // throws error if wifi not conencted
         }

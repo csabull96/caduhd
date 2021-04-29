@@ -1,4 +1,5 @@
-﻿using Ksvydo.HandDetector.Model;
+﻿using Caduhd.Controller.InputEvaluator;
+using Caduhd.HandsDetector;
 
 namespace Caduhd.Controller
 {

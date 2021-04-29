@@ -1,4 +1,4 @@
-﻿namespace Ksvydo.Input.Keyboard
+﻿namespace Caduhd.Input.Keyboard
 {
     public enum KeyState { Down, Up }
 }

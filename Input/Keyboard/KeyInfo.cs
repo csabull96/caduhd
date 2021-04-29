@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace Ksvydo.Input.Keyboard
+namespace Caduhd.Input.Keyboard
 {
     public class KeyInfo
     {
