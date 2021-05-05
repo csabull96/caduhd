@@ -130,7 +130,6 @@
     <Folder Include="Converters\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="License-LGPL.txt" />
     <Content Include="Resources\Images\webcamera_placeholder.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

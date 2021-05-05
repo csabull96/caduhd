@@ -78,7 +78,7 @@ namespace Caduhd.Drone
                 }
                 else if (droneCommand is DisconnectCommand)
                 {
-                    // not handled yet
+                    // not sure it's possible
                 }
             }
             else if (droneCommand is CameraCommand)
@@ -100,9 +100,10 @@ namespace Caduhd.Drone
             {
                 while (true)
                 {
-                    _telloStateData = _udpServer.Receive(ref _telloIPEndPoint);
                     try
                     {
+                        _telloStateData = _udpServer.Receive(ref _telloIPEndPoint);
+
                         var properties = Encoding.ASCII.GetString(_telloStateData).Split(';');
 
                         telloState.Pitch = int.Parse(properties[0].Substring(6));

@@ -26,8 +26,8 @@ namespace Caduhd.Controller.InputEvaluator
         protected KeyInfo MoveLeft { get; set; } = new KeyInfo(MOVE_LEFT_KEY);
         protected KeyInfo MoveUp { get; set; } = new KeyInfo(MOVE_UP_KEY);
         protected KeyInfo MoveDown { get; set; } = new KeyInfo(MOVE_DOWN_KEY);
-        protected KeyInfo RotateRight { get; set; } = new KeyInfo(ROTATE_RIGHT_KEY);
-        protected KeyInfo RotateLeft { get; set; } = new KeyInfo(ROTATE_LEFT_KEY);
+        protected KeyInfo YawRight { get; set; } = new KeyInfo(ROTATE_RIGHT_KEY);
+        protected KeyInfo YawLeft { get; set; } = new KeyInfo(ROTATE_LEFT_KEY);
         protected KeyInfo TakeOff { get; set; } = new KeyInfo(TAKE_OFF_KEY);
         protected KeyInfo Land { get; set; } = new KeyInfo(LAND_KEY);
 
@@ -73,35 +73,35 @@ namespace Caduhd.Controller.InputEvaluator
 
                 if (MoveForward.KeyState == KeyState.Down)
                 {
-                    moveCommand.Longitudinal += SIGN_VALUE;
+                    moveCommand.Longitudinal += MOVE_FORWARD;
                 }
                 if (MoveBackward.KeyState == KeyState.Down)
                 {
-                    moveCommand.Longitudinal -= SIGN_VALUE;
-                }
-                if (MoveRight.KeyState == KeyState.Down)
-                {
-                    moveCommand.Lateral += SIGN_VALUE;
+                    moveCommand.Longitudinal += MOVE_BACKWARD;
                 }
                 if (MoveLeft.KeyState == KeyState.Down)
                 {
-                    moveCommand.Lateral -= SIGN_VALUE;
+                    moveCommand.Lateral += MOVE_LEFT;
+                }
+                if (MoveRight.KeyState == KeyState.Down)
+                {
+                    moveCommand.Lateral += MOVE_RIGHT;
                 }
                 if (MoveUp.KeyState == KeyState.Down)
                 {
-                    moveCommand.Vertical += SIGN_VALUE;
+                    moveCommand.Vertical += MOVE_UP;
                 }
                 if (MoveDown.KeyState == KeyState.Down)
                 {
-                    moveCommand.Vertical -= SIGN_VALUE;
+                    moveCommand.Vertical += MOVE_DOWN;
                 }
-                if (RotateRight.KeyState == KeyState.Down)
+                if (YawLeft.KeyState == KeyState.Down)
                 {
-                    moveCommand.Yaw += SIGN_VALUE;
+                    moveCommand.Yaw += YAW_LEFT;
                 }
-                if (RotateLeft.KeyState == KeyState.Down)
+                if (YawRight.KeyState == KeyState.Down)
                 {
-                    moveCommand.Yaw -= SIGN_VALUE;
+                    moveCommand.Yaw += YAW_RIGHT;
                 }
 
                 return moveCommand;
