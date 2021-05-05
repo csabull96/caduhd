@@ -13,12 +13,12 @@ namespace Caduhd.Controller
 
         public abstract void Control();
 
+        public void Connect() => InternalControl(new ConnectCommand());
+
+        public void StartStreamingVideo() => InternalControl(new StartStreamingVideoCommand());
+
+        public void StopStreamingVideo() => InternalControl(new StopStreamingVideoCommand());
+
         protected void InternalControl(DroneCommand droneCommand) => _drone.Control(droneCommand);
-
-        public void Connect() => _drone.Control(new ConnectCommand());
-
-        public void StartStreamingVideo() => _drone.Control(new StartStreamingVideoCommand());
-
-        public void StopStreamingVideo() => _drone.Control(new StopStreamingVideoCommand());
     }
 }

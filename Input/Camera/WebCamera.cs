@@ -13,7 +13,7 @@ namespace Caduhd.Input.Camera
         private const int DEFAULT_HEIGHT = 320;
         private const int DEFAULT_FPS = 30;
 
-        private Timer _timer;
+        private readonly Timer _timer;
         private VideoCapture _videoCapture;
 
         public int Fps { get; private set; }
@@ -23,24 +23,21 @@ namespace Caduhd.Input.Camera
 
         public event NewWebCameraFrameEventHandler NewFrame;
 
-        public WebCamera(int width, int height) : this(30, width, height)
-        {
-
-        }
+        public WebCamera(int width, int height) : this(30, width, height) { }
 
         public WebCamera(int fps = DEFAULT_FPS, int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT)
         {
             if (fps < 1)
-                throw new ArgumentException($"Invalid web camera FPS. The FPS has to be greater than 0.");
+                throw new ArgumentException($"The FPS has to be greater than 0.");
 
             if (width < 1 || height < 1)
-                throw new ArgumentException($"Invalid web camera resolution. Both width and height have to be greater than 0.");
+                throw new ArgumentException($"Invalid resolution. Both width and height have to be greater than 0.");
 
             Fps = fps;
             Width = width;
             Height = height;
-
             IsOn = false;
+
             int interval = 1000 / Fps;
             _timer = new Timer(interval);
         }

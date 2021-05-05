@@ -5,6 +5,6 @@ namespace Caduhd.Controller.InputEvaluator
 {
     public interface IDroneHandsInputEvaluator
     {
-        MoveCommand EvaluateHands(Hands hands);
+        MoveCommand EvaluateHands(NormalizedHands hands);
     }
 }

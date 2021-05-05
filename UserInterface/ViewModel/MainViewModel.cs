@@ -4,6 +4,7 @@ using Caduhd.Controller.Command;
 using Caduhd.Controller.InputAnalyzer;
 using Caduhd.Controller.InputEvaluator;
 using Caduhd.Drone;
+using Caduhd.Drone.Event;
 using Caduhd.HandsDetector;
 using Caduhd.Input.Camera;
 using Caduhd.Input.Keyboard;
@@ -17,14 +18,14 @@ namespace Caduhd.UserInterface.ViewModel
     {
         private bool _isWebCameraFrameProcessorBusy;
 
-        private IWebCamera _webCamera;
-        private KeyEventProcessor _keyEventProcessor;
+        private readonly HandsAnalyzer _handsInputAnalyzer;
+        private readonly DroneHandsInputEvaluator _droneHandsInputEvaluator;
+        private readonly SkinColorHandsDetector _handsDetector;
+        private readonly Tello _tello;
+        private readonly HandsDroneController _droneController;
 
-        private HandsAnalyzer _handsInputAnalyzer;
-        private DroneHandsInputEvaluator _droneHandsInputEvaluator;
-        private SkinColorHandsDetector _handsDetector;
-        private Tello _tello;
-        private HandsDroneController _droneController;
+        private readonly IWebCamera _webCamera;
+        private readonly KeyEventProcessor _keyEventProcessor;
 
         public UserInterfaceConnector UserInterfaceConnector { get; private set; } = new UserInterfaceConnector();
         
@@ -32,25 +33,22 @@ namespace Caduhd.UserInterface.ViewModel
         {
             _isWebCameraFrameProcessorBusy = false;
 
-            _webCamera = new WebCamera(320, 180);
-            _webCamera.NewFrame += ProcessWebCameraFrame;
-            _keyEventProcessor = new KeyEventProcessor();
-
             _handsInputAnalyzer = new HandsAnalyzer();
             _droneHandsInputEvaluator = new DroneHandsInputEvaluator();
             _handsDetector = new SkinColorHandsDetector();
-
             _tello = new Tello();
             _tello.StateChanged += HandleDroneStateChanged;
             _tello.NewCameraFrame += ProcessDroneCameraFrame;
-
             DroneControllerKeyInputEvaluatorFactory factory = new DroneControllerKeyInputEvaluatorFactory();
             IDroneKeyInputEvaluator droneControllerKeyInputEvaluator = 
                 factory.GetDroneControllerKeyInputEvaluator(_tello);
             _droneController = 
                 new HandsDroneController(_tello, _droneHandsInputEvaluator, droneControllerKeyInputEvaluator);
 
+            _webCamera = new WebCamera(320, 180);
+            _webCamera.NewFrame += ProcessWebCameraFrame;
             _webCamera.TurnOn();
+            _keyEventProcessor = new KeyEventProcessor();
         }
 
         public void HandleKeyEvent(KeyEventArgs keyEventArgs)
@@ -80,19 +78,20 @@ namespace Caduhd.UserInterface.ViewModel
 
         private void ProcessWebCameraFrame(object sender, NewWebCameraFrameEventArgs args)
         {
-            // two thread should not enter this method at the same time
-            // because the behaviour of the web camera frame processor depends on its actual state
+            // the web camera frame processor's behaviour strongly depends on its state
+            // only 1 thread is allowed to execute the method at a time
+            // other threads could change the state, too (without the original thread acknowledging it)
             if (!_isWebCameraFrameProcessorBusy)
             {
                 _isWebCameraFrameProcessorBusy = true;
                 
                 BgrImage frame = args.Frame;
-                Hands hands = null;
+                NormalizedHands hands = null;
                 MoveCommand moveCommand = null;
 
                 if (_handsDetector.Tuned)
                 {
-                    var result = _handsDetector.DetectHands(frame);
+                    HandsDetectorResult result = _handsDetector.DetectHands(frame);
                     frame = result.Image;
                     hands = result.Hands;
                     moveCommand = 
@@ -102,7 +101,7 @@ namespace Caduhd.UserInterface.ViewModel
                 {
                     if (_handsInputAnalyzer.State == HandsAnalyzerState.ReadyToAnalyzeLeft || _handsInputAnalyzer.State == HandsAnalyzerState.AnalyzingLeft)
                     {
-                        Rectangle roi = _droneHandsInputEvaluator.GetNeutralLeftHandArea(frame.Width, frame.Height);
+                        Rectangle roi = _droneHandsInputEvaluator.GetLeftNeutralHandArea(frame.Width, frame.Height);
 
                         if (_handsInputAnalyzer.State == HandsAnalyzerState.AnalyzingLeft)
                         {
@@ -113,7 +112,7 @@ namespace Caduhd.UserInterface.ViewModel
                     }
                     else if (_handsInputAnalyzer.State == HandsAnalyzerState.ReadyToAnalyzeRight || _handsInputAnalyzer.State == HandsAnalyzerState.AnalyzingRight)
                     {
-                        Rectangle roi = _droneHandsInputEvaluator.GetNeutralRightHandArea(frame.Width, frame.Height);
+                        Rectangle roi = _droneHandsInputEvaluator.GetRightNeutralHandArea(frame.Width, frame.Height);
 
                         if (_handsInputAnalyzer.State == HandsAnalyzerState.AnalyzingRight)
                         {
@@ -125,9 +124,7 @@ namespace Caduhd.UserInterface.ViewModel
                     else if (_handsInputAnalyzer.State == HandsAnalyzerState.Tuning)
                     {
                         HandsInputAnalyzerResult result = _handsInputAnalyzer.Result;
-
-                        _handsDetector.Tune(result);
-                        Hands neutralHands = _handsDetector.DetectHands(result.HandsForeground).Hands;
+                        NormalizedHands neutralHands = _handsDetector.Tune(result);
                         _droneHandsInputEvaluator.Tune(neutralHands);
                     }
                 }
@@ -136,14 +133,12 @@ namespace Caduhd.UserInterface.ViewModel
                 {
                     UserInterfaceConnector.SetCurrentWebCameraFrame(frame?.Bitmap ?? args.Frame.Bitmap);
 
-                    // in this way
-                    // the following values are forwarded to the ui only for debugging purposes (as a developer feedback)
-
+                    // developer feedback, debugging
                     UserInterfaceConnector.LeftHand = hands == null ? "0/0/0" :
-                        $"{hands.Left.X}/{hands.Left.Y}/{hands.Left.Weight}";
+                        $"{hands.Left.X:F2}/{hands.Left.Y:F2}/{hands.Left.Weight:F2}";
 
                     UserInterfaceConnector.RightHand = hands == null ? "0/0/0" :
-                        $"{hands.Right.X}/{hands.Right.Y}/{hands.Right.Weight}";
+                        $"{hands.Right.X:F2}/{hands.Right.Y:F2}/{hands.Right.Weight:F2}";
 
                     UserInterfaceConnector.Direction = moveCommand == null ? "l/r:0 f/b:0 u/d:0 yaw:0" :
                         $"l/r:{moveCommand.Lateral} f/b:{moveCommand.Longitudinal} u/d:{moveCommand.Vertical} yaw:{moveCommand.Yaw}";

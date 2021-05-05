@@ -6,8 +6,8 @@ namespace Caduhd.Controller
 {
     public class KeyboardDroneController : AbstractDroneController, IKeyInputHandler
     {
-        protected DroneCommand _latestKeyInputEvaluated;
         protected readonly IDroneKeyInputEvaluator _keyInputEvaluator;
+        protected DroneCommand _latestKeyInputEvaluated;
 
         public KeyboardDroneController(IControllableDrone drone, 
             IDroneKeyInputEvaluator keyInputEvaluator) : base(drone)
@@ -20,9 +20,7 @@ namespace Caduhd.Controller
             DroneCommand keyEvaluated = _keyInputEvaluator.EvaluateKey(keyInfo);
 
             if (keyEvaluated == null)
-            {
                 return null;
-            }
 
             _latestKeyInputEvaluated = keyEvaluated;
             DroneControllerKeyInputProcessResult result =

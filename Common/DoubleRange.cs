@@ -2,10 +2,7 @@
 {
     public class DoubleRange : Range<double>
     {
-        public DoubleRange(double lowerBound, double upperBound) : base(lowerBound, upperBound)
-        {
-
-        }
+        public DoubleRange(double lowerBound, double upperBound) : base(lowerBound, upperBound) { }
 
         public override bool IsWithinRange(double value, bool isLowerBoundInclusive = true, bool isUpperBoundInclusive = true)
         {

@@ -6,5 +6,6 @@ namespace Caduhd.HandsDetector
     {
         HandsColorMaps HandsColorMaps { get; }
         BgrImage HandsBackground { get; }
+        BgrImage HandsForeground { get; }
     }
 }

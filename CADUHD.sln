@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandsDetector.Tests", "Hand
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{78431359-5BD3-487B-996C-87C0FBE92BFE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Tests", "Common.Tests\Common.Tests.csproj", "{C22CEB97-966C-4EC7-BF48-4AA7810F67AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{78431359-5BD3-487B-996C-87C0FBE92BFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78431359-5BD3-487B-996C-87C0FBE92BFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78431359-5BD3-487B-996C-87C0FBE92BFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C22CEB97-966C-4EC7-BF48-4AA7810F67AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C22CEB97-966C-4EC7-BF48-4AA7810F67AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C22CEB97-966C-4EC7-BF48-4AA7810F67AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C22CEB97-966C-4EC7-BF48-4AA7810F67AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

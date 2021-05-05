@@ -41,9 +41,9 @@ namespace Caduhd.Common
                 return Blue.IsWithinRange(pixel.Blue) &&
                     Green.IsWithinRange(pixel.Green) &&
                     Red.IsWithinRange(pixel.Red) &&
-                    BluePerGreen.IsWithinRange(pixel.Blue / pixel.Green) &&
-                    BluePerRed.IsWithinRange(pixel.Blue / pixel.Red) &&
-                    GreenPerRed.IsWithinRange(pixel.Green / pixel.Red);
+                    BluePerGreen.IsWithinRange((double)pixel.Blue / pixel.Green) &&
+                    BluePerRed.IsWithinRange((double)pixel.Blue / pixel.Red) &&
+                    GreenPerRed.IsWithinRange((double)pixel.Green / pixel.Red);
             }
             catch (DivideByZeroException)
             {

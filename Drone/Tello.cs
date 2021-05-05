@@ -1,6 +1,7 @@
 ﻿using Caduhd.Common;
 using Caduhd.Controller;
 using Caduhd.Controller.Command;
+using Caduhd.Drone.Event;
 using Emgu.CV;
 using System;
 using System.Net;

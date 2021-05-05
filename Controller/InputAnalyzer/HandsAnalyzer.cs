@@ -25,12 +25,15 @@ namespace Caduhd.Controller.InputAnalyzer
                 if (_rightHandAnalysisImage == null)
                     throw new NullReferenceException("Missing right hand analysis.");
 
+                // the right side of the _leftHandAnalysisImage and
+                // the left side of the _rightHandAnalysisImage contain the background
                 BgrImage handsBackground = _rightHandAnalysisImage.Merge(_leftHandAnalysisImage);
+                // the right side of the _rightHandAnalysisImage and
+                // the left side of the _leftHandAnalysisImage contain the analyzed hands
                 BgrImage handsForeground = _leftHandAnalysisImage.Merge(_rightHandAnalysisImage);
 
                 return new HandsInputAnalyzerResult(new HandsColorMaps(_leftHandColorMap, _rightHandColorMap),
-                        handsBackground,
-                        handsForeground);
+                        handsBackground, handsForeground);
             }
         }
 
@@ -66,6 +69,7 @@ namespace Caduhd.Controller.InputAnalyzer
                 _leftHandAnalysisImage = image.Copy();
                 image.Roi = roi;
                 _leftHandColorMap = ExtractColorMap(image);
+                image.Roi = Rectangle.Empty;
                 AdvanceState();
             }
             else
@@ -90,6 +94,7 @@ namespace Caduhd.Controller.InputAnalyzer
                 _rightHandAnalysisImage = image.Copy();
                 image.Roi = roi;
                 _rightHandColorMap = ExtractColorMap(image);
+                image.Roi = Rectangle.Empty;
                 AdvanceState();
             }
             else
@@ -110,8 +115,9 @@ namespace Caduhd.Controller.InputAnalyzer
         }
 
         private bool IsRoiValid(BgrImage image, Rectangle roi) =>
-            0 <= roi.X && 0 <= roi.Y && 0 <= roi.Width && 0 <= roi.Height &&
-            roi.X + roi.Width < image.Width && roi.Y + roi.Height < image.Height;
+            0 <= roi.X && 0 <= roi.Y &&
+            0 < roi.Width && 0 < roi.Height &&
+            roi.X + roi.Width <= image.Width && roi.Y + roi.Height <= image.Height;
 
         private ColorMap ExtractColorMap(BgrImage image)
         {

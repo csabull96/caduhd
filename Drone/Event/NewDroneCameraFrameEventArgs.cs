@@ -1,7 +1,7 @@
 ﻿using Caduhd.Common;
 using System;
 
-namespace Caduhd.Drone
+namespace Caduhd.Drone.Event
 {
     public class NewDroneCameraFrameEventArgs : EventArgs
     {

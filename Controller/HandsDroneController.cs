@@ -6,8 +6,8 @@ namespace Caduhd.Controller
 {
     public class HandsDroneController : KeyboardDroneController, IHandsInputHandler
     {
-        private MoveCommand _latestHandsInputEvaluated;
         private readonly IDroneHandsInputEvaluator _handsInputEvaluator;
+        private MoveCommand _latestHandsInputEvaluated;
 
         public HandsDroneController(IControllableDrone drone, 
             IDroneHandsInputEvaluator handsInputEvaluator, 
@@ -16,7 +16,7 @@ namespace Caduhd.Controller
             _handsInputEvaluator = handsInputEvaluator;
         }
 
-        public InputProcessResult ProcessHandsInput(Hands hands)
+        public InputProcessResult ProcessHandsInput(NormalizedHands hands)
         {
             _latestHandsInputEvaluated = _handsInputEvaluator.EvaluateHands(hands);
             DroneControllerHandsInputProcessResult result =

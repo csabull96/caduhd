@@ -7,55 +7,61 @@ namespace Caduhd.Controller.InputEvaluator
 {
     public class DroneHandsInputEvaluator : AbstractDroneInputEvaluator, IDroneHandsInputEvaluator
     {
-        private const int LATERAL_ANGLE_THRESHOLD = 30;
+        // left and right neutral hand area
+        private const double NORMALIZED_NEUTRAL_HAND_AREA_WIDTH = 0.1;
+        private const double NORMALIZED_NEUTRAL_HAND_AREA_HEIGHT = 0.35;
+        private const double NORMALIZED_LEFT_NEUTRAL_HAND_AREA_X = 0.15;
+        private const double NORMALIZED_RIGHT_NEUTRAL_HAND_AREA_X = 1 - NORMALIZED_LEFT_NEUTRAL_HAND_AREA_X - NORMALIZED_NEUTRAL_HAND_AREA_WIDTH;
+        private const double NORMALIZED_LEFT_NEUTRAL_HAND_AREA_Y = 0.4;
+        private const double NORMALIZED_RIGHT_NEUTRAL_HAND_AREA_Y = NORMALIZED_LEFT_NEUTRAL_HAND_AREA_Y;
 
-        private const double LONGITUDINAL_RATIO_THRESHOLD_UPPER = 1.3;
-        private const double LONGITUDINAL_RATIO_THRESHOLD_LOWER = 0.7;
-
-        private const int VERTICAL_ANGLE_THRESHOLD = 70;
-
-        private const double YAW_RATIO_THRESHOLD_UPPER = 1.5;
+        // HANDS INPUT EVALUATOR CONFIGURATION PARAMETERS
+        // Lateral
+        private const int LATERAL_ANGLE_THRESHOLD = 45;
+        // Longitudinal
+        private const double LONGITUDINAL_RATIO_THRESHOLD_UPPER = 1.15;
+        private const double LONGITUDINAL_RATIO_THRESHOLD_LOWER = 0.6;
+        // Vertical
+        private const int VERTICAL_ANGLE_THRESHOLD = 130;
+        // Yaw
+        private const double YAW_RATIO_THRESHOLD_UPPER = 1.4;
         private const double YAW_RATIO_THRESHOLD_LOWER = 0.5;
 
-        private Hands _neutralHands;
+        // the neutral state of hands (hands as input)
+        // when evaluating a custom hands input, we're evaluating the changes relative to this neutral state of hands
+        private NormalizedHands _neutralHands;
 
-        public void Tune(Hands neutralHands) => _neutralHands = neutralHands;
+        public Rectangle GetLeftNeutralHandArea(int imageWidth, int imageHeight) =>
+            new Rectangle(
+                Convert.ToInt32(NORMALIZED_LEFT_NEUTRAL_HAND_AREA_X * imageWidth),
+                Convert.ToInt32(NORMALIZED_LEFT_NEUTRAL_HAND_AREA_Y * imageHeight),
+                Convert.ToInt32(NORMALIZED_NEUTRAL_HAND_AREA_WIDTH * imageWidth),
+                Convert.ToInt32(NORMALIZED_NEUTRAL_HAND_AREA_HEIGHT * imageHeight));
 
-        public Rectangle GetNeutralLeftHandArea(int width, int height)
-        {
-            int w = width / 10;
-            int h = height / 3;
-            int x = width / 9;
-            int y = height * 2 / 5;
+        public Rectangle GetRightNeutralHandArea(int imageWidth, int imageHeight) =>
+            new Rectangle(
+                Convert.ToInt32(NORMALIZED_RIGHT_NEUTRAL_HAND_AREA_X * imageWidth),
+                Convert.ToInt32(NORMALIZED_RIGHT_NEUTRAL_HAND_AREA_Y * imageHeight),
+                Convert.ToInt32(NORMALIZED_NEUTRAL_HAND_AREA_WIDTH * imageWidth),
+                Convert.ToInt32(NORMALIZED_NEUTRAL_HAND_AREA_HEIGHT * imageHeight));
 
-            return new Rectangle(x, y, w, h);
-        }
-        
-        public Rectangle GetNeutralRightHandArea(int width, int height)
-        {
-            int w = width / 10;
-            int h = height / 3;
-            int x = width * 8 / 9 - w;
-            int y = height * 2 / 5;
+        public void Tune(NormalizedHands neutralHands) => _neutralHands = neutralHands;
 
-            return new Rectangle(x, y, w, h);
-        }
-
-        public MoveCommand EvaluateHands(Hands hands)
+        public MoveCommand EvaluateHands(NormalizedHands hands)
         {
 
-            throw new NotImplementedException("Refactor Dude!");
+            //throw new NotImplementedException("Refactor Dude!");
 
 
             //dividing by zero problem
             MoveCommand moveCommand = new MoveCommand();
 
             // this is going to be negative if left hand is lower than center point
-            double alpha = 180 * Math.Atan(
+            double alpha = 180 / Math.PI * Math.Atan(
                 (double)(_neutralHands.Center.Y - hands.Left.Y) / 
                 (_neutralHands.Center.X - hands.Left.X));
 
-            double beta = 180 * Math.Atan(
+            double beta = 180 / Math.PI * Math.Atan(
                 (double)(hands.Right.Y - _neutralHands.Center.Y) /
                 (hands.Right.X - _neutralHands.Center.X));
 
@@ -128,11 +134,11 @@ namespace Caduhd.Controller.InputEvaluator
             {
                 if (delta < 0 && isLeftHandDown && isRightHandDown)
                 {
-                    moveCommand.Vertical = SIGN_VALUE;
+                    moveCommand.Vertical = -SIGN_VALUE;
                 }
                 else if (delta > 0 && isLeftHandUp && isRightHandUp)
                 {
-                    moveCommand.Vertical = -SIGN_VALUE;
+                    moveCommand.Vertical = SIGN_VALUE;
                 }
                 else
                 {

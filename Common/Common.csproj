@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorMap.cs" />
+    <Compile Include="PointD.cs" />
     <Compile Include="DoubleRange.cs" />
     <Compile Include="Histogram.cs" />
     <Compile Include="BgrImage.cs" />
