@@ -33,7 +33,7 @@ namespace Caduhd.Controller.InputEvaluator
 
         public DroneCommand EvaluateKey(KeyInfo keyInfo)
         {
-            return TryUpdateInputKey(keyInfo) ? EvaluateInputKeys() : null;
+            return TryUpdateInputKey(keyInfo) ? EvaluateInputKeys(keyInfo) : null;
         }
 
         private bool TryUpdateInputKey(KeyInfo keyInfo)
@@ -45,7 +45,7 @@ namespace Caduhd.Controller.InputEvaluator
                 KeyInfo keyInfoToUpdate = GetInputKeys().Single(ki => ki.Key == keyInfo.Key);
                 if (keyInfoToUpdate.KeyState != keyInfo.KeyState)
                 {
-                    keyInfoToUpdate = keyInfo;
+                    keyInfoToUpdate.KeyState = keyInfo.KeyState;
                     return true;
                 }
                 
@@ -57,7 +57,7 @@ namespace Caduhd.Controller.InputEvaluator
             }
         }
 
-        protected virtual DroneCommand EvaluateInputKeys()
+        protected virtual DroneCommand EvaluateInputKeys(KeyInfo keyUpdated)
         {
             if (TakeOff.KeyState == KeyState.Down)
             {

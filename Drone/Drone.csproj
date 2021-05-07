@@ -58,7 +58,8 @@
     <Compile Include="Event\DroneStateChangedEventArgs.cs" />
     <Compile Include="Event\NewDroneCameraFrameEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tello.cs" />
+    <Compile Include="Dji\Tello.cs" />
+    <Compile Include="Dji\TelloStateParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="License-LGPL.txt" />

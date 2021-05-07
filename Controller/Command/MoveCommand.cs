@@ -53,6 +53,12 @@
             return moveCommand;
         }
 
+        public bool NotEquals(MoveCommand other) => other == null ||
+            !this.Lateral.Equals(other.Lateral) ||
+            !this.Longitudinal.Equals(other.Longitudinal) ||
+            !this.Vertical.Equals(other.Vertical) ||
+            !this.Yaw.Equals(other.Yaw);
+
         private int AdjustValueIfWrong(int original)
         {
             if (original < MIN)

@@ -4,11 +4,13 @@ using Caduhd.Controller.Command;
 using Caduhd.Controller.InputAnalyzer;
 using Caduhd.Controller.InputEvaluator;
 using Caduhd.Drone;
+using Caduhd.Drone.Dji;
 using Caduhd.Drone.Event;
 using Caduhd.HandsDetector;
 using Caduhd.Input.Camera;
 using Caduhd.Input.Keyboard;
 using System.Drawing;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 
@@ -16,7 +18,9 @@ namespace Caduhd.UserInterface.ViewModel
 {
     public class MainViewModel : BaseViewModel
     {
-        private bool _isWebCameraFrameProcessorBusy;
+        private const int YES = 1;
+        private const int NO = 0;
+        private int _isWebCameraFrameProcessorBusy;
 
         private readonly HandsAnalyzer _handsInputAnalyzer;
         private readonly DroneHandsInputEvaluator _droneHandsInputEvaluator;
@@ -31,7 +35,7 @@ namespace Caduhd.UserInterface.ViewModel
         
         public MainViewModel()
         {
-            _isWebCameraFrameProcessorBusy = false;
+            _isWebCameraFrameProcessorBusy = 0;
 
             _handsInputAnalyzer = new HandsAnalyzer();
             _droneHandsInputEvaluator = new DroneHandsInputEvaluator();
@@ -80,11 +84,9 @@ namespace Caduhd.UserInterface.ViewModel
         {
             // the web camera frame processor's behaviour strongly depends on its state
             // only 1 thread is allowed to execute the method at a time
-            // other threads could change the state, too (without the original thread acknowledging it)
-            if (!_isWebCameraFrameProcessorBusy)
+            // other threads could change the state (without the original thread's approval)
+            if (Interlocked.CompareExchange(ref _isWebCameraFrameProcessorBusy, YES, NO) == NO)
             {
-                _isWebCameraFrameProcessorBusy = true;
-                
                 BgrImage frame = args.Frame;
                 NormalizedHands hands = null;
                 MoveCommand moveCommand = null;
@@ -144,14 +146,14 @@ namespace Caduhd.UserInterface.ViewModel
                         $"l/r:{moveCommand.Lateral} f/b:{moveCommand.Longitudinal} u/d:{moveCommand.Vertical} yaw:{moveCommand.Yaw}";
                 });
 
-                _isWebCameraFrameProcessorBusy = false;
+                Interlocked.Exchange(ref _isWebCameraFrameProcessorBusy, NO);
             }
         }
 
         private void HandleDroneStateChanged(object source, DroneStateChangedEventArgs args)
         {
-            UserInterfaceConnector.SetSpeed(args.DroneState.Speed);
-            UserInterfaceConnector.SetHeight(args.DroneState.Height);
+            UserInterfaceConnector.SetSpeed(args.DroneState.Wifi);
+            UserInterfaceConnector.SetHeight(args.DroneState.ToF);
             UserInterfaceConnector.SetBatteryLevel(args.DroneState.Battery);
         }
 
@@ -191,7 +193,7 @@ namespace Caduhd.UserInterface.ViewModel
         public void Closed()
         {
             _webCamera.TurnOff();
-            _droneController.StopStreamingVideo();
+            _tello.Dispose();
         }
     }
 }

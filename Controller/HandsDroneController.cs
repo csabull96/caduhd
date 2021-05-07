@@ -7,20 +7,24 @@ namespace Caduhd.Controller
     public class HandsDroneController : KeyboardDroneController, IHandsInputHandler
     {
         private readonly IDroneHandsInputEvaluator _handsInputEvaluator;
-        private MoveCommand _latestHandsInputEvaluated;
+        private MoveCommand _previousHandsInputEvaluated;
+        private MoveCommand _actualHandsInputEvaluated;
 
         public HandsDroneController(IControllableDrone drone, 
             IDroneHandsInputEvaluator handsInputEvaluator, 
             IDroneKeyInputEvaluator keyInputEvaluator) : base(drone, keyInputEvaluator)
         {
             _handsInputEvaluator = handsInputEvaluator;
+            _previousHandsInputEvaluated = MoveCommand.Idle;
+            _actualHandsInputEvaluated = MoveCommand.Idle;
         }
 
         public InputProcessResult ProcessHandsInput(NormalizedHands hands)
         {
-            _latestHandsInputEvaluated = _handsInputEvaluator.EvaluateHands(hands);
+            _previousHandsInputEvaluated = _actualHandsInputEvaluated?.GetCopy() as MoveCommand;
+            _actualHandsInputEvaluated = _handsInputEvaluator.EvaluateHands(hands);
             DroneControllerHandsInputProcessResult result =
-                new DroneControllerHandsInputProcessResult(_latestHandsInputEvaluated.GetCopy() as MoveCommand);
+                new DroneControllerHandsInputProcessResult(_actualHandsInputEvaluated.GetCopy() as MoveCommand);
             Control();
             return result;
         }
@@ -59,10 +63,9 @@ namespace Caduhd.Controller
 
                 return latestKeyInputEvaluatedCopy;
             }
-            else if (_latestHandsInputEvaluated != null)
+            else if (_actualHandsInputEvaluated.NotEquals(_previousHandsInputEvaluated))
             {
-                DroneCommand latestHandsInputEvaluatedCopy = _latestHandsInputEvaluated.GetCopy();
-                _latestHandsInputEvaluated = null;
+                DroneCommand latestHandsInputEvaluatedCopy = _actualHandsInputEvaluated.GetCopy();
                 return latestHandsInputEvaluatedCopy;
             }
 

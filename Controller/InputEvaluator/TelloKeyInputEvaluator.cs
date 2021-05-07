@@ -15,19 +15,19 @@ namespace Caduhd.Controller.InputEvaluator
         protected KeyInfo StartStreamingVideo { get; private set; } = new KeyInfo(START_STREAMING_VIDEO_KEY);
         protected KeyInfo StopStreamingVideo { get; private set; } = new KeyInfo(STOP_STREAMING_VIDEO_KEY);
 
-        protected override DroneCommand EvaluateInputKeys()
+        protected override DroneCommand EvaluateInputKeys(KeyInfo keyUpdated)
         {
-            if (StartStreamingVideo.KeyState == KeyState.Down)
+            if (keyUpdated.Key == StartStreamingVideo.Key && keyUpdated.KeyState == KeyState.Down)
             {
                 return new StartStreamingVideoCommand();
             }
-            else if (StopStreamingVideo.KeyState == KeyState.Down)
+            else if (keyUpdated.Key == StopStreamingVideo.Key && keyUpdated.KeyState == KeyState.Down)
             {
                 return new StopStreamingVideoCommand();
             }
             else
             {
-                return base.EvaluateInputKeys();
+                return base.EvaluateInputKeys(keyUpdated);
             }
         }
 

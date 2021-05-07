@@ -30,59 +30,32 @@
             <Grid Grid.Row="0"
                   Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
+                    <RowDefinition Height="40" />
                     <RowDefinition Height="2*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid Background="White">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0"
                             Margin="10 0 10 0"
-                            Width="16"
-                            Height="16"
+                            Width="Auto"
+                            FontSize="12"
+                            Content=" Connect "
                             VerticalAlignment="Center"
                             Click="Connect" />
-                    <Button Grid.Column="1"
-                            Margin="10 0 10 0"
-                            Width="16"
-                            Height="16"
-                            VerticalAlignment="Center"
-                            Click="StartStreamingDroneVideo" />
-                    <Button Grid.Column="2"
-                            Margin="10 0 10 0"
-                            Width="16"
-                            Height="16"
-                            VerticalAlignment="Center"
-                            Click="StopStreamingDroneVideo" />
-                    <Button Grid.Column="3"
-                            Margin="10 0 10 0"
-                            Width="16"
-                            Height="16"
-                            VerticalAlignment="Center"
-                            Click="TurnOnWebCamera" />
-                    <Button Grid.Column="4"
-                            Margin="10 0 10 0"
-                            Width="16"
-                            Height="16"
-                            VerticalAlignment="Center"
-                            Click="TurnOffWebCamera" />
-                    <TextBlock Grid.Column="5"
+                    <TextBlock Grid.Column="1"
                                Text="{Binding UserInterfaceConnector.Height, Mode=OneWay}"
-                               HorizontalAlignment="Right"
+                               HorizontalAlignment="Center"
                                VerticalAlignment="Center">
                     </TextBlock>
-                    <TextBlock Grid.Column="6"
+                    <TextBlock Grid.Column="2"
                                Text="{Binding UserInterfaceConnector.Speed, Mode=OneWay}"
-                               HorizontalAlignment="Right"
+                               HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
                     <ProgressBar Width="42"
                                  Height="16"
