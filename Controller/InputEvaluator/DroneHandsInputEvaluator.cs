@@ -23,7 +23,7 @@ namespace Caduhd.Controller.InputEvaluator
         private const double LONGITUDINAL_UPPER_THRESHOLD = 1.15;
         private const double LONGITUDINAL_LOWER_THRESHOLD = 0.6;
         // Vertical
-        private const int VERTICAL_ANGLE_THRESHOLD = 130;
+        private const int VERTICAL_ANGLE_THRESHOLD = 140;
         // Yaw
         private const double YAW_UPPDER_THRESHOLD = 1.4;
         private const double YAW_LOWER_THRESHOLD = 0.5;
