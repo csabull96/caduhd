@@ -2,7 +2,7 @@
 
 namespace Caduhd.Common
 {
-    public class Histogram
+    public class Histogram : IHistogram
     {
         private readonly double _min;
         private readonly double _max;

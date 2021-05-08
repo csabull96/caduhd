@@ -121,9 +121,9 @@ namespace Caduhd.Controller.InputAnalyzer
 
         private ColorMap ExtractColorMap(BgrImage image)
         {
-            Histogram blues = new Histogram(0, 255, 64);
-            Histogram greens = new Histogram(0, 255, 64);
-            Histogram reds = new Histogram(0, 255, 64);
+            IHistogram blues = new Histogram(0, 255, 64);
+            IHistogram greens = new Histogram(0, 255, 64);
+            IHistogram reds = new Histogram(0, 255, 64);
 
             for (int y = 0; y < image.Height; y++)
             {

@@ -15,7 +15,7 @@ namespace Caduhd.Common
         public DoubleRange BluePerRed { get; private set; }
         public DoubleRange GreenPerRed { get; private set; }
 
-        public ColorMap(Histogram blue, Histogram green, Histogram red)
+        public ColorMap(IHistogram blue, IHistogram green, IHistogram red)
         {
             Blue = new DoubleRange(blue.Smallest, blue.Greatest);
             Green = new DoubleRange(green.Smallest, green.Greatest);

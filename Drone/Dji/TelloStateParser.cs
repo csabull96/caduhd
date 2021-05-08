@@ -7,7 +7,7 @@ namespace Caduhd.Drone.Dji
     {
         public DroneState Parse(byte[] stateData)
         {
-            string[] properties = stateData.AsString().Split(';');
+            string[] properties = stateData.AsString().Trim().Split(';');
             DroneState droneState = new DroneState();
             try
             {

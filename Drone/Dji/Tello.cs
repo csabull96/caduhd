@@ -251,7 +251,7 @@ namespace Caduhd.Drone.Dji
 
                         TellTello(STOP_STREAMING_VIDEO);
                         IsStreamingVideo = false;
-                        NewCameraFrame?.Invoke(this, new NewDroneCameraFrameEventArgs(BgrImage.GetBlank(Color.Orange)));
+                        //NewCameraFrame?.Invoke(this, new NewDroneCameraFrameEventArgs(BgrImage.GetBlank(Color.Orange)));
                     }
                 }
 
@@ -307,7 +307,7 @@ namespace Caduhd.Drone.Dji
                         {
                             byte[] responseBytes = _tello.Receive(ref _telloIPEndPoint);
                             IsReachable = true;
-                            responseString = responseBytes.AsString();
+                            responseString = responseBytes.AsString().Trim();
                             // response is only forwarded to the ProcessResponse method
                             // if it comes from the Tello
                             ProcessResponse(commandString, responseString);

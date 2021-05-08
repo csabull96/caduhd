@@ -100,13 +100,11 @@ namespace Caduhd.Common
             return merged;
         }
 
-        public static BgrImage GetBlank(Color color) =>
-            new BgrImage(new Image<Bgr, byte>(1920, 1080, new Bgr(color)));
+        //public static BgrImage GetBlank(Color color) =>
+        //    new BgrImage(new Image<Bgr, byte>(1920, 1080, new Bgr(color)));
 
         public BgrImage Copy() => new BgrImage(_image.Copy());
 
         public void CopyTo(BgrImage destination) => this._image.CopyTo(destination._image);
-
-        public void Save(string filename) => _image.Save(filename);
     }
 }
