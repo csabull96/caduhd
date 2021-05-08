@@ -25,7 +25,7 @@ namespace Caduhd.Drone.Dji
 
         private const int TELLO_RESPONSE_TIMEOUT = 200;
         private const int TELLO_STATE_RECEIVER_RESPONSE_TIMEOUT = 2000;
-        private const int WIFI_CHECKER_TIME_INTERVAL = 1000;
+        private const int WIFI_CHECKER_TIME_INTERVAL = 1600;
 
         private const string OK_RESPONSE = "ok";
         private const string ERROR_RESPONSE = "error";
