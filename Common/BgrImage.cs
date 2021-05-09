@@ -25,11 +25,6 @@ namespace Caduhd.Common
 
         public BgrImage(Mat mat) : this(mat.ToImage<Bgr, byte>()) { }
 
-        public static BgrImage GetBlank(int v1, int v2, object color)
-        {
-            throw new NotImplementedException();
-        }
-
         public BgrImage(Image<Bgr, byte> image)
         {
             _image = image;

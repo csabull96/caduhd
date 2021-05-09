@@ -1,5 +1,6 @@
 ﻿using Caduhd.Common;
 using System;
+using System.IO;
 
 namespace Caduhd.Drone.Dji
 {

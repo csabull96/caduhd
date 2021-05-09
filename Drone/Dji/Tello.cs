@@ -110,8 +110,6 @@ namespace Caduhd.Drone.Dji
             _isStreaming = 0;
             _videoStreamCancellationTokenSource = new CancellationTokenSource();
             _numberOfConsecutiveEmtpyFrames = 0;
-            
-            StartResponseReceiver();
         }
 
         private void Elapsed(object sender, ElapsedEventArgs e)
@@ -173,6 +171,7 @@ namespace Caduhd.Drone.Dji
 
         private void Connect()
         {
+            StartResponseReceiver();
             // if the Tello successfully received our connect message
             // then it'll cache the senders IP/Port
             // every message we send to the Tello (even from different socket)
