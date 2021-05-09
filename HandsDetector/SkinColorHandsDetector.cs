@@ -40,7 +40,7 @@ namespace Caduhd.HandsDetector
         public HandsDetectorResult DetectHands(BgrImage image)
         {
             if (image == null)
-                throw new ArgumentNullException("The input image sent for hand detection was null.");
+                throw new ArgumentNullException("The image sent for hand detection was null.");
 
             BgrImage imagePreProcessed = PreProcess(image);
             return DetectHandsInternally(imagePreProcessed);

@@ -1,5 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
+using System;
 using System.Drawing;
 
 namespace Caduhd.Common
@@ -23,6 +24,11 @@ namespace Caduhd.Common
         public Bitmap Bitmap => _image.Bitmap;
 
         public BgrImage(Mat mat) : this(mat.ToImage<Bgr, byte>()) { }
+
+        public static BgrImage GetBlank(int v1, int v2, object color)
+        {
+            throw new NotImplementedException();
+        }
 
         public BgrImage(Image<Bgr, byte> image)
         {
@@ -106,5 +112,7 @@ namespace Caduhd.Common
         public BgrImage Copy() => new BgrImage(_image.Copy());
 
         public void CopyTo(BgrImage destination) => this._image.CopyTo(destination._image);
+
+        //public void Save(string filename) => _image.Save(filename);
     }
 }
