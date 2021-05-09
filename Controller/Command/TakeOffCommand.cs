@@ -2,6 +2,7 @@
 {
     public sealed class TakeOffCommand : MovementCommand
     {
-        public override DroneCommand GetCopy() => new TakeOffCommand();
+        public override DroneCommand Copy() => new TakeOffCommand();
+        public override bool Equals(object obj) => obj is TakeOffCommand;
     }
 }

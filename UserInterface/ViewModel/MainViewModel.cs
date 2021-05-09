@@ -108,6 +108,7 @@ namespace Caduhd.UserInterface.ViewModel
                         if (_handsInputAnalyzer.State == HandsAnalyzerState.AnalyzingLeft)
                         {
                             _handsInputAnalyzer.AnalyzeLeft(frame, roi);
+                            _handsInputAnalyzer.AdvanceState();
                         }
 
                         frame.DrawRectangle(roi, Color.Red, 2);
@@ -119,13 +120,14 @@ namespace Caduhd.UserInterface.ViewModel
                         if (_handsInputAnalyzer.State == HandsAnalyzerState.AnalyzingRight)
                         {
                             _handsInputAnalyzer.AnalyzeRight(frame, roi);
+                            _handsInputAnalyzer.AdvanceState();
                         }
 
                         frame.DrawRectangle(roi, Color.Red, 2);
                     }
                     else if (_handsInputAnalyzer.State == HandsAnalyzerState.Tuning)
                     {
-                        HandsInputAnalyzerResult result = _handsInputAnalyzer.Result;
+                        HandsAnalyzerResult result = _handsInputAnalyzer.Result;
                         NormalizedHands neutralHands = _handsDetector.Tune(result);
                         _droneHandsInputEvaluator.Tune(neutralHands);
                     }

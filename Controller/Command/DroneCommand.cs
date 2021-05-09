@@ -2,6 +2,6 @@
 {
     public abstract class DroneCommand
     {
-        public abstract DroneCommand GetCopy();
+        public abstract DroneCommand Copy();
     }
 }

@@ -7,29 +7,25 @@ namespace Caduhd.Controller
     public class HandsDroneController : KeyboardDroneController, IHandsInputHandler
     {
         private readonly IDroneHandsInputEvaluator _handsInputEvaluator;
-        private MoveCommand _previousHandsInputEvaluated;
-        private MoveCommand _actualHandsInputEvaluated;
+        protected MoveCommand _latestHandsInputEvaluated;
 
         public HandsDroneController(IControllableDrone drone, 
             IDroneHandsInputEvaluator handsInputEvaluator, 
             IDroneKeyInputEvaluator keyInputEvaluator) : base(drone, keyInputEvaluator)
         {
             _handsInputEvaluator = handsInputEvaluator;
-            _previousHandsInputEvaluated = MoveCommand.Idle;
-            _actualHandsInputEvaluated = MoveCommand.Idle;
         }
 
         public InputProcessResult ProcessHandsInput(NormalizedHands hands)
         {
-            _previousHandsInputEvaluated = _actualHandsInputEvaluated?.GetCopy() as MoveCommand;
-            _actualHandsInputEvaluated = _handsInputEvaluator.EvaluateHands(hands);
+            _latestHandsInputEvaluated = _handsInputEvaluator.EvaluateHands(hands);
             DroneControllerHandsInputProcessResult result =
-                new DroneControllerHandsInputProcessResult(_actualHandsInputEvaluated.GetCopy() as MoveCommand);
+                new DroneControllerHandsInputProcessResult(_latestHandsInputEvaluated.Copy() as MoveCommand);
             Control();
             return result;
         }
 
-        public override void Control()
+        protected override void Control()
         {
             DroneCommand inputsEvaluated = EvaluateInputs();
             InternalControl(inputsEvaluated);
@@ -40,7 +36,7 @@ namespace Caduhd.Controller
             // key input has always priority over the hands input
             if (_latestKeyInputEvaluated != null)
             {
-                DroneCommand latestKeyInputEvaluatedCopy = _latestKeyInputEvaluated.GetCopy();
+                DroneCommand latestKeyInputEvaluatedCopy = _latestKeyInputEvaluated.Copy();
 
                 // If the evaluated input from the keyboard was executed, then it has to be set to null,
                 // otherwise the evaluated hands input will never have the chance to get executed.
@@ -63,9 +59,9 @@ namespace Caduhd.Controller
 
                 return latestKeyInputEvaluatedCopy;
             }
-            else if (_actualHandsInputEvaluated.NotEquals(_previousHandsInputEvaluated))
+            else if (_latestHandsInputEvaluated != null)
             {
-                DroneCommand latestHandsInputEvaluatedCopy = _actualHandsInputEvaluated.GetCopy();
+                DroneCommand latestHandsInputEvaluatedCopy = _latestHandsInputEvaluated.Copy();
                 return latestHandsInputEvaluatedCopy;
             }
 

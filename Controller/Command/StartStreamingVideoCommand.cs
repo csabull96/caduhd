@@ -2,6 +2,8 @@
 {
     public sealed class StartStreamingVideoCommand : CameraCommand
     {
-        public override DroneCommand GetCopy() => new StartStreamingVideoCommand();
+        public override DroneCommand Copy() => new StartStreamingVideoCommand();
+
+        public override bool Equals(object obj) => obj is StartStreamingVideoCommand;
     }
 }

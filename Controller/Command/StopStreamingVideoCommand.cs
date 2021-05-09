@@ -2,6 +2,7 @@
 {
     public sealed class StopStreamingVideoCommand : CameraCommand
     {
-        public override DroneCommand GetCopy() => new StopStreamingVideoCommand();
+        public override DroneCommand Copy() => new StopStreamingVideoCommand();
+        public override bool Equals(object obj) => obj is StopStreamingVideoCommand;
     }
 }

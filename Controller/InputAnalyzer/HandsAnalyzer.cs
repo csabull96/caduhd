@@ -13,17 +13,17 @@ namespace Caduhd.Controller.InputAnalyzer
         private BgrImage _leftHandAnalysisImage;
         private BgrImage _rightHandAnalysisImage;
      
-        public HandsAnalyzerState State { get; set; }
+        public HandsAnalyzerState State { get; private set; }
 
-        public HandsInputAnalyzerResult Result
+        public HandsAnalyzerResult Result
         {
             get
             {
                 if (_leftHandAnalysisImage == null)
-                    throw new NullReferenceException("Missing left hand analysis.");
+                    throw new InvalidOperationException("Missing left hand analysis.");
 
                 if (_rightHandAnalysisImage == null)
-                    throw new NullReferenceException("Missing right hand analysis.");
+                    throw new InvalidOperationException("Missing right hand analysis.");
 
                 // the right side of the _leftHandAnalysisImage and
                 // the left side of the _rightHandAnalysisImage contain the background
@@ -32,7 +32,7 @@ namespace Caduhd.Controller.InputAnalyzer
                 // the left side of the _leftHandAnalysisImage contain the analyzed hands
                 BgrImage handsForeground = _leftHandAnalysisImage.Merge(_rightHandAnalysisImage);
 
-                return new HandsInputAnalyzerResult(new HandsColorMaps(_leftHandColorMap, _rightHandColorMap),
+                return new HandsAnalyzerResult(new HandsColorMaps(_leftHandColorMap, _rightHandColorMap),
                         handsBackground, handsForeground);
             }
         }
@@ -45,12 +45,18 @@ namespace Caduhd.Controller.InputAnalyzer
                     State = HandsAnalyzerState.AnalyzingLeft;
                     break;
                 case HandsAnalyzerState.AnalyzingLeft:
+                    if (_leftHandAnalysisImage == null)
+                        throw new InvalidOperationException($"Left hand has to be analyzed before advancing to the {HandsAnalyzerState.ReadyToAnalyzeRight} state.");
+
                     State = HandsAnalyzerState.ReadyToAnalyzeRight;
                     break;
                 case HandsAnalyzerState.ReadyToAnalyzeRight:
                     State = HandsAnalyzerState.AnalyzingRight;
                     break;
                 case HandsAnalyzerState.AnalyzingRight:
+                    if (_leftHandAnalysisImage == null || _rightHandAnalysisImage == null)
+                        throw new InvalidOperationException($"Both left and right hands have to be analyzed before advancing to the {HandsAnalyzerState.Tuning} state.");
+
                     State = HandsAnalyzerState.Tuning;
                     break;
                 case HandsAnalyzerState.Tuning:
@@ -61,6 +67,9 @@ namespace Caduhd.Controller.InputAnalyzer
 
         public void AnalyzeLeft(BgrImage image, Rectangle roi)
         {
+            if (State != HandsAnalyzerState.AnalyzingLeft)
+                throw new InvalidOperationException($"Hands analyzer has to be in {HandsAnalyzerState.AnalyzingLeft} state in order to analyze left hand.");
+
             if (image == null)
                 throw new ArgumentNullException("The image used for left hand analysis was null.");
 
@@ -70,7 +79,6 @@ namespace Caduhd.Controller.InputAnalyzer
                 image.Roi = roi;
                 _leftHandColorMap = ExtractColorMap(image);
                 image.Roi = Rectangle.Empty;
-                AdvanceState();
             }
             else
             {
@@ -80,6 +88,9 @@ namespace Caduhd.Controller.InputAnalyzer
 
         public void AnalyzeRight(BgrImage image, Rectangle roi)
         {
+            if (State != HandsAnalyzerState.AnalyzingRight)
+                throw new InvalidOperationException($"Hands analyzer has to be in {HandsAnalyzerState.AnalyzingRight} state in order to analyze right hand.");
+
             if (image == null)
                 throw new ArgumentNullException("The image used for right hand analysis was null.");
 
@@ -95,7 +106,6 @@ namespace Caduhd.Controller.InputAnalyzer
                 image.Roi = roi;
                 _rightHandColorMap = ExtractColorMap(image);
                 image.Roi = Rectangle.Empty;
-                AdvanceState();
             }
             else
             {

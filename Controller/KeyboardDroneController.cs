@@ -24,12 +24,12 @@ namespace Caduhd.Controller
 
             _latestKeyInputEvaluated = keyEvaluated;
             DroneControllerKeyInputProcessResult result =
-                new DroneControllerKeyInputProcessResult(_latestKeyInputEvaluated.GetCopy());
+                new DroneControllerKeyInputProcessResult(_latestKeyInputEvaluated.Copy());
             Control();
             return result;
         }
 
-        public override void Control()
+        protected override void Control()
         {
             InternalControl(_latestKeyInputEvaluated);
         }

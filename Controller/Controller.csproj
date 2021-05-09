@@ -64,7 +64,7 @@
     <Compile Include="HandsDroneController.cs" />
     <Compile Include="IControllableDrone.cs" />
     <Compile Include="InputAnalyzer\HandsAnalyzer.cs" />
-    <Compile Include="InputAnalyzer\HandsInputAnalyzerResult.cs" />
+    <Compile Include="InputAnalyzer\HandsAnalyzerResult.cs" />
     <Compile Include="InputAnalyzer\HandsAnalyzerState.cs" />
     <Compile Include="InputEvaluator\AbstractDroneInputEvaluator.cs" />
     <Compile Include="InputEvaluator\DroneHandsInputEvaluator.cs" />
