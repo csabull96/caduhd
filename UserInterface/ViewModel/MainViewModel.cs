@@ -49,15 +49,15 @@ namespace Caduhd.UserInterface.ViewModel
             _droneController = 
                 new HandsDroneController(_tello, _droneHandsInputEvaluator, droneControllerKeyInputEvaluator);
 
-            _webCamera = new WebCamera(320, 180);
+            _webCamera = new WebCamera(320, 280);
             _webCamera.NewFrame += ProcessWebCameraFrame;
-            _webCamera.TurnOn();
+            _webCamera.On();
             _keyEventProcessor = new KeyEventProcessor();
         }
 
         public void HandleKeyEvent(KeyEventArgs keyEventArgs)
         {
-            KeyInfo keyInfo = _keyEventProcessor.ProcessKeyEvent(keyEventArgs);
+            KeyInfo keyInfo = _keyEventProcessor.ProcessKeyEvent(keyEventArgs.Key, keyEventArgs.IsDown, keyEventArgs.IsRepeat);
 
             if (keyInfo.Key == Key.Back)
             {
@@ -174,12 +174,12 @@ namespace Caduhd.UserInterface.ViewModel
 
         public void TurnOnWebCamera()
         {
-            _webCamera.TurnOn();
+            _webCamera.On();
         }
 
         public void TurnOffWebCamera()
         {
-            _webCamera.TurnOff();
+            _webCamera.Off();
         }
 
         public void StartStreamingDroneVideo()
@@ -194,7 +194,7 @@ namespace Caduhd.UserInterface.ViewModel
 
         public void Closed()
         {
-            _webCamera.TurnOff();
+            _webCamera.Off();
             _tello.Dispose();
         }
     }

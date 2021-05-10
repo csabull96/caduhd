@@ -7,14 +7,14 @@ using System.Timers;
 
 namespace Caduhd.Input.Camera
 {
-    public class WebCamera : IWebCamera
+    public class WebCamera : IWebCamera, IDisposable
     {
-        private const int DEFAULT_WIDTH = 640;
-        private const int DEFAULT_HEIGHT = 320;
+        private const int DEFAULT_WIDTH = 320;
+        private const int DEFAULT_HEIGHT = 180;
         private const int DEFAULT_FPS = 30;
 
         private readonly Timer _timer;
-        private VideoCapture _videoCapture;
+        private ICapture _videoCapture;
 
         public int Fps { get; private set; }
         public int Width { get; private set; }
@@ -23,15 +23,17 @@ namespace Caduhd.Input.Camera
 
         public event NewWebCameraFrameEventHandler NewFrame;
 
-        public WebCamera(int width, int height) : this(30, width, height) { }
+        public WebCamera(int width, int height) : this(new VideoCapture(0, VideoCapture.API.DShow), 30, width, height) { }
 
-        public WebCamera(int fps = DEFAULT_FPS, int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT)
+        public WebCamera(ICapture capture, int fps = DEFAULT_FPS, int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT)
         {
             if (fps < 1)
                 throw new ArgumentException($"The FPS has to be greater than 0.");
 
             if (width < 1 || height < 1)
                 throw new ArgumentException($"Invalid resolution. Both width and height have to be greater than 0.");
+
+            _videoCapture = capture;
 
             Fps = fps;
             Width = width;
@@ -40,38 +42,48 @@ namespace Caduhd.Input.Camera
 
             int interval = 1000 / Fps;
             _timer = new Timer(interval);
+            _timer.Elapsed += QueryFrame;
         }
 
         private void QueryFrame(object sender, ElapsedEventArgs e)
         {
-            Image<Bgr, byte> frame = _videoCapture.QueryFrame()
+            try
+            {
+                Image<Bgr, byte> frame = _videoCapture.QueryFrame()
                 .ToImage<Bgr, byte>()
                 .Resize(Width, Height, Inter.Area, false)
                 .Flip(FlipType.Horizontal);
-            
-            NewFrame?.Invoke(this, new NewWebCameraFrameEventArgs(new BgrImage(frame)));
+
+                NewFrame?.Invoke(this, new NewWebCameraFrameEventArgs(new BgrImage(frame)));
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
-        public void TurnOn()
+        public void On()
         {
             if (!IsOn)
             {
-                _videoCapture = new VideoCapture(0, VideoCapture.API.DShow);
-                _timer.Elapsed += QueryFrame;
                 _timer.Start();
                 IsOn = true;
             }
         }
 
-        public void TurnOff()
+        public void Off()
         {
             if (IsOn)
             {
                 _timer.Stop();
-                _timer.Elapsed -= QueryFrame;
-                _videoCapture.Dispose();
                 IsOn = false;
             }
+        }
+
+        public void Dispose()
+        {
+            _timer.Dispose();
+            (_videoCapture as IDisposable)?.Dispose();
         }
     }
 }

@@ -6,7 +6,7 @@
     {
         bool IsOn { get; }
         event NewWebCameraFrameEventHandler NewFrame;
-        void TurnOn();
-        void TurnOff();
+        void On();
+        void Off();
     }
 }

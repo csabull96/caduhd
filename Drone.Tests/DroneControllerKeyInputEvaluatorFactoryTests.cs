@@ -1,12 +1,11 @@
 ﻿using Caduhd.Controller;
 using Caduhd.Controller.Command;
 using Caduhd.Controller.InputEvaluator;
-using Caduhd.Drone;
 using Caduhd.Drone.Dji;
 using System;
 using Xunit;
 
-namespace Drone.Tests
+namespace Caduhd.Drone.Tests
 {
     public class DroneControllerKeyInputEvaluatorFactoryTests
     {

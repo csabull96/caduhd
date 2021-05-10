@@ -3,7 +3,7 @@ using Caduhd.Drone.Event;
 using System.Drawing;
 using Xunit;
 
-namespace Drone.Tests.Event
+namespace Caduhd.Drone.Tests.Event
 {
     public class NewDroneCameraFrameEventArgsTests
     {

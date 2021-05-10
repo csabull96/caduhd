@@ -1,13 +1,8 @@
 ﻿using Caduhd.Common;
 using Caduhd.Drone.Dji;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace Drone.Tests.Dji
+namespace Caduhd.Drone.Tests.Dji
 {
     public class TelloStateParserTests
     {

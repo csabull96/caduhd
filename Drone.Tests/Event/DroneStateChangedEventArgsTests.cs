@@ -1,8 +1,7 @@
-﻿using Caduhd.Drone;
-using Caduhd.Drone.Event;
+﻿using Caduhd.Drone.Event;
 using Xunit;
 
-namespace Drone.Tests.Event
+namespace Caduhd.Drone.Tests.Event
 {
     public class DroneStateChangedEventArgsTests
     {

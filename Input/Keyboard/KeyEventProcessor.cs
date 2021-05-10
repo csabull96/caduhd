@@ -4,13 +4,13 @@ namespace Caduhd.Input.Keyboard
 {
     public class KeyEventProcessor
     {
-        public KeyInfo ProcessKeyEvent(KeyEventArgs keyEventArgs)
+        public KeyInfo ProcessKeyEvent(Key key, bool isDown = true, bool isRepeat = false)
         {
-            if (keyEventArgs.IsRepeat)
+            if (isRepeat)
                 return null;
 
-            KeyState keyState = keyEventArgs.IsDown ? KeyState.Down : KeyState.Up;
-            return new KeyInfo(keyEventArgs.Key, keyState);
+            KeyState keyState = isDown ? KeyState.Down : KeyState.Up;
+            return new KeyInfo(key, keyState);
         }
     }
 }
