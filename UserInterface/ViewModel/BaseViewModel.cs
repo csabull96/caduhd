@@ -1,19 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Caduhd.UserInterface.ViewModel
+﻿namespace Caduhd.UserInterface.ViewModel
 {
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+
+    /// <summary>
+    /// Abstract base class for view model classes.
+    /// </summary>
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Property changed event to notify the UI about changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Fires the <see cref="PropertyChanged"/> event to notify the UI about a change.
+        /// </summary>
+        /// <param name="name">The name of the property changed.</param>
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

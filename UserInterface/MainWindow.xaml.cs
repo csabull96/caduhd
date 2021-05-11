@@ -51,19 +51,9 @@ namespace Caduhd.UserInterface
             _mainViewModel.StopStreamingDroneVideo();
         }
 
-        private void TurnOnWebCamera(object sender, RoutedEventArgs e)
-        {
-            _mainViewModel.TurnOnWebCamera();
-        }
-
-        private void TurnOffWebCamera(object sender, RoutedEventArgs e)
-        {
-            _mainViewModel.TurnOffWebCamera();
-        }
-
         private void Window_Closed(object sender, EventArgs e)
         {
-            _mainViewModel.Closed();
+            _mainViewModel.Dispose();
         }
     }
 }

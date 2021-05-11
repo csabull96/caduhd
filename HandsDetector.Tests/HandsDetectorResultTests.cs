@@ -3,7 +3,7 @@ using Caduhd.HandsDetector;
 using System.Drawing;
 using Xunit;
 
-namespace Caduhd.HandDetector.Tests
+namespace Caduhd.HandsDetector.Tests
 {
     public class HandsDetectorResultTests
     {

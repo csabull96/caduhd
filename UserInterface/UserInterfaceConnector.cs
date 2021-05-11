@@ -1,120 +1,206 @@
-﻿using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.CompilerServices;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-
-namespace Caduhd.UserInterface
+﻿namespace Caduhd.UserInterface
 {
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.Runtime.CompilerServices;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+
+    /// <summary>
+    /// User interface connector for data binding between the view model and the UI.
+    /// </summary>
     public class UserInterfaceConnector : INotifyPropertyChanged
     {
+        private BitmapSource currentWebCameraFrame;
+        private BitmapSource currentDroneCameraFrame;
+        private string tuningState;
+        private string leftHand;
+        private string rightHand;
+        private string direction;
+        private int batteryLevel = 0;
+        private double speed = 0;
+        private int height = 0;
+
+        /// <summary>
+        /// Property changed event to notify UI about changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private BitmapSource _currentWebCameraFrame;
-        public BitmapSource CurrentWebCameraFrame => _currentWebCameraFrame;
-        public void SetCurrentWebCameraFrame(Bitmap bitmap)
+        /// <summary>
+        /// Gets the current web camera frame.
+        /// </summary>
+        public BitmapSource CurrentWebCameraFrame => this.currentWebCameraFrame;
+
+        /// <summary>
+        /// Gets the current drone camera frame.
+        /// </summary>
+        public BitmapSource CurrentDroneCameraFrame => this.currentDroneCameraFrame;
+
+        /// <summary>
+        /// Gets or sets the state of the tuning.
+        /// </summary>
+        public string TuningState
         {
-            _currentWebCameraFrame = BitmapToBitmapSource(bitmap, PixelFormats.Bgr24);
-            OnPropertyChanged(nameof(CurrentWebCameraFrame));
+            get
+            {
+                return this.tuningState;
+            }
+
+            set
+            {
+                this.tuningState = value;
+                this.OnPropertyChanged();
+            }
         }
 
-        private BitmapSource _currentDroneCameraFrame;
-        public BitmapSource CurrentDroneCameraFrame => _currentDroneCameraFrame;
+        /// <summary>
+        /// Gets or sets the representation of the left hand.
+        /// </summary>
+        public string LeftHand
+        {
+            get
+            {
+                return this.leftHand;
+            }
+
+            set
+            {
+                this.leftHand = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the representation of the right hand.
+        /// </summary>
+        public string RightHand
+        {
+            get
+            {
+                return this.rightHand;
+            }
+
+            set
+            {
+                this.rightHand = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the direction representation.
+        /// </summary>
+        public string Direction
+        {
+            get
+            {
+                return this.direction;
+            }
+
+            set
+            {
+                this.direction = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets the batter level.
+        /// </summary>
+        public int BatteryLevel => this.batteryLevel;
+
+        /// <summary>
+        /// Gets the battery level as percentage string.
+        /// </summary>
+        public string BatteryPercentage => $"{this.batteryLevel}%";
+
+        /// <summary>
+        /// Gets the speed as string with metric unit.
+        /// </summary>
+        public string Speed => $"Speed: {this.speed:F1} m/s";
+
+        /// <summary>
+        /// Gets the height string with metric unit.
+        /// </summary>
+        public string Height => $"Height: {this.height} cm";
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserInterfaceConnector"/> class.
+        /// </summary>
+        public UserInterfaceConnector()
+        {
+        }
+
+        /// <summary>
+        /// Sets the current web camera frame.
+        /// </summary>
+        /// <param name="bitmap">Web camera frame as <see cref="Bitmap"/>.</param>
+        public void SetCurrentWebCameraFrame(Bitmap bitmap)
+        {
+            this.currentWebCameraFrame = this.BitmapToBitmapSource(bitmap, PixelFormats.Bgr24);
+            this.OnPropertyChanged(nameof(this.CurrentWebCameraFrame));
+        }
+
+        /// <summary>
+        /// Sets the current drone camera frame.
+        /// </summary>
+        /// <param name="bitmap">Drone camera frame as <see cref="Bitmap"/>.</param>
         public void SetCurrentDroneCameraFrame(Bitmap bitmap)
         {
             if (bitmap != null)
             {
-                _currentDroneCameraFrame = BitmapToBitmapSource(bitmap, PixelFormats.Bgr24);
-                OnPropertyChanged(nameof(CurrentDroneCameraFrame));
+                this.currentDroneCameraFrame = this.BitmapToBitmapSource(bitmap, PixelFormats.Bgr24);
+                this.OnPropertyChanged(nameof(this.CurrentDroneCameraFrame));
             }
         }
 
-        private string _tuningState;
-        public string TuningState
-        {
-            get { return _tuningState; }
-            set 
-            { 
-                _tuningState = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _leftHand;
-        public string LeftHand
-        {
-            get { return _leftHand; }
-            set 
-            { 
-                _leftHand = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _rightHand;
-        public string RightHand
-        {
-            get { return _rightHand; }
-            set
-            {
-                _rightHand = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _direction;
-        public string Direction
-        {
-            get { return _direction; }
-            set
-            {
-                _direction = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private int _batteryLevel = 0;
+        /// <summary>
+        /// Sets the battery level.
+        /// </summary>
+        /// <param name="batteryLevel">Battery level</param>
         public void SetBatteryLevel(int batteryLevel)
         {
-            _batteryLevel = batteryLevel;
-            OnPropertyChanged(nameof(BatteryLevel));
-            OnPropertyChanged(nameof(BatteryPercentage));
+            this.batteryLevel = this.batteryLevel;
+            this.OnPropertyChanged(nameof(BatteryLevel));
+            this.OnPropertyChanged(nameof(BatteryPercentage));
         }
-        public int BatteryLevel => _batteryLevel;
-        public string BatteryPercentage => $"{_batteryLevel}%";
 
-        private double _speed = 0;
+        /// <summary>
+        /// Sets the speed.
+        /// </summary>
+        /// <param name="speed">The speed.</param>
         public void SetSpeed(double speed)
         {
-            _speed = speed;
-            OnPropertyChanged(nameof(Speed));
+            this.speed = speed;
+            this.OnPropertyChanged(nameof(this.Speed));
         }
-        public string Speed { get { return $"Speed: {_speed.ToString("F1")} m/s"; } }
 
-        private int _relativeHeight = 0;
+        /// <summary>
+        /// Sets the height.
+        /// </summary>
+        /// <param name="height"></param>
         public void SetHeight(int height)
         {
-            _relativeHeight = height;
-            OnPropertyChanged(nameof(Height));
+            this.height = height;
+            this.OnPropertyChanged(nameof(this.Height));
         }
-        public string Height { get { return $"Height: {_relativeHeight} cm"; } }
 
-        public UserInterfaceConnector()
+        /// <summary>
+        /// Fires the <see cref="PropertyChanged"/> event to notify the UI about a change.
+        /// </summary>
+        /// <param name="name">The name of the property changed.</param>
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
-            //CurrentWebCameraFrame = new BitmapImage(new Uri(@"Resources\Images\webca_placeholder.jpg", UriKind.Relative));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
         private BitmapSource BitmapToBitmapSource(Bitmap bitmap, System.Windows.Media.PixelFormat pixelFormat)
         {
             var bitmapData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
             var bitmapSource = BitmapSource.Create(bitmapData.Width, bitmapData.Height, 96, 96, pixelFormat, null, bitmapData.Scan0, bitmapData.Stride * bitmapData.Height, bitmapData.Stride);
             bitmap.UnlockBits(bitmapData);
             return bitmapSource;
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

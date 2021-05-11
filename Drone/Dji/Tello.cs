@@ -1,24 +1,27 @@
-﻿using Caduhd.Common;
-using Caduhd.Controller;
-using Caduhd.Controller.Command;
-using Caduhd.Drone.Event;
-using Emgu.CV;
-using System;
-using System.Collections.Concurrent;
-using System.Drawing;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
-using Timer = System.Timers.Timer;
-
-namespace Caduhd.Drone.Dji
+﻿namespace Caduhd.Drone.Dji
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Drawing;
+    using System.IO;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Timers;
+    using Caduhd.Common;
+    using Caduhd.Controller;
+    using Caduhd.Controller.Command;
+    using Caduhd.Drone.Event;
+    using Emgu.CV;
+    using Timer = System.Timers.Timer;
+
+    /// <summary>
+    /// The implementation of the <see cref="IControllableDrone"/> for the DJI Tello.
+    /// </summary>
     public class Tello : IControllableDrone, IDisposable
     {
-        private bool _disposing;
+        private bool disposing;
 
         private const int YES = 1;
         private const int NO = 0;
@@ -39,37 +42,40 @@ namespace Caduhd.Drone.Dji
         private const string REQUEST_WIFI_SNR = "wifi?";
 
         // what connected really means is that there was a handshake after the initial connect message
-        private bool _connected;
+        private bool connected;
 
-        private ConcurrentQueue<string> _commandQueue;
+        private ConcurrentQueue<string> commandQueue;
 
         private const string TELLO_IP = "192.168.10.1";
         private const int TELLO_PORT = 8889;
-        private IPEndPoint _telloIPEndPoint;
+        private IPEndPoint telloIPEndPoint;
+
         // to send messages to Tello and receive their response
-        private readonly UdpClient _tello;
-        private int _isReceivingTelloResponse;
+        private readonly UdpClient tello;
+        private int isReceivingTelloResponse;
+
         // to receive Tello's state
-        private readonly UdpClient _telloStateReceiver;
-        private int _isReceivingTelloState;
-        private TelloStateParser _telloStateParser;
+        private readonly UdpClient telloStateReceiver;
+        private int isReceivingTelloState;
+        private TelloStateParser telloStateParser;
+
         // the connection with Tello is UDP based so
         // instead of "connected" vs "not connected"
         // I went with "responding" vs "not responding"
         public bool IsReachable { get; private set; }
 
-        private DroneState _droneState;
-        private readonly Timer _snrChecker;
-        private int _snr;
+        private DroneState droneState;
+        private readonly Timer snrChecker;
+        private int snr;
 
         private const int MIN_SPEED = 0;
         private const int MAX_SPEED = 100;
         private const int DEFAULT_SPEED = 60;
-        private int _speed = DEFAULT_SPEED;
+        private int speed = DEFAULT_SPEED;
         public int Speed 
         {
-            get => _speed;
-            set => _speed = AdjustSpeed(value);
+            get => speed;
+            set => speed = AdjustSpeed(value);
         }
 
         public delegate void NewDroneVideoFrameEventHandler(object source, NewDroneCameraFrameEventArgs args);
@@ -78,78 +84,80 @@ namespace Caduhd.Drone.Dji
         public delegate void DroneStateEventHandler(object source, DroneStateChangedEventArgs args);
         public event DroneStateEventHandler StateChanged;
 
-        private int _isStreaming;
-        private CancellationTokenSource _videoStreamCancellationTokenSource;
-        private int _numberOfConsecutiveEmtpyFrames;
+        private int isStreaming;
+        private CancellationTokenSource videoStreamCancellationTokenSource;
+        private int numberOfConsecutiveEmtpyFrames;
         private const int ALLOWED_NUMBER_OF_CONSECUTIVE_EMPTY_FRAMES = 10;
 
+        /// <summary>
+        /// Gets a value indicating whether the Tello is streaming video at the moment or not.
+        /// </summary>
         public bool IsStreamingVideo { get; private set; } = false;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Tello"/> class.
+        /// </summary>
         public Tello() 
         {
-            _disposing = false;
+            this.disposing = false;
 
-            _telloIPEndPoint = new IPEndPoint(IPAddress.Parse(TELLO_IP), TELLO_PORT);
-            _tello = new UdpClient(11001);
-            _tello.Client.ReceiveTimeout = TELLO_RESPONSE_TIMEOUT;
-            _isReceivingTelloResponse = NO;
+            this.telloIPEndPoint = new IPEndPoint(IPAddress.Parse(TELLO_IP), TELLO_PORT);
+            this.tello = new UdpClient(11001);
+            this.tello.Client.ReceiveTimeout = TELLO_RESPONSE_TIMEOUT;
+            this.isReceivingTelloResponse = NO;
 
-            _telloStateReceiver = new UdpClient(new IPEndPoint(IPAddress.Parse("0.0.0.0"), 8890));
-            _telloStateReceiver.Client.ReceiveTimeout = TELLO_STATE_RECEIVER_RESPONSE_TIMEOUT;
-            _isReceivingTelloState = NO;
-            _telloStateParser = new TelloStateParser();
+            this.telloStateReceiver = new UdpClient(new IPEndPoint(IPAddress.Parse("0.0.0.0"), 8890));
+            this.telloStateReceiver.Client.ReceiveTimeout = TELLO_STATE_RECEIVER_RESPONSE_TIMEOUT;
+            this.isReceivingTelloState = NO;
+            this.telloStateParser = new TelloStateParser();
 
-            _connected = false;
+            this.connected = false;
 
-            _commandQueue = new ConcurrentQueue<string>();
+            this.commandQueue = new ConcurrentQueue<string>();
 
-            _snr = -1;
-            _snrChecker = new Timer(WIFI_CHECKER_TIME_INTERVAL);
-            _snrChecker.Elapsed += Elapsed;
+            this.snr = -1;
+            this.snrChecker = new Timer(WIFI_CHECKER_TIME_INTERVAL);
+            this.snrChecker.Elapsed += Elapsed;
 
-            _isStreaming = 0;
-            _videoStreamCancellationTokenSource = new CancellationTokenSource();
-            _numberOfConsecutiveEmtpyFrames = 0;
+            this.isStreaming = 0;
+            this.videoStreamCancellationTokenSource = new CancellationTokenSource();
+            this.numberOfConsecutiveEmtpyFrames = 0;
         }
 
-        private void Elapsed(object sender, ElapsedEventArgs e)
+        /// <summary>
+        /// Disposes Tello.
+        /// </summary>
+        public void Dispose()
         {
-            if (_disposing)
-            {
-                _snrChecker.Dispose();
-            }
-            else if (!_connected)
-            {
-                _snrChecker.Stop();
-            }
-            else if (IsReachable)
-            {
-                TellTello(REQUEST_WIFI_SNR);
-            }
+            this.disposing = true;
         }
 
+        /// <summary>
+        /// Sends the requested command for execution to the drone.
+        /// </summary>
+        /// <param name="droneCommant">The requested <see cref="DroneCommand"/> object.</param>
         public void Control(DroneCommand droneCommand)
         {
             if (droneCommand is MovementCommand)
             {
                 if (droneCommand is TakeOffCommand)
                 {
-                    TakeOff();
+                    this.TakeOff();
                 }
                 else if (droneCommand is LandCommand)
                 {
-                   Land();
+                    this.Land();
                 }
                 else if (droneCommand is MoveCommand)
                 {
-                    Move(droneCommand as MoveCommand);
+                    this.Move(droneCommand as MoveCommand);
                 }
             }
             else if (droneCommand is ControlCommand)
             {
                 if (droneCommand is ConnectCommand)
                 {
-                    Connect();
+                    this.Connect();
                 }
                 else if (droneCommand is DisconnectCommand)
                 {
@@ -160,29 +168,47 @@ namespace Caduhd.Drone.Dji
             {
                 if (droneCommand is StartStreamingVideoCommand)
                 {
-                    StartStreamingVideo();
+                    this.StartStreamingVideo();
                 }
                 else if (droneCommand is StopStreamingVideoCommand)
                 {
-                    StopStreamingVideo();
+                    this.StopStreamingVideo();
                 }
             }
         }
 
+        private void Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (this.disposing)
+            {
+                this.snrChecker.Dispose();
+            }
+            else if (!this.connected)
+            {
+                this.snrChecker.Stop();
+            }
+            else if (this.IsReachable)
+            {
+                this.TellTello(REQUEST_WIFI_SNR);
+            }
+        }
+
+
         private void Connect()
         {
-            StartResponseReceiver();
+            this.StartResponseReceiver();
+
             // if the Tello successfully received our connect message
             // then it'll cache the senders IP/Port
             // every message we send to the Tello (even from different socket)
             // the Tello is going to answer to the originally cached address
             // until it receives a connect message with a different IP/Port
-            TellTello(CONNECT);            
+            this.TellTello(CONNECT);
         }
 
         private void Disconnect()
         {
-            _connected = false;
+            connected = false;
             // should we call dispose here??
         }
 
@@ -190,34 +216,38 @@ namespace Caduhd.Drone.Dji
         {
             // we can't take off unless our initial connect message has been answered
             // land and move methods have no such restrictions (safety reasons)
-            if (_connected)
+            if (this.connected)
             {
-                TellTello(TAKE_OFF);
+                this.TellTello(TAKE_OFF);
             }
         }
 
         private void Land()
         {
-            TellTello(LAND);
+            this.TellTello(LAND);
         }
 
         private void Move(MoveCommand moveCommand)
         {
-            TellTello(string.Format(MOVE,
-                moveCommand.Lateral * Speed,
-                moveCommand.Longitudinal * Speed,
-                moveCommand.Vertical * Speed,
-                moveCommand.Yaw * Speed));
+            this.TellTello(
+                string.Format(
+                    MOVE,
+                    moveCommand.Lateral * this.Speed,
+                    moveCommand.Longitudinal * this.Speed,
+                    moveCommand.Vertical * this.Speed,
+                    moveCommand.Yaw * this.Speed));
         }
 
         private void StartStreamingVideo()
         {
-            if (!_connected || Interlocked.CompareExchange(ref _isStreaming, YES, NO) == YES)
+            if (!this.connected || Interlocked.CompareExchange(ref this.isStreaming, YES, NO) == YES)
+            {
                 return;
-            
-            TellTello(START_STREAMING_VIDEO);
+            }
 
-            _videoStreamCancellationTokenSource = new CancellationTokenSource();
+            this.TellTello(START_STREAMING_VIDEO);
+
+            this.videoStreamCancellationTokenSource = new CancellationTokenSource();
 
             Task.Factory.StartNew(() =>
             {
@@ -225,46 +255,47 @@ namespace Caduhd.Drone.Dji
                 {
                     if (videoCapture.IsOpened && videoCapture.BackendName == "FFMPEG")
                     {
-                        IsStreamingVideo = true;
+                        this.IsStreamingVideo = true;
 
-                        while (!_videoStreamCancellationTokenSource.IsCancellationRequested && !_disposing && _connected)
+                        while (!this.videoStreamCancellationTokenSource.IsCancellationRequested && !this.disposing && this.connected)
                         {
                             Mat frame = new Mat();
                             videoCapture.Read(frame);
                             
                             if (frame.IsEmpty)
                             {
-                                if (ALLOWED_NUMBER_OF_CONSECUTIVE_EMPTY_FRAMES < ++_numberOfConsecutiveEmtpyFrames)
+                                if (ALLOWED_NUMBER_OF_CONSECUTIVE_EMPTY_FRAMES < ++this.numberOfConsecutiveEmtpyFrames)
                                 {
-                                    _videoStreamCancellationTokenSource.Cancel();
+                                    this.videoStreamCancellationTokenSource.Cancel();
                                 }
 
                                 continue;
                             }
 
-                            _numberOfConsecutiveEmtpyFrames = 0;
+                            this.numberOfConsecutiveEmtpyFrames = 0;
                             BgrImage image = new BgrImage(frame);
                             frame.Dispose();
-                            NewCameraFrame?.Invoke(this, new NewDroneCameraFrameEventArgs(image));
+                            this.NewCameraFrame?.Invoke(this, new NewDroneCameraFrameEventArgs(image));
                         }
 
-                        TellTello(STOP_STREAMING_VIDEO);
-                        IsStreamingVideo = false;
-                        //NewCameraFrame?.Invoke(this, new NewDroneCameraFrameEventArgs(BgrImage.GetBlank(Color.Orange)));
+                        this.TellTello(STOP_STREAMING_VIDEO);
+                        this.IsStreamingVideo = false;
+
+                        this.NewCameraFrame?.Invoke(this, new NewDroneCameraFrameEventArgs(BgrImage.GetBlank(1920, 1080, Color.WhiteSmoke)));
                     }
                 }
 
-                Interlocked.Exchange(ref _isStreaming, NO);
+                Interlocked.Exchange(ref this.isStreaming, NO);
 
-            }, _videoStreamCancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            }, this.videoStreamCancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
         }
 
         private void StopStreamingVideo()
         {
-            if (IsStreamingVideo)
+            if (this.IsStreamingVideo)
             {
-                _videoStreamCancellationTokenSource.Cancel();
+                this.videoStreamCancellationTokenSource.Cancel();
             }
         }
 
@@ -272,44 +303,44 @@ namespace Caduhd.Drone.Dji
         {
             try
             {
-                _commandQueue.Enqueue(commandString);
+                this.commandQueue.Enqueue(commandString);
                 byte[] commandBytes = commandString.AsBytes();
                 IPEndPoint telloIPEndPoint = new IPEndPoint(IPAddress.Parse(TELLO_IP), TELLO_PORT);
-                _tello.Send(commandBytes, commandBytes.Length, telloIPEndPoint);
+                this.tello.Send(commandBytes, commandBytes.Length, telloIPEndPoint);
             }
             catch (SocketException e)
             {
                 if (e.SocketErrorCode == SocketError.TimedOut)
                 {
-
                 }
             }
             catch (Exception)
             {
-              
             }
         }
 
         private async void StartResponseReceiver()
         {
-            if (Interlocked.CompareExchange(ref _isReceivingTelloResponse, YES, NO) == YES)
+            if (Interlocked.CompareExchange(ref this.isReceivingTelloResponse, YES, NO) == YES)
+            {
                 return;
+            }
 
             await Task.Factory.StartNew(() =>
             {
-                while (!_disposing)
+                while (!this.disposing)
                 {
-                    if (_commandQueue.TryDequeue(out string commandString))
+                    if (this.commandQueue.TryDequeue(out string commandString))
                     {
                         string responseString = string.Empty;
                         try
                         {
-                            byte[] responseBytes = _tello.Receive(ref _telloIPEndPoint);
-                            IsReachable = true;
+                            byte[] responseBytes = tello.Receive(ref this.telloIPEndPoint);
+                            this.IsReachable = true;
                             responseString = responseBytes.AsString().Trim();
                             // response is only forwarded to the ProcessResponse method
                             // if it comes from the Tello
-                            ProcessResponse(commandString, responseString);
+                            this.ProcessResponse(commandString, responseString);
                         }
                         catch (SocketException e)
                         {
@@ -333,7 +364,7 @@ namespace Caduhd.Drone.Dji
                 }
 
                 // we only get here if _disposing = true
-                _tello.Close();
+                this.tello.Close();
 
             }, TaskCreationOptions.LongRunning);
         }
@@ -345,39 +376,41 @@ namespace Caduhd.Drone.Dji
                 // if we receive any kind of response
                 // (other than "error") right after the "command" message was sent
                 // we take it as a "successful handshake"
-                if (!_connected && response != ERROR_RESPONSE)
+                if (!this.connected && response != ERROR_RESPONSE)
                 {
-                    _connected = true;
-                    StartReceivingTelloState();
-                    _snrChecker.Start();
+                    this.connected = true;
+                    this.StartReceivingTelloState();
+                    this.snrChecker.Start();
                 }
             }
             else if (command == REQUEST_WIFI_SNR)
             {
                 if (int.TryParse(response, out int snr))
                 {
-                    _snr = snr;
+                    this.snr = snr;
                 }
             }
         }
 
         private async void StartReceivingTelloState()
         {
-            if (!_connected || Interlocked.CompareExchange(ref _isReceivingTelloState, YES, NO) == YES)
+            if (!this.connected || Interlocked.CompareExchange(ref this.isReceivingTelloState, YES, NO) == YES)
+            {
                 return;
+            }
 
             await Task.Factory.StartNew(() =>
             {
-                while (!_disposing && _connected)
+                while (!disposing && connected)
                 {
                     try
                     {
-                        byte[] stateBytes = _telloStateReceiver.Receive(ref _telloIPEndPoint);
-                        IsReachable = true;
-                        _droneState = _telloStateParser.Parse(stateBytes);
-                        _droneState.Wifi = _snr;
+                        byte[] stateBytes = telloStateReceiver.Receive(ref this.telloIPEndPoint);
+                        this.IsReachable = true;
+                        this.droneState = telloStateParser.Parse(stateBytes);
+                        this.droneState.Wifi = snr;
 
-                        StateChanged?.Invoke(this, new DroneStateChangedEventArgs(_droneState));
+                        this.StateChanged?.Invoke(this, new DroneStateChangedEventArgs(droneState));
                         
                         // should we restart video streaming and wifi checker if Tello is reachable again?
                     }
@@ -386,7 +419,7 @@ namespace Caduhd.Drone.Dji
                         if (e.SocketErrorCode == SocketError.TimedOut)
                         {
                             // Tello stopped sharing its state, probably Tello is not reachable
-                            IsReachable = false;
+                            this.IsReachable = false;
                         }
                     }
                     catch (Exception)
@@ -395,9 +428,9 @@ namespace Caduhd.Drone.Dji
                     }
                 }
 
-                if (_disposing)
+                if (this.disposing)
                 {
-                    _telloStateReceiver.Close();
+                    this.telloStateReceiver.Close();
                 }
 
             }, TaskCreationOptions.LongRunning);
@@ -413,12 +446,8 @@ namespace Caduhd.Drone.Dji
             {
                 return MAX_SPEED;
             }
-            return original;
-        }
 
-        public void Dispose()
-        {
-            _disposing = true;
+            return original;
         }
     }
 }

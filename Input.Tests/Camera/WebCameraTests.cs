@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Input.Tests.Camera
+namespace Caduhd.Input.Tests.Camera
 {
     public class WebCameraTests
     {

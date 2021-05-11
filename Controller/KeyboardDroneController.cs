@@ -1,37 +1,62 @@
-﻿using Caduhd.Controller.Command;
-using Caduhd.Controller.InputEvaluator;
-using Caduhd.Input.Keyboard;
-
-namespace Caduhd.Controller
+﻿namespace Caduhd.Controller
 {
+    using Caduhd.Controller.Command;
+    using Caduhd.Controller.InputEvaluator;
+    using Caduhd.Input.Keyboard;
+
+    /// <summary>
+    /// A drone controller that is used to control a <see cref="IControllableDrone"/> with the keyboard.
+    /// </summary>
     public class KeyboardDroneController : AbstractDroneController, IKeyInputHandler
     {
-        protected readonly IDroneKeyInputEvaluator _keyInputEvaluator;
-        protected DroneCommand _latestKeyInputEvaluated;
+        /// <summary>
+        /// The desired implementation of the <see cref="IDroneKeyInputEvaluator"/> interface.
+        /// </summary>
+        private readonly IDroneKeyInputEvaluator keyInputEvaluator;
 
-        public KeyboardDroneController(IControllableDrone drone, 
-            IDroneKeyInputEvaluator keyInputEvaluator) : base(drone)
+        /// <summary>
+        /// Gets or sets the result of the latest key input evaluation as <see cref="DroneCommand"/>.
+        /// </summary>
+        protected DroneCommand LatestKeyInputEvaluated { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeyboardDroneController"/> class.
+        /// </summary>
+        /// <param name="drone">The <see cref="IControllableDrone"/> drone that we would like to control with this controller.</param>
+        /// <param name="keyInputEvaluator">The desired implementation of the <see cref="IDroneKeyInputEvaluator"/> interface.</param>
+        public KeyboardDroneController(IControllableDrone drone, IDroneKeyInputEvaluator keyInputEvaluator)
+            : base(drone)
         {
-            _keyInputEvaluator = keyInputEvaluator;
+            this.keyInputEvaluator = keyInputEvaluator;
         }
 
+        /// <summary>
+        /// Processes a key input.
+        /// </summary>
+        /// <param name="keyInfo">The key input to evaluate.</param>
+        /// <returns>The evaluation result of the <paramref name="keyInfo"/>.</returns>
         public InputProcessResult ProcessKeyInput(KeyInfo keyInfo)
         {
-            DroneCommand keyEvaluated = _keyInputEvaluator.EvaluateKey(keyInfo);
+            DroneCommand keyEvaluated = this.keyInputEvaluator.EvaluateKey(keyInfo);
 
             if (keyEvaluated == null)
+            {
                 return null;
+            }
 
-            _latestKeyInputEvaluated = keyEvaluated;
+            this.LatestKeyInputEvaluated = keyEvaluated;
             DroneControllerKeyInputProcessResult result =
-                new DroneControllerKeyInputProcessResult(_latestKeyInputEvaluated.Copy());
-            Control();
+                new DroneControllerKeyInputProcessResult(this.LatestKeyInputEvaluated.Copy());
+            this.Control();
             return result;
         }
 
+        /// <summary>
+        /// Evaluated latest inputs together.
+        /// </summary>
         protected override void Control()
         {
-            InternalControl(_latestKeyInputEvaluated);
+            this.InternalControl(this.LatestKeyInputEvaluated);
         }
     }
 }

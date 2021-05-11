@@ -1,24 +1,46 @@
-﻿using Emgu.CV.Structure;
-using System;
-using System.Drawing;
-
-namespace Caduhd.Common
+﻿namespace Caduhd.Common
 {
+    using System;
+    using System.Drawing;
+    using Emgu.CV.Structure;
+
+    /// <summary>
+    /// A wrapper class around the Emgu.CV.Structure.Bgr class.
+    /// </summary>
     public class BgrPixel
     {
-        private Bgr _pixel;
+        private Bgr pixel;
 
-        public int Blue => Convert.ToInt32(_pixel.Blue);
+        /// <summary>
+        /// Gets the blue channal value of the pixel.
+        /// </summary>
+        public int Blue => Convert.ToInt32(this.pixel.Blue);
 
-        public int Green => Convert.ToInt32(_pixel.Green);
+        /// <summary>
+        /// Gets the green channal value of the pixel.
+        /// </summary>
+        public int Green => Convert.ToInt32(this.pixel.Green);
 
-        public int Red => Convert.ToInt32(_pixel.Red);
+        /// <summary>
+        /// Gets the red channal value of the pixel.
+        /// </summary>
+        public int Red => Convert.ToInt32(this.pixel.Red);
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BgrPixel"/> class.
+        /// </summary>
+        /// <param name="color">The color of the pixel.</param>
         public BgrPixel(Color color) : this(color.B, color.G, color.R) { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BgrPixel"/> class.
+        /// </summary>
+        /// <param name="blue">The blue channal value.</param>
+        /// <param name="green">The green channal value.</param>
+        /// <param name="red">The red channal value.</param>
         public BgrPixel(int blue, int green, int red)
         {
-            _pixel = new Bgr(blue, green, red);
+            this.pixel = new Bgr(blue, green, red);
         }
     }
 }

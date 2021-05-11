@@ -1,9 +1,12 @@
-﻿using Caduhd.Common;
-using System;
-using System.Drawing;
-
-namespace Caduhd.HandsDetector
+﻿namespace Caduhd.HandsDetector
 {
+    using System;
+    using System.Drawing;
+    using Caduhd.Common;
+
+    /// <summary>
+    /// A class used for skin color based hand detection.
+    /// </summary>
     public class SkinColorHandsDetector
     {
         private const int DIVISOR_TO_GET_HAND_AREA_WIDTH_FROM_IMAGE_WIDTH = 3;
@@ -17,33 +20,51 @@ namespace Caduhd.HandsDetector
         private readonly BgrPixel SKIN_PIXEL = new BgrPixel(Color.White);
         private readonly BgrPixel UNKNOWN_PIXEL = new BgrPixel(Color.Green);
 
-        private IHandsDetectorTuning _tuning;
+        private IHandsDetectorTuning tuning;
 
-        private NormalizedHands _neutralHands;
+        private NormalizedHands neutralHands;
 
+        /// <summary>
+        /// Gets a value indicating whether the hand detector is tuned or not.
+        /// </summary>
         public bool Tuned { get; private set; }
 
+        /// <summary>
+        /// A method to tune the hand detector.
+        /// </summary>
+        /// <param name="tuning">The <see cref="IHandsDetectorTuning"/> tuning object.</param>
+        /// <returns>The neutral hands that was detected right after tuning.</returns>
         public NormalizedHands Tune(IHandsDetectorTuning tuning)
         {
-            _tuning = tuning;
+            this.tuning = tuning;
 
-            HandsDetectorResult result = DetectHandsInternally(_tuning.HandsForeground);
-            _neutralHands = result.Hands;
+            HandsDetectorResult result = this.DetectHandsInternally(this.tuning.HandsForeground);
+            this.neutralHands = result.Hands;
 
-            Tuned = true;
+            this.Tuned = true;
 
-            return _neutralHands;
+            return this.neutralHands;
         }
 
-        public void InvalidateTuning() => Tuned = false;
+        /// <summary>
+        /// Invalidates the current tuning of the hand detector.
+        /// </summary>
+        public void InvalidateTuning() => this.Tuned = false;
 
+        /// <summary>
+        /// Detect hand based on color on the left and right third of the image.
+        /// </summary>
+        /// <param name="image">The image in which the hands should detected.</param>
+        /// <returns>The result of the hand detection.</returns>
         public HandsDetectorResult DetectHands(BgrImage image)
         {
             if (image == null)
+            {
                 throw new ArgumentNullException("The image sent for hand detection was null.");
+            }
 
-            BgrImage imagePreProcessed = PreProcess(image);
-            return DetectHandsInternally(imagePreProcessed);
+            BgrImage imagePreProcessed = this.PreProcess(image);
+            return this.DetectHandsInternally(imagePreProcessed);
         }
 
         private BgrImage PreProcess(BgrImage image)
@@ -56,17 +77,17 @@ namespace Caduhd.HandsDetector
         {
             int handAreaWidth = image.Width / DIVISOR_TO_GET_HAND_AREA_WIDTH_FROM_IMAGE_WIDTH;
 
-            NormalizedHand left = EvaluatePixels(image, 0, handAreaWidth, _tuning.HandsColorMaps.Left, _neutralHands?.Left);
-            NormalizedHand right = EvaluatePixels(image, image.Width - handAreaWidth, handAreaWidth, _tuning.HandsColorMaps.Right, _neutralHands?.Right);
+            NormalizedHand left = this.EvaluatePixels(image, 0, handAreaWidth, this.tuning.HandsColorMaps.Left, this.neutralHands?.Left);
+            NormalizedHand right = this.EvaluatePixels(image, image.Width - handAreaWidth, handAreaWidth, this.tuning.HandsColorMaps.Right, this.neutralHands?.Right);
 
             int radius = image.Width * image.Height / DIVISOR_TO_GET_HAND_MARKER_CIRCLE_RADIUS_FROM_IMAGE_SIZE;
 
-            if (Tuned && _neutralHands != null)
+            if (this.Tuned && this.neutralHands != null)
             {
-                image.DrawLineSegment(left.X, left.Y, _neutralHands.Center.X, _neutralHands.Center.Y, Color.Yellow, radius);
-                image.DrawLineSegment(_neutralHands.Center.X, _neutralHands.Center.Y, right.X, right.Y, Color.Yellow, radius);
+                image.DrawLineSegment(left.X, left.Y, this.neutralHands.Center.X, this.neutralHands.Center.Y, Color.Yellow, radius);
+                image.DrawLineSegment(this.neutralHands.Center.X, this.neutralHands.Center.Y, right.X, right.Y, Color.Yellow, radius);
             }
-            
+
             image.DrawCircle(left.X, left.Y, Color.Blue, radius, BgrImage.FILL_DRAWING);
             image.DrawCircle(right.X, right.Y, Color.Blue, radius, BgrImage.FILL_DRAWING);
 
@@ -84,7 +105,7 @@ namespace Caduhd.HandsDetector
                 {
                     BgrPixel pixel = image.GetPixel(x, y);
 
-                    if (IsBackground(pixel, x, y))
+                    if (this.IsBackground(pixel, x, y))
                     {
                         image.SetPixel(BACKGROUND_PIXEL, x, y);
                     }
@@ -102,7 +123,7 @@ namespace Caduhd.HandsDetector
 
             NormalizedHand detectedHand = new HandNormalizer(image.Width, image.Height).Normalize(handBuilder.Build());
 
-            if (Tuned && neutralHand != null && detectedHand.Weight < neutralHand.Weight / DIVISOR_TO_GET_VALID_HAND_WEIGHT_LOWER_BOUND_FROM_NEUTRAL_HAND_WEIGHT)
+            if (this.Tuned && neutralHand != null && detectedHand.Weight < neutralHand.Weight / DIVISOR_TO_GET_VALID_HAND_WEIGHT_LOWER_BOUND_FROM_NEUTRAL_HAND_WEIGHT)
             {
                 // after tuning the neutral hands are cached
                 // if the weight of the hand is under a threshold
@@ -116,7 +137,7 @@ namespace Caduhd.HandsDetector
 
         private bool IsBackground(BgrPixel pixel, int x, int y)
         {
-            BgrPixel backgroundReferencePixel = _tuning.HandsBackground.GetPixel(x, y);
+            BgrPixel backgroundReferencePixel = this.tuning.HandsBackground.GetPixel(x, y);
 
             double deltaBlue = Math.Abs(backgroundReferencePixel.Blue - pixel.Blue);
             double deltaGreen = Math.Abs(backgroundReferencePixel.Green - pixel.Green);

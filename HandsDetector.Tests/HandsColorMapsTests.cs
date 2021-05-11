@@ -4,7 +4,7 @@ using Moq;
 using System;
 using Xunit;
 
-namespace Caduhd.HandDetector.Tests
+namespace Caduhd.HandsDetector.Tests
 {
     public class HandsColorMapsTests
     {

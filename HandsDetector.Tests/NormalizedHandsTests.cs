@@ -1,7 +1,7 @@
 ﻿using Caduhd.HandsDetector;
 using Xunit;
 
-namespace Caduhd.HandDetector.Tests
+namespace Caduhd.HandsDetector.Tests
 {
     public class NormalizedHandsTests
     {

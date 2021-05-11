@@ -1,11 +1,10 @@
 ﻿using Caduhd.Common;
-using Caduhd.HandsDetector;
 using Moq;
 using System;
 using System.Drawing;
 using Xunit;
 
-namespace Caduhd.HandDetector.Tests
+namespace Caduhd.HandsDetector.Tests
 {
     public class SkinColorHandsDetectorTests
     {

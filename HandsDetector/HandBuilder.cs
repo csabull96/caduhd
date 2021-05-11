@@ -1,21 +1,33 @@
 ﻿namespace Caduhd.HandsDetector
 {
+    /// <summary>
+    /// Hand builder.
+    /// </summary>
     public class HandBuilder
     {
-        private int _totalX;
-        private int _totalY;
-        private int _weight;
+        private int totalX;
+        private int totalY;
+        private int weight;
 
+        /// <summary>
+        /// Appends underlying hand obejct with an additional point.
+        /// </summary>
+        /// <param name="x">The x coordinate of the hand.</param>
+        /// <param name="y">The y coordinate of the hand.</param>
         public void Append(int x, int y)
         {
-            _totalX += x;
-            _totalY += y;
-            _weight++;
+            this.totalX += x;
+            this.totalY += y;
+            this.weight++;
         }
 
+        /// <summary>
+        /// Build a <see cref="Hand"/> object from the points that this builder object was appended with.
+        /// </summary>
+        /// <returns>The build <see cref="Hand"/> object.</returns>
         public Hand Build()
         {
-            return _weight == 0 ? new Hand() : new Hand(_totalX / _weight, _totalY / _weight, _weight);
+            return this.weight == 0 ? new Hand() : new Hand(this.totalX / this.weight, this.totalY / this.weight, this.weight);
         }
     }
 }

@@ -3,7 +3,7 @@ using Caduhd.Input.Camera;
 using System.Drawing;
 using Xunit;
 
-namespace Input.Tests.Camera
+namespace Caduhd.Input.Tests.Camera
 {
     public class NewWebCameraFrameEventArgsTests
     {
