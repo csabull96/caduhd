@@ -1,6 +1,7 @@
 ﻿namespace Caduhd.Controller.InputAnalyzer
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
     using Caduhd.Common;
     using Caduhd.HandsDetector;
@@ -8,7 +9,7 @@
     /// <summary>
     /// A color based hands analyzer.
     /// </summary>
-    public class HandsAnalyzer
+    public class HandsAnalyzer : IHandsAnalyzer
     {
         private ColorMap leftHandColorMap;
         private ColorMap rightHandColorMap;
@@ -91,7 +92,7 @@
         /// </summary>
         /// <param name="image">The image in which the left hand and the right hand background can be found.</param>
         /// <param name="roi">The region of interest in which the left hand's BgrPixels can be found.</param>
-        public void AnalyzeLeft(BgrImage image, Rectangle roi)
+        public void AnalyzeLeft(BgrImage image, List<Point> poi)
         {
             if (this.State != HandsAnalyzerState.AnalyzingLeft)
             {
@@ -103,17 +104,17 @@
                 throw new ArgumentNullException("The image used for left hand analysis was null.");
             }
 
-            if (this.IsRoiValid(image, roi))
-            {
+           // if (this.IsRoiValid(image, roi))
+            //{
                 this.leftHandAnalysisImage = image.Copy();
-                image.Roi = roi;
-                this.leftHandColorMap = this.ExtractColorMap(image);
-                image.Roi = Rectangle.Empty;
-            }
-            else
-            {
-                throw new ArgumentException("The ROI of the left hand analysis is not valid.");
-            }
+                //image.Roi = roi;
+                this.leftHandColorMap = this.ExtractColorMap(image, poi);
+                //image.Roi = Rectangle.Empty;
+            //}
+           // else
+            //{
+            //    throw new ArgumentException("The ROI of the left hand analysis is not valid.");
+            //}
         }
 
         /// <summary>
@@ -121,7 +122,7 @@
         /// </summary>
         /// <param name="image">The image in which the right hand and the left hand background can be found.</param>
         /// <param name="roi">The region of interest in which the right hand's BgrPixels can be found.</param>
-        public void AnalyzeRight(BgrImage image, Rectangle roi)
+        public void AnalyzeRight(BgrImage image, List<Point> poi)
         {
             if (this.State != HandsAnalyzerState.AnalyzingRight)
             {
@@ -143,17 +144,17 @@
                 throw new ArgumentException("The size of the left hand analysis image and the right hand analysis image have to be the same.");
             }
 
-            if (this.IsRoiValid(image, roi))
-            {
+            //if (this.IsRoiValid(image, roi))
+            //{
                 this.rightHandAnalysisImage = image.Copy();
-                image.Roi = roi;
-                this.rightHandColorMap = this.ExtractColorMap(image);
-                image.Roi = Rectangle.Empty;
-            }
-            else
-            {
-                throw new ArgumentException("The ROI of the right hand analysis is not valid.");
-            }
+            //    image.Roi = roi;
+                this.rightHandColorMap = this.ExtractColorMap(image, poi);
+            //    image.Roi = Rectangle.Empty;
+            //}
+            //else
+            //{
+            //    throw new ArgumentException("The ROI of the right hand analysis is not valid.");
+            //}
         }
 
         /// <summary>
@@ -175,23 +176,32 @@
             0 < roi.Width && 0 < roi.Height &&
             roi.X + roi.Width <= image.Width && roi.Y + roi.Height <= image.Height;
 
-        private ColorMap ExtractColorMap(BgrImage image)
+        private ColorMap ExtractColorMap(BgrImage image, List<Point> poi)
         {
             IHistogram blues = new Histogram(0, 255, 64);
             IHistogram greens = new Histogram(0, 255, 64);
             IHistogram reds = new Histogram(0, 255, 64);
 
-            for (int y = 0; y < image.Height; y++)
+            foreach (Point point in poi)
             {
-                for (int x = 0; x < image.Width; x++)
-                {
-                    BgrPixel pixel = image.GetPixel(x, y);
+                BgrPixel pixel = image.GetPixel(point.X, point.Y);
 
-                    blues.Insert(pixel.Blue);
-                    greens.Insert(pixel.Green);
-                    reds.Insert(pixel.Red);
-                }
+                blues.Insert(pixel.Blue);
+                greens.Insert(pixel.Green);
+                reds.Insert(pixel.Red);
             }
+
+            //for (int y = 0; y < image.Height; y++)
+            //{
+            //    for (int x = 0; x < image.Width; x++)
+            //    {
+            //        BgrPixel pixel = image.GetPixel(x, y);
+
+            //        blues.Insert(pixel.Blue);
+            //        greens.Insert(pixel.Green);
+            //        reds.Insert(pixel.Red);
+            //    }
+            //}
 
             return new ColorMap(blues, greens, reds);
         } 

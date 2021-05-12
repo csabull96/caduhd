@@ -1,8 +1,9 @@
 ﻿namespace Caduhd.Common
 {
-    using System.Drawing;
     using Emgu.CV;
     using Emgu.CV.Structure;
+    using System.Collections.Generic;
+    using System.Drawing;
 
     /// <summary>
     /// A wrapper class around the Emgu.CV.Image class.
@@ -40,16 +41,37 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BgrImage"/> class.
         /// </summary>
-        /// <param name="mat">The Emgu.CV.Mat object that the BgrImage is going to be constructed of.</param>
-        public BgrImage(Mat mat) : this(mat.ToImage<Bgr, byte>()) { }
+        /// <param name="bitmap">The Bitmap object that the BgrImage is going to be constructed from.</param>
+        public BgrImage(Bitmap bitmap)
+            : this(new Image<Bgr, byte>(bitmap))
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BgrImage"/> class.
         /// </summary>
-        /// <param name="image">The Emgu.CV.Image object that the BgrImage is going to be constructed of.</param>
+        /// <param name="mat">The Emgu.CV.Mat object that the BgrImage is going to be constructed from.</param>
+        public BgrImage(Mat mat) 
+            : this(mat.ToImage<Bgr, byte>())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BgrImage"/> class.
+        /// </summary>
+        /// <param name="image">The Emgu.CV.Image object that the BgrImage is going to be constructed from.</param>
         public BgrImage(Image<Bgr, byte> image)
         {
             this.image = image;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BgrImage"/> class.
+        /// </summary>
+        /// <param name="filename">The name of the file.</param>
+        public BgrImage(string filename)
+        {
+            this.image = new Image<Bgr, byte>(filename);
         }
 
         /// <summary>
@@ -129,6 +151,19 @@
         public void DrawRectangle(Rectangle rectangle, Color color, int thickness)
         {
             this.image.Draw(rectangle, new Bgr(color), thickness);
+        }
+
+        /// <summary>
+        /// Marks points in a BgrImage.
+        /// </summary>
+        /// <param name="points">The points to be marked.</param>
+        /// <param name="color">The color to mark with.</param>
+        public void MarkPoints(IEnumerable<Point> points, Color color)
+        {
+            foreach (Point point in points)
+            {
+                this.SetPixel(new BgrPixel(color), point.X, point.Y);
+            }
         }
 
         /// <summary>

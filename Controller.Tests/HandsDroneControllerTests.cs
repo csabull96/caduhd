@@ -1,5 +1,6 @@
-﻿using Caduhd.Controller.Command;
-using Caduhd.Controller.InputEvaluator;
+﻿using Caduhd.Controller.InputEvaluator;
+using Caduhd.Drone;
+using Caduhd.Drone.Command;
 using Caduhd.HandsDetector;
 using Caduhd.Input.Keyboard;
 using Moq;
@@ -10,18 +11,18 @@ namespace Caduhd.Controller.Tests
 {
     public class HandsDroneControllerTests
     {
-        private readonly Mock<IControllableDrone> _controllableDroneMock;
-        private readonly Mock<IDroneKeyInputEvaluator> _keyInputEvaluatorMock;
-        private readonly Mock<IDroneHandsInputEvaluator> _handsInputEvaluatorMock;
+        private readonly Mock<AbstractDrone> _controllableDroneMock;
+        private readonly Mock<IDroneControllerKeyInputEvaluator> _keyInputEvaluatorMock;
+        private readonly Mock<IDroneControllerHandsInputEvaluator> _handsInputEvaluatorMock;
         private readonly HandsDroneController _droneController;
 
         private readonly NormalizedHands _hands;
 
         public HandsDroneControllerTests()
         {
-            _controllableDroneMock = new Mock<IControllableDrone>();
-            _keyInputEvaluatorMock = new Mock<IDroneKeyInputEvaluator>();
-            _handsInputEvaluatorMock = new Mock<IDroneHandsInputEvaluator>();
+            _controllableDroneMock = new Mock<AbstractDrone>();
+            _keyInputEvaluatorMock = new Mock<IDroneControllerKeyInputEvaluator>();
+            _handsInputEvaluatorMock = new Mock<IDroneControllerHandsInputEvaluator>();
             _droneController = new HandsDroneController(_controllableDroneMock.Object,
                 _handsInputEvaluatorMock.Object, _keyInputEvaluatorMock.Object);
 

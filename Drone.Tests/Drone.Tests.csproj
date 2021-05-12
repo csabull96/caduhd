@@ -59,7 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dji\TelloStateParserTests.cs" />
-    <Compile Include="DroneControllerKeyInputEvaluatorFactoryTests.cs" />
     <Compile Include="Event\DroneStateChangedEventArgsTests.cs" />
     <Compile Include="Event\NewDroneCameraFrameEventArgsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

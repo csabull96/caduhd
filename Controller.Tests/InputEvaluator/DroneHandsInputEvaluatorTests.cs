@@ -1,5 +1,5 @@
-﻿using Caduhd.Controller.Command;
-using Caduhd.Controller.InputEvaluator;
+﻿using Caduhd.Controller.InputEvaluator;
+using Caduhd.Drone.Command;
 using Caduhd.HandsDetector;
 using Xunit;
 
@@ -7,14 +7,14 @@ namespace Caduhd.Controller.Tests.InputEvaluator
 {
     public class DroneHandsInputEvaluatorTests
     {
-        private DroneHandsInputEvaluator _handsInputEvaluator;
+        private DroneControllerHandsInputEvaluator _handsInputEvaluator;
         private NormalizedHands _neutralHands;
         public DroneHandsInputEvaluatorTests()
         {
             var left = new NormalizedHand(0.15, 0.5, 0.15);
             var right = new NormalizedHand(0.85, 0.5, 0.15);
             _neutralHands = new NormalizedHands(left, right);
-            _handsInputEvaluator = new DroneHandsInputEvaluator();
+            _handsInputEvaluator = new DroneControllerHandsInputEvaluator();
             _handsInputEvaluator.Tune(_neutralHands);
         }
 

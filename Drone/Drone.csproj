@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\caduhd.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -53,7 +54,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DroneControllerKeyInputEvaluatorFactory.cs" />
+    <Compile Include="AbstractDrone.cs" />
+    <Compile Include="Command\CameraCommand.cs" />
+    <Compile Include="Command\ConnectCommand.cs" />
+    <Compile Include="Command\ControlCommand.cs" />
+    <Compile Include="Command\DisconnectCommand.cs" />
+    <Compile Include="Command\DroneCommand.cs" />
+    <Compile Include="Command\LandCommand.cs" />
+    <Compile Include="Command\MoveCommand.cs" />
+    <Compile Include="Command\MovementCommand.cs" />
+    <Compile Include="Command\StartStreamingVideoCommand.cs" />
+    <Compile Include="Command\StopStreamingVideoCommand.cs" />
+    <Compile Include="Command\TakeOffCommand.cs" />
     <Compile Include="DroneState.cs" />
     <Compile Include="Event\DroneStateChangedEventArgs.cs" />
     <Compile Include="Event\NewDroneCameraFrameEventArgs.cs" />
@@ -71,10 +83,6 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{78431359-5BD3-487B-996C-87C0FBE92BFE}</Project>
       <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Controller\Controller.csproj">
-      <Project>{4f577257-83f2-4fae-b205-e776e1a397b9}</Project>
-      <Name>Controller</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

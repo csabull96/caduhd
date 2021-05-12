@@ -4,16 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A623CE8B-853A-447E-8AE1-7F5546713047}</ProjectGuid>
+    <ProjectGuid>{A8127DC8-8DC7-411B-AB07-B1B0C0DFB62D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Caduhd.HandsDetector</RootNamespace>
-    <AssemblyName>HandDetector</AssemblyName>
+    <RootNamespace>Caduhd</RootNamespace>
+    <AssemblyName>CaduhdApp</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -43,35 +42,34 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="ZedGraph, Version=5.1.7.430, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
-      <HintPath>..\packages\ZedGraph.5.1.7\lib\net35-Client\ZedGraph.dll</HintPath>
-    </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Hand.cs" />
-    <Compile Include="HandBuilder.cs" />
-    <Compile Include="HandNormalizer.cs" />
-    <Compile Include="HandsColorMaps.cs" />
-    <Compile Include="HandsDetectorResult.cs" />
-    <Compile Include="ISkinColorHandsDetector.cs" />
-    <Compile Include="NormalizedHand.cs" />
-    <Compile Include="NormalizedHands.cs" />
-    <Compile Include="SkinColorHandsDetector.cs" />
-    <Compile Include="IHandsDetectorTuning.cs" />
+    <Compile Include="CaduhdApp.cs" />
+    <Compile Include="ICaduhdUIConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{78431359-5bd3-487b-996c-87c0fbe92bfe}</Project>
+      <Project>{78431359-5BD3-487B-996C-87C0FBE92BFE}</Project>
       <Name>Common</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <ProjectReference Include="..\Controller\Controller.csproj">
+      <Project>{4F577257-83F2-4FAE-B205-E776E1A397B9}</Project>
+      <Name>Controller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Drone\Drone.csproj">
+      <Project>{9C6E775B-B95E-4449-B8D0-88BD50ECB1A3}</Project>
+      <Name>Drone</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HandsDetector\HandsDetector.csproj">
+      <Project>{A623CE8B-853A-447E-8AE1-7F5546713047}</Project>
+      <Name>HandsDetector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Input\Input.csproj">
+      <Project>{FAB1DC2D-74E6-4161-B1AB-562E5095CC37}</Project>
+      <Name>Input</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

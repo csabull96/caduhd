@@ -1,16 +1,19 @@
 ﻿namespace Caduhd.UserInterface
 {
+    using Caduhd.Common;
+    using Caduhd.Drone.Command;
     using System.ComponentModel;
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.Runtime.CompilerServices;
+    using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
 
     /// <summary>
     /// User interface connector for data binding between the view model and the UI.
     /// </summary>
-    public class UserInterfaceConnector : INotifyPropertyChanged
+    public class UserInterfaceConnector : ICaduhdUIConnector, INotifyPropertyChanged
     {
         private BitmapSource currentWebCameraFrame;
         private BitmapSource currentDroneCameraFrame;
@@ -201,6 +204,29 @@
             var bitmapSource = BitmapSource.Create(bitmapData.Width, bitmapData.Height, 96, 96, pixelFormat, null, bitmapData.Scan0, bitmapData.Stride * bitmapData.Height, bitmapData.Stride);
             bitmap.UnlockBits(bitmapData);
             return bitmapSource;
+        }
+
+        public void SetDroneImage(BgrImage image)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetComputerCameraImage(BgrImage image)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                this.currentWebCameraFrame = this.BitmapToBitmapSource(image.Bitmap, PixelFormats.Bgr24);
+                this.OnPropertyChanged(nameof(this.CurrentWebCameraFrame));
+            });
+        }
+
+        public void SetHandsInputEvaluated(MoveCommand handsInputEvaluated)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                 Direction = handsInputEvaluated == null ? "l/r:0 f/b:0 u/d:0 yaw:0" :
+                 $"l/r:{handsInputEvaluated.Lateral} f/b:{handsInputEvaluated.Longitudinal} u/d:{handsInputEvaluated.Vertical} yaw:{handsInputEvaluated.Yaw}";
+            });
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿namespace Caduhd.Controller
 {
-    using Caduhd.Controller.Command;
     using Caduhd.Controller.InputEvaluator;
+    using Caduhd.Drone;
+    using Caduhd.Drone.Command;
     using Caduhd.HandsDetector;
 
     /// <summary>
@@ -9,7 +10,11 @@
     /// </summary>
     public class HandsDroneController : KeyboardDroneController, IHandsInputHandler
     {
-        private readonly IDroneHandsInputEvaluator handsInputEvaluator;
+        private readonly IDroneControllerHandsInputEvaluator handsInputEvaluator;
+
+
+        public ITuneableDroneControllerHandsInputEvaluator HandsInputEvaluator => handsInputEvaluator as ITuneableDroneControllerHandsInputEvaluator;
+
 
         /// <summary>
         /// Gets or sets the result of the latest hands input evaluation as <see cref="MoveCommand"/>.
@@ -20,9 +25,9 @@
         /// Initializes a new instance of the <see cref="HandsDroneController"/> class.
         /// </summary>
         /// <param name="drone">The <see cref="IControllableDrone"/> drone that we would like to control with this controller.</param>
-        /// <param name="handsInputEvaluator">The desired implementation of the <see cref="IDroneHandsInputEvaluator"/> interface.</param>
+        /// <param name="handsInputEvaluator">The desired implementation of the <see cref="IDroneControllerHandsInputEvaluator"/> interface.</param>
         /// <param name="keyInputEvaluator">The desired implementation of the <see cref="IDroneKeyInputEvaluator"/> interface.</param>
-        public HandsDroneController(IControllableDrone drone, IDroneHandsInputEvaluator handsInputEvaluator, IDroneKeyInputEvaluator keyInputEvaluator)
+        public HandsDroneController(AbstractDrone drone, IDroneControllerHandsInputEvaluator handsInputEvaluator, IDroneControllerKeyInputEvaluator keyInputEvaluator)
             : base(drone, keyInputEvaluator)
         {
             this.handsInputEvaluator = handsInputEvaluator;

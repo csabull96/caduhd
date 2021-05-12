@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Tests", "Common.Tests\Common.Tests.csproj", "{C22CEB97-966C-4EC7-BF48-4AA7810F67AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caduhd", "CaduhdApp\Caduhd.csproj", "{A8127DC8-8DC7-411B-AB07-B1B0C0DFB62D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caduhd.Tests", "Caduhd.Tests\Caduhd.Tests.csproj", "{4D868CF5-B7C7-48DE-AEE2-F8E72338752D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +85,14 @@ Global
 		{C22CEB97-966C-4EC7-BF48-4AA7810F67AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C22CEB97-966C-4EC7-BF48-4AA7810F67AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C22CEB97-966C-4EC7-BF48-4AA7810F67AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8127DC8-8DC7-411B-AB07-B1B0C0DFB62D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8127DC8-8DC7-411B-AB07-B1B0C0DFB62D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8127DC8-8DC7-411B-AB07-B1B0C0DFB62D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8127DC8-8DC7-411B-AB07-B1B0C0DFB62D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D868CF5-B7C7-48DE-AEE2-F8E72338752D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D868CF5-B7C7-48DE-AEE2-F8E72338752D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D868CF5-B7C7-48DE-AEE2-F8E72338752D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D868CF5-B7C7-48DE-AEE2-F8E72338752D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

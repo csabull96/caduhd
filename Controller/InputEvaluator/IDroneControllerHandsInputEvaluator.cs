@@ -1,12 +1,12 @@
 ﻿namespace Caduhd.Controller.InputEvaluator
 {
-    using Caduhd.Controller.Command;
+    using Caduhd.Drone.Command;
     using Caduhd.HandsDetector;
 
     /// <summary>
-    /// <see cref="IDroneHandsInputEvaluator"/> interface.
+    /// <see cref="IDroneControllerHandsInputEvaluator"/> interface.
     /// </summary>
-    public interface IDroneHandsInputEvaluator
+    public interface IDroneControllerHandsInputEvaluator
     {
         /// <summary>
         /// Evaluates <see cref="NormalizedHands"/> input.
@@ -14,5 +14,7 @@
         /// <param name="hands"><see cref="NormalizedHands"/> to evaluate.</param>
         /// <returns>The evaluated <paramref name="hands"/> as <see cref="MoveCommand"/>.</returns>
         MoveCommand EvaluateHands(NormalizedHands hands);
+
+
     }
 }

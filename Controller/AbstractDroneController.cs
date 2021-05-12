@@ -1,13 +1,15 @@
 ﻿namespace Caduhd.Controller
 {
-    using Caduhd.Controller.Command;
+    using Caduhd.Drone;
+    using Caduhd.Drone.Command;
+    using System;
 
     /// <summary>
     /// Abstract drone controller.
     /// </summary>
-    public abstract class AbstractDroneController
+    public abstract class AbstractDroneController : IDisposable
     {
-        private readonly IControllableDrone drone;
+        private readonly AbstractDrone drone;
 
         private DroneCommand lastCommandSentToDrone;
 
@@ -15,7 +17,7 @@
         /// Initializes a new instance of the <see cref="AbstractDroneController"/> class.
         /// </summary>
         /// <param name="drone">The <see cref="IControllableDrone"/> that we would like to control with this controller.</param>
-        public AbstractDroneController(IControllableDrone drone)
+        public AbstractDroneController(AbstractDrone drone)
         {
             this.drone = drone;
             this.lastCommandSentToDrone = null;
@@ -25,6 +27,11 @@
         /// Sends a <see cref="ConnectCommand"/> to the drone.
         /// </summary>
         public void Connect() => this.InternalControl(new ConnectCommand());
+
+        public void Dispose()
+        {
+            (drone as IDisposable)?.Dispose();
+        }
 
         /// <summary>
         /// Sends a <see cref="StartStreamingVideoCommand"/> to the drone.

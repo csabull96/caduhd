@@ -7,7 +7,7 @@
     /// <summary>
     /// A class used for skin color based hand detection.
     /// </summary>
-    public class SkinColorHandsDetector
+    public class SkinColorHandsDetector : ISkinColorHandsDetector
     {
         private const int DIVISOR_TO_GET_HAND_AREA_WIDTH_FROM_IMAGE_WIDTH = 3;
 
@@ -28,6 +28,9 @@
         /// Gets a value indicating whether the hand detector is tuned or not.
         /// </summary>
         public bool Tuned { get; private set; }
+
+
+
 
         /// <summary>
         /// A method to tune the hand detector.

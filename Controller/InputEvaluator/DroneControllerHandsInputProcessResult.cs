@@ -1,6 +1,7 @@
-﻿namespace Caduhd.Controller.InputEvaluator
+﻿using Caduhd.Drone.Command;
+
+namespace Caduhd.Controller.InputEvaluator
 {
-    using Caduhd.Controller.Command;
 
     /// <summary>
     /// Drone controller hands input process result.

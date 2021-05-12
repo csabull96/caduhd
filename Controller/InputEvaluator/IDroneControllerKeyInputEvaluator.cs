@@ -1,12 +1,12 @@
 ﻿namespace Caduhd.Controller.InputEvaluator
 {
-    using Caduhd.Controller.Command;
+    using Caduhd.Drone.Command;
     using Caduhd.Input.Keyboard;
 
     /// <summary>
-    /// <see cref="IDroneKeyInputEvaluator"/> interface.
+    /// <see cref="IDroneControllerKeyInputEvaluator"/> interface.
     /// </summary>
-    public interface IDroneKeyInputEvaluator
+    public interface IDroneControllerKeyInputEvaluator
     {
         /// <summary>
         /// Evaluates <see cref="KeyInfo"/> input.

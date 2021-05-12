@@ -6,11 +6,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2ADBA303-3026-4273-9464-55C5138E2A2B}</ProjectGuid>
+    <ProjectGuid>{4D868CF5-B7C7-48DE-AEE2-F8E72338752D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Caduhd.Controller.Tests</RootNamespace>
-    <AssemblyName>Controller.Tests</AssemblyName>
+    <RootNamespace>Caduhd.Tests</RootNamespace>
+    <AssemblyName>Caduhd.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -44,7 +44,6 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
@@ -72,40 +71,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\ConnectCommandTests.cs" />
-    <Compile Include="Command\DisconnectCommandTests.cs" />
-    <Compile Include="Command\LandCommandTests.cs" />
-    <Compile Include="Command\MoveCommandTests.cs" />
-    <Compile Include="Command\StartStreamingVideoCommandTests.cs" />
-    <Compile Include="Command\StopStreamingVideoCommandTests.cs" />
-    <Compile Include="Command\TakeOffCommandTests.cs" />
-    <Compile Include="HandsDroneControllerTests.cs" />
-    <Compile Include="InputAnalyzer\HandsAnalyzerResultTests.cs" />
-    <Compile Include="InputAnalyzer\HandsAnalyzerTests.cs" />
-    <Compile Include="InputEvaluator\DroneControllerHandsInputProcessResultTests.cs" />
-    <Compile Include="InputEvaluator\DroneControllerKeyInputProcessResultTests.cs" />
-    <Compile Include="InputEvaluator\DroneHandsInputEvaluatorTests.cs" />
-    <Compile Include="InputEvaluator\GeneralDroneKeyInputEvaluatorTests.cs" />
-    <Compile Include="InputEvaluator\TelloKeyInputEvaluatorTests.cs" />
-    <Compile Include="KeyboardDroneControllerTests.cs" />
+    <Compile Include="CaduhdAppTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
-    <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
+    <ProjectReference Include="..\CaduhdApp\Caduhd.csproj">
+      <Project>{a8127dc8-8dc7-411b-ab07-b1b0c0dfb62d}</Project>
+      <Name>Caduhd</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{78431359-5BD3-487B-996C-87C0FBE92BFE}</Project>
       <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Controller\Controller.csproj">
-      <Project>{4f577257-83f2-4fae-b205-e776e1a397b9}</Project>
+      <Project>{4F577257-83F2-4FAE-B205-E776E1A397B9}</Project>
       <Name>Controller</Name>
     </ProjectReference>
     <ProjectReference Include="..\Drone\Drone.csproj">
@@ -120,6 +99,12 @@
       <Project>{FAB1DC2D-74E6-4161-B1AB-562E5095CC37}</Project>
       <Name>Input</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -42,5 +42,28 @@
         {
             this.pixel = new Bgr(blue, green, red);
         }
+
+        public override bool Equals(object comparand)
+        {
+            if (comparand is BgrPixel bgrPixel)
+            {
+                return Blue == bgrPixel.Blue && Green == bgrPixel.Green && Red == bgrPixel.Red;
+            }
+            else if (comparand is Color color)
+            {
+                return Blue == color.B && Green == color.G && Red == color.R;
+            }
+            else if (comparand is Bgr bgr)
+            {
+                return Blue == bgr.Blue && Green == bgr.Green && Red == bgr.Red;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

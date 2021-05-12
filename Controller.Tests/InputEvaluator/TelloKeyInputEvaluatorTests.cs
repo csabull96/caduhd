@@ -1,5 +1,5 @@
-﻿using Caduhd.Controller.Command;
-using Caduhd.Controller.InputEvaluator;
+﻿using Caduhd.Controller.InputEvaluator;
+using Caduhd.Drone.Command;
 using Caduhd.Input.Keyboard;
 using System.Windows.Input;
 using Xunit;
@@ -8,7 +8,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
 {
     public class TelloKeyInputEvaluatorTests
     {
-        private IDroneKeyInputEvaluator _telloKeyInputEvaluator;
+        private IDroneControllerKeyInputEvaluator _telloKeyInputEvaluator;
         public TelloKeyInputEvaluatorTests()
         {
             _telloKeyInputEvaluator = new TelloKeyInputEvaluator();

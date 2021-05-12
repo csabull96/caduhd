@@ -1,6 +1,6 @@
 ﻿namespace Caduhd.Controller.InputEvaluator
 {
-    using Caduhd.Controller.Command;
+    using Caduhd.Drone.Command;
 
     /// <summary>
     /// Drone controller key input process result.

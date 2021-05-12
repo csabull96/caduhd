@@ -1,5 +1,5 @@
-﻿using Caduhd.Controller.Command;
-using Caduhd.Controller.InputEvaluator;
+﻿using Caduhd.Controller.InputEvaluator;
+using Caduhd.Drone.Command;
 using Xunit;
 
 namespace Caduhd.Controller.Tests.InputEvaluator

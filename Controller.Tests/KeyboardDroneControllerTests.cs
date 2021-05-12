@@ -1,5 +1,6 @@
-﻿using Caduhd.Controller.Command;
-using Caduhd.Controller.InputEvaluator;
+﻿using Caduhd.Controller.InputEvaluator;
+using Caduhd.Drone;
+using Caduhd.Drone.Command;
 using Caduhd.Input.Keyboard;
 using Moq;
 using System.Windows.Input;
@@ -9,14 +10,14 @@ namespace Caduhd.Controller.Tests
 {
     public class KeyboardDroneControllerTests
     {
-        private readonly Mock<IControllableDrone> _controllableDroneMock;
-        private readonly Mock<IDroneKeyInputEvaluator> _keyInputEvaluatorMock;
+        private readonly Mock<AbstractDrone> _controllableDroneMock;
+        private readonly Mock<IDroneControllerKeyInputEvaluator> _keyInputEvaluatorMock;
         private readonly KeyboardDroneController _droneController;
 
         public KeyboardDroneControllerTests()
         {
-            _controllableDroneMock = new Mock<IControllableDrone>();
-            _keyInputEvaluatorMock = new Mock<IDroneKeyInputEvaluator>();
+            _controllableDroneMock = new Mock<AbstractDrone>();
+            _keyInputEvaluatorMock = new Mock<IDroneControllerKeyInputEvaluator>();
             _droneController = new KeyboardDroneController(_controllableDroneMock.Object, _keyInputEvaluatorMock.Object);
         }
 

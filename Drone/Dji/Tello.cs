@@ -10,8 +10,7 @@
     using System.Threading.Tasks;
     using System.Timers;
     using Caduhd.Common;
-    using Caduhd.Controller;
-    using Caduhd.Controller.Command;
+    using Caduhd.Drone.Command;
     using Caduhd.Drone.Event;
     using Emgu.CV;
     using Timer = System.Timers.Timer;
@@ -19,7 +18,7 @@
     /// <summary>
     /// The implementation of the <see cref="IControllableDrone"/> for the DJI Tello.
     /// </summary>
-    public class Tello : IControllableDrone, IDisposable
+    public class Tello : AbstractDrone
     {
         private bool disposing;
 
@@ -97,11 +96,16 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Tello"/> class.
         /// </summary>
-        public Tello() 
+        public Tello()
+            : this(TELLO_IP, TELLO_PORT)
+        { 
+        }
+
+        public Tello(string ip, int port)
         {
             this.disposing = false;
 
-            this.telloIPEndPoint = new IPEndPoint(IPAddress.Parse(TELLO_IP), TELLO_PORT);
+            this.telloIPEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
             this.tello = new UdpClient(11001);
             this.tello.Client.ReceiveTimeout = TELLO_RESPONSE_TIMEOUT;
             this.isReceivingTelloResponse = NO;
@@ -117,7 +121,7 @@
 
             this.snr = -1;
             this.snrChecker = new Timer(WIFI_CHECKER_TIME_INTERVAL);
-            this.snrChecker.Elapsed += Elapsed;
+            this.snrChecker.Elapsed += this.Elapsed;
 
             this.isStreaming = 0;
             this.videoStreamCancellationTokenSource = new CancellationTokenSource();
@@ -127,7 +131,7 @@
         /// <summary>
         /// Disposes Tello.
         /// </summary>
-        public void Dispose()
+        public override void Dispose()
         {
             this.disposing = true;
         }
@@ -135,8 +139,8 @@
         /// <summary>
         /// Sends the requested command for execution to the drone.
         /// </summary>
-        /// <param name="droneCommant">The requested <see cref="DroneCommand"/> object.</param>
-        public void Control(DroneCommand droneCommand)
+        /// <param name="droneCommand">The requested <see cref="DroneCommand"/> object.</param>
+        public override void Control(DroneCommand droneCommand)
         {
             if (droneCommand is MovementCommand)
             {
@@ -161,7 +165,7 @@
                 }
                 else if (droneCommand is DisconnectCommand)
                 {
-                    // the connection is UDP based
+                    this.Disconnect();
                 }
             }
             else if (droneCommand is CameraCommand)
@@ -193,7 +197,6 @@
             }
         }
 
-
         private void Connect()
         {
             this.StartResponseReceiver();
@@ -208,8 +211,7 @@
 
         private void Disconnect()
         {
-            connected = false;
-            // should we call dispose here??
+            this.connected = false;
         }
 
         private void TakeOff()
@@ -261,7 +263,7 @@
                         {
                             Mat frame = new Mat();
                             videoCapture.Read(frame);
-                            
+
                             if (frame.IsEmpty)
                             {
                                 if (ALLOWED_NUMBER_OF_CONSECUTIVE_EMPTY_FRAMES < ++this.numberOfConsecutiveEmtpyFrames)
@@ -305,8 +307,7 @@
             {
                 this.commandQueue.Enqueue(commandString);
                 byte[] commandBytes = commandString.AsBytes();
-                IPEndPoint telloIPEndPoint = new IPEndPoint(IPAddress.Parse(TELLO_IP), TELLO_PORT);
-                this.tello.Send(commandBytes, commandBytes.Length, telloIPEndPoint);
+                this.tello.Send(commandBytes, commandBytes.Length, this.telloIPEndPoint);
             }
             catch (SocketException e)
             {
@@ -338,8 +339,6 @@
                             byte[] responseBytes = tello.Receive(ref this.telloIPEndPoint);
                             this.IsReachable = true;
                             responseString = responseBytes.AsString().Trim();
-                            // response is only forwarded to the ProcessResponse method
-                            // if it comes from the Tello
                             this.ProcessResponse(commandString, responseString);
                         }
                         catch (SocketException e)

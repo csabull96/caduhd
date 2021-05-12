@@ -4,14 +4,15 @@
     using System.Linq;
     using System.Reflection;
     using System.Windows.Input;
-    using Caduhd.Controller.Command;
+    using Caduhd.Drone.Command;
     using Caduhd.Input.Keyboard;
 
     /// <summary>
     /// General drone key input evaluator.
     /// </summary>
-    public class GeneralDroneKeyInputEvaluator : AbstractDroneInputEvaluator, IDroneKeyInputEvaluator
+    public class GeneralDroneKeyInputEvaluator : AbstractDroneInputEvaluator, IDroneControllerKeyInputEvaluator
     {
+        private const Key MOVE_CONNECT_KEY = Key.D0;
         private const Key MOVE_FORWARD_KEY = Key.Up;
         private const Key MOVE_BACKWARD_KEY = Key.Down;
         private const Key MOVE_LEFT_KEY = Key.Left;
@@ -22,6 +23,11 @@
         private const Key YAW_RIGHT_KEY = Key.D;
         private const Key TAKE_OFF_KEY = Key.Enter;
         private const Key LAND_KEY = Key.Space;
+
+        /// <summary>
+        /// Gets the <see cref="KeyInfo"/> of the connect key.
+        /// </summary>
+        protected KeyInfo Connect { get; private set; } = new KeyInfo(MOVE_CONNECT_KEY);
 
         /// <summary>
         /// Gets the <see cref="KeyInfo"/> of the forward movement key.
@@ -90,7 +96,11 @@
         /// <returns>The evaluated <see cref="KeyInfo"/> as a <see cref="DroneCommand"/>.</returns>
         protected virtual DroneCommand EvaluateInputKeys(KeyInfo keyUpdated)
         {
-            if (this.TakeOff.KeyState == KeyState.Down)
+            if (this.Connect.KeyState == KeyState.Down)
+            {
+                return new ConnectCommand();
+            }
+            else if (this.TakeOff.KeyState == KeyState.Down)
             {
                 return new TakeOffCommand();
             }

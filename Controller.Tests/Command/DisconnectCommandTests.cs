@@ -1,4 +1,4 @@
-﻿using Caduhd.Controller.Command;
+﻿using Caduhd.Drone.Command;
 using Xunit;
 
 namespace Caduhd.Controller.Tests.Command

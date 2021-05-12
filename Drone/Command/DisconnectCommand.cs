@@ -1,4 +1,4 @@
-﻿namespace Caduhd.Controller.Command
+﻿namespace Caduhd.Drone.Command
 {
     /// <summary>
     /// Disconnected drone command.

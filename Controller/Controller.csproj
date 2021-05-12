@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\caduhd.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Emgu.CV.World, Version=4.1.1.3497, Culture=neutral, PublicKeyToken=7281126722ab4438" />
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,32 +52,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractDroneController.cs" />
-    <Compile Include="Command\CameraCommand.cs" />
-    <Compile Include="Command\ConnectCommand.cs" />
-    <Compile Include="Command\ControlCommand.cs" />
-    <Compile Include="Command\DisconnectCommand.cs" />
-    <Compile Include="Command\DroneCommand.cs" />
-    <Compile Include="Command\LandCommand.cs" />
-    <Compile Include="Command\MoveCommand.cs" />
-    <Compile Include="Command\MovementCommand.cs" />
-    <Compile Include="Command\StartStreamingVideoCommand.cs" />
-    <Compile Include="Command\StopStreamingVideoCommand.cs" />
-    <Compile Include="Command\TakeOffCommand.cs" />
     <Compile Include="HandsDroneController.cs" />
-    <Compile Include="IControllableDrone.cs" />
     <Compile Include="InputAnalyzer\HandsAnalyzer.cs" />
     <Compile Include="InputAnalyzer\HandsAnalyzerResult.cs" />
     <Compile Include="InputAnalyzer\HandsAnalyzerState.cs" />
+    <Compile Include="InputAnalyzer\IHandsAnalyzer.cs" />
     <Compile Include="InputEvaluator\AbstractDroneInputEvaluator.cs" />
-    <Compile Include="InputEvaluator\DroneHandsInputEvaluator.cs" />
+    <Compile Include="InputEvaluator\DroneControllerHandsInputEvaluator.cs" />
     <Compile Include="IHandsInputHandler.cs" />
     <Compile Include="IKeyInputHandler.cs" />
-    <Compile Include="InputEvaluator\IDroneHandsInputEvaluator.cs" />
-    <Compile Include="InputEvaluator\IDroneKeyInputEvaluator.cs" />
+    <Compile Include="InputEvaluator\IDroneControllerHandsInputEvaluator.cs" />
+    <Compile Include="InputEvaluator\IDroneControllerKeyInputEvaluator.cs" />
     <Compile Include="InputEvaluator\GeneralDroneKeyInputEvaluator.cs" />
     <Compile Include="InputEvaluator\DroneControllerHandsInputProcessResult.cs" />
     <Compile Include="InputEvaluator\DroneControllerKeyInputProcessResult.cs" />
     <Compile Include="InputEvaluator\InputProcessResult.cs" />
+    <Compile Include="InputEvaluator\ITuneableDroneControllerHandsInputEvaluator.cs" />
     <Compile Include="InputEvaluator\TelloKeyInputEvaluator.cs" />
     <Compile Include="KeyboardDroneController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,6 +76,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{78431359-5BD3-487B-996C-87C0FBE92BFE}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Drone\Drone.csproj">
+      <Project>{9C6E775B-B95E-4449-B8D0-88BD50ECB1A3}</Project>
+      <Name>Drone</Name>
     </ProjectReference>
     <ProjectReference Include="..\HandsDetector\HandsDetector.csproj">
       <Project>{A623CE8B-853A-447E-8AE1-7F5546713047}</Project>
@@ -100,6 +96,10 @@
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="InputEvaluator\Resources\left_neutral_hand.png" />
+    <EmbeddedResource Include="InputEvaluator\Resources\right_neutral_hand.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -14,29 +14,29 @@ namespace Caduhd.Controller.Tests.InputAnalyzer
     {
         private HandsAnalyzer _handsAnalyzer;
         private BgrImage _left;
-        private Rectangle _leftRoi; 
+        private List<Point> _leftPoi; 
         private BgrImage _right;
-        private Rectangle _rightRoi; 
+        private List<Point> _rightPoi; 
 
         public HandsAnalyzerTests()
         {
             _handsAnalyzer = new HandsAnalyzer();
             _left = BgrImage.GetBlank(640, 480, Color.Red);
-            _leftRoi = new Rectangle(10, 10, 100, 200);
+            _leftPoi = new List<Point>();
             _right = BgrImage.GetBlank(640, 480, Color.Green);
-            _rightRoi = new Rectangle(630 - 100, 10, 100, 200);
+            _rightPoi = new List<Point>();
         }
         
         [Fact]
         public void AnalyzeLeft_NotInAnalyzingLeftHandState_ThrowsInvalidOperationException()
         {
-            Assert.Throws<InvalidOperationException>(() => _handsAnalyzer.AnalyzeLeft(_left, _leftRoi));
+            Assert.Throws<InvalidOperationException>(() => _handsAnalyzer.AnalyzeLeft(_left, _leftPoi));
         }
 
         [Fact]
         public void AnalyzeRight_NotInAnalyzingRightHandState_ThrowsInvalidOperationException()
         {
-            Assert.Throws<InvalidOperationException>(() => _handsAnalyzer.AnalyzeLeft(_right, _rightRoi));
+            Assert.Throws<InvalidOperationException>(() => _handsAnalyzer.AnalyzeLeft(_right, _rightPoi));
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace Caduhd.Controller.Tests.InputAnalyzer
             _handsAnalyzer.AdvanceState();
             Assert.Equal(HandsAnalyzerState.AnalyzingLeft, _handsAnalyzer.State);
 
-            _handsAnalyzer.AnalyzeLeft(_left, _leftRoi);
+            _handsAnalyzer.AnalyzeLeft(_left, _leftPoi);
 
             _handsAnalyzer.AdvanceState();
             Assert.Equal(HandsAnalyzerState.ReadyToAnalyzeRight, _handsAnalyzer.State);
@@ -71,7 +71,7 @@ namespace Caduhd.Controller.Tests.InputAnalyzer
         public void AdvanceState_ReadyToAnalyzeRightState_AdvancesToAnalyzingRightState()
         {
             _handsAnalyzer.AdvanceState();
-            _handsAnalyzer.AnalyzeLeft(_left, _leftRoi);
+            _handsAnalyzer.AnalyzeLeft(_left, _leftPoi);
             _handsAnalyzer.AdvanceState();
 
             _handsAnalyzer.AdvanceState();
@@ -82,7 +82,7 @@ namespace Caduhd.Controller.Tests.InputAnalyzer
         public void AdvanceState_AnalyzingRightState_RightNotAnalyzed_ThrowsInvalidOperationException()
         {
             _handsAnalyzer.AdvanceState();
-            _handsAnalyzer.AnalyzeLeft(_left, _leftRoi);
+            _handsAnalyzer.AnalyzeLeft(_left, _leftPoi);
             _handsAnalyzer.AdvanceState();
 
             _handsAnalyzer.AdvanceState();
@@ -93,11 +93,11 @@ namespace Caduhd.Controller.Tests.InputAnalyzer
         public void AdvanceState_AnalyzingRightState_RightAnalyzed_AdvancesToTuningState()
         {
             _handsAnalyzer.AdvanceState();
-            _handsAnalyzer.AnalyzeLeft(_left, _leftRoi);
+            _handsAnalyzer.AnalyzeLeft(_left, _leftPoi);
             _handsAnalyzer.AdvanceState();
 
             _handsAnalyzer.AdvanceState();
-            _handsAnalyzer.AnalyzeRight(_right, _rightRoi);
+            _handsAnalyzer.AnalyzeRight(_right, _rightPoi);
             _handsAnalyzer.AdvanceState();
 
             Assert.Equal(HandsAnalyzerState.Tuning, _handsAnalyzer.State);
@@ -109,12 +109,12 @@ namespace Caduhd.Controller.Tests.InputAnalyzer
             Assert.Equal(HandsAnalyzerState.ReadyToAnalyzeLeft, _handsAnalyzer.State);
             _handsAnalyzer.AdvanceState();
             Assert.Equal(HandsAnalyzerState.AnalyzingLeft, _handsAnalyzer.State);
-            _handsAnalyzer.AnalyzeLeft(_left, _leftRoi);
+            _handsAnalyzer.AnalyzeLeft(_left, _leftPoi);
             _handsAnalyzer.AdvanceState();
             Assert.Equal(HandsAnalyzerState.ReadyToAnalyzeRight, _handsAnalyzer.State);
             _handsAnalyzer.AdvanceState();
             Assert.Equal(HandsAnalyzerState.AnalyzingRight, _handsAnalyzer.State);
-            _handsAnalyzer.AnalyzeRight(_right, _rightRoi);
+            _handsAnalyzer.AnalyzeRight(_right, _rightPoi);
             _handsAnalyzer.AdvanceState();
             Assert.Equal(HandsAnalyzerState.Tuning, _handsAnalyzer.State);
             _handsAnalyzer.AdvanceState();
@@ -131,7 +131,7 @@ namespace Caduhd.Controller.Tests.InputAnalyzer
         public void ResultGetter_OnlyLeftAnalyzed_ThrowsInvalidOperationException()
         {
             _handsAnalyzer.AdvanceState();
-            _handsAnalyzer.AnalyzeLeft(_left, _leftRoi);
+            _handsAnalyzer.AnalyzeLeft(_left, _leftPoi);
 
             Assert.Throws<InvalidOperationException>(() => _handsAnalyzer.Result);
         }
@@ -140,11 +140,11 @@ namespace Caduhd.Controller.Tests.InputAnalyzer
         public void ResultGetter_BothHandsAnalyzed_ReturnsEvaluatedResult()
         {
             _handsAnalyzer.AdvanceState();
-            _handsAnalyzer.AnalyzeLeft(_left, _leftRoi);
+            _handsAnalyzer.AnalyzeLeft(_left, _leftPoi);
             _handsAnalyzer.AdvanceState();
 
             _handsAnalyzer.AdvanceState();
-            _handsAnalyzer.AnalyzeRight(_right, _rightRoi);
+            _handsAnalyzer.AnalyzeRight(_right, _rightPoi);
 
             Assert.NotNull(_handsAnalyzer.Result);
         }
@@ -153,11 +153,11 @@ namespace Caduhd.Controller.Tests.InputAnalyzer
         public void ResultGetter_BothHandsAnalyzed_ReturnsCorrectResult()
         {
             _handsAnalyzer.AdvanceState();
-            _handsAnalyzer.AnalyzeLeft(_left, _leftRoi);
+            _handsAnalyzer.AnalyzeLeft(_left, _leftPoi);
             _handsAnalyzer.AdvanceState();
 
             _handsAnalyzer.AdvanceState();
-            _handsAnalyzer.AnalyzeRight(_right, _rightRoi);
+            _handsAnalyzer.AnalyzeRight(_right, _rightPoi);
 
             var handsAnalyzerResult = _handsAnalyzer.Result;
 

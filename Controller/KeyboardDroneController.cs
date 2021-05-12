@@ -1,7 +1,8 @@
 ﻿namespace Caduhd.Controller
 {
-    using Caduhd.Controller.Command;
     using Caduhd.Controller.InputEvaluator;
+    using Caduhd.Drone;
+    using Caduhd.Drone.Command;
     using Caduhd.Input.Keyboard;
 
     /// <summary>
@@ -10,9 +11,9 @@
     public class KeyboardDroneController : AbstractDroneController, IKeyInputHandler
     {
         /// <summary>
-        /// The desired implementation of the <see cref="IDroneKeyInputEvaluator"/> interface.
+        /// The desired implementation of the <see cref="IDroneControllerKeyInputEvaluator"/> interface.
         /// </summary>
-        private readonly IDroneKeyInputEvaluator keyInputEvaluator;
+        private readonly IDroneControllerKeyInputEvaluator keyInputEvaluator;
 
         /// <summary>
         /// Gets or sets the result of the latest key input evaluation as <see cref="DroneCommand"/>.
@@ -23,8 +24,8 @@
         /// Initializes a new instance of the <see cref="KeyboardDroneController"/> class.
         /// </summary>
         /// <param name="drone">The <see cref="IControllableDrone"/> drone that we would like to control with this controller.</param>
-        /// <param name="keyInputEvaluator">The desired implementation of the <see cref="IDroneKeyInputEvaluator"/> interface.</param>
-        public KeyboardDroneController(IControllableDrone drone, IDroneKeyInputEvaluator keyInputEvaluator)
+        /// <param name="keyInputEvaluator">The desired implementation of the <see cref="IDroneControllerKeyInputEvaluator"/> interface.</param>
+        public KeyboardDroneController(AbstractDrone drone, IDroneControllerKeyInputEvaluator keyInputEvaluator)
             : base(drone)
         {
             this.keyInputEvaluator = keyInputEvaluator;

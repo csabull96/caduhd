@@ -1,23 +1,19 @@
 ﻿namespace Caduhd.Controller.InputEvaluator
 {
-    using System;
-    using System.Drawing;
-    using Caduhd.Controller.Command;
+    using Caduhd.Common;
+    using Caduhd.Drone.Command;
     using Caduhd.HandsDetector;
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     /// Drone hands input evaluator.
     /// </summary>
-    public class DroneHandsInputEvaluator : AbstractDroneInputEvaluator, IDroneHandsInputEvaluator
+    public class DroneControllerHandsInputEvaluator : AbstractDroneInputEvaluator, IDroneControllerHandsInputEvaluator, ITuneableDroneControllerHandsInputEvaluator
     {
-        // left and right neutral hand area
-        private const double NORMALIZED_NEUTRAL_HAND_AREA_WIDTH = 0.1;
-        private const double NORMALIZED_NEUTRAL_HAND_AREA_HEIGHT = 0.35;
-        private const double NORMALIZED_LEFT_NEUTRAL_HAND_AREA_X = 0.15;
-        private const double NORMALIZED_RIGHT_NEUTRAL_HAND_AREA_X = 1 - NORMALIZED_LEFT_NEUTRAL_HAND_AREA_X - NORMALIZED_NEUTRAL_HAND_AREA_WIDTH;
-        private const double NORMALIZED_LEFT_NEUTRAL_HAND_AREA_Y = 0.4;
-        private const double NORMALIZED_RIGHT_NEUTRAL_HAND_AREA_Y = NORMALIZED_LEFT_NEUTRAL_HAND_AREA_Y;
-
         // HANDS INPUT EVALUATOR CONFIGURATION PARAMETERS
         // Lateral
         private const int LATERAL_ANGLE_THRESHOLD = 20;
@@ -36,31 +32,75 @@
         // the neutral state of hands (hands as input)
         private NormalizedHands neutralHands;
 
-        /// <summary>
-        /// Gets the neutral area for the left hand in the image.
-        /// </summary>
-        /// <param name="imageWidth">Width of the image.</param>
-        /// <param name="imageHeight">Height of the image.</param>
-        /// <returns>The neutral area for the left hand as <see cref="Rectangle"/>.</returns>
-        public Rectangle LeftNeutralHandArea(int imageWidth, int imageHeight) =>
-            new Rectangle(
-                Convert.ToInt32(NORMALIZED_LEFT_NEUTRAL_HAND_AREA_X * imageWidth),
-                Convert.ToInt32(NORMALIZED_LEFT_NEUTRAL_HAND_AREA_Y * imageHeight),
-                Convert.ToInt32(NORMALIZED_NEUTRAL_HAND_AREA_WIDTH * imageWidth),
-                Convert.ToInt32(NORMALIZED_NEUTRAL_HAND_AREA_HEIGHT * imageHeight));
+        public Dictionary<string, Dictionary<string, List<Point>>> TunerHands { get; private set; }
 
-        /// <summary>
-        /// Gets the neutral area for the right hand in the image.
-        /// </summary>
-        /// <param name="imageWidth">Width of the image.</param>
-        /// <param name="imageHeight">Height of the image.</param>
-        /// <returns>The neutral area for the right hand as <see cref="Rectangle"/>.</returns>
-        public Rectangle RightNeutralHandArea(int imageWidth, int imageHeight) =>
-            new Rectangle(
-                Convert.ToInt32(NORMALIZED_RIGHT_NEUTRAL_HAND_AREA_X * imageWidth),
-                Convert.ToInt32(NORMALIZED_RIGHT_NEUTRAL_HAND_AREA_Y * imageHeight),
-                Convert.ToInt32(NORMALIZED_NEUTRAL_HAND_AREA_WIDTH * imageWidth),
-                Convert.ToInt32(NORMALIZED_NEUTRAL_HAND_AREA_HEIGHT * imageHeight));
+        public DroneControllerHandsInputEvaluator()
+        {
+            TunerHands = new Dictionary<string, Dictionary<string, List<Point>>>();
+
+            TunerHands.Add("left", new Dictionary<string, List<Point>>());
+            TunerHands["left"].Add("poi", new List<Point>());
+            TunerHands["left"].Add("outline", new List<Point>());
+
+            TunerHands.Add("right", new Dictionary<string, List<Point>>());
+            TunerHands["right"].Add("poi", new List<Point>());
+            TunerHands["right"].Add("outline", new List<Point>());
+
+            var assembly = Assembly.GetExecutingAssembly();
+
+            var resources = assembly
+                .GetManifestResourceNames()
+                .Where(r => r.EndsWith("_neutral_hand.png"));
+
+            string resource = string.Empty;
+            BgrImage left;
+            BgrImage right;
+
+            resource = resources.Single(r => r.Contains("left_neutral_hand.png"));
+            using (var stream = assembly.GetManifestResourceStream(resource))
+            {
+                left = new BgrImage(new Bitmap(stream));
+            }
+
+            resource = resources.Single(r => r.Contains("right_neutral_hand.png"));
+            using (var stream = assembly.GetManifestResourceStream(resource))
+            {
+                right = new BgrImage(new Bitmap(stream));
+            }
+
+            for (int y = 0; y < left.Height; y++)
+            {
+                for (int x = 0; x < right.Width; x++)
+                {
+                    var leftPixel = left.GetPixel(x, y);
+                    var rightPixel = right.GetPixel(x, y);
+
+                    if (!leftPixel.Equals(Color.White))
+                    {
+                        if (leftPixel.Equals(Color.Black))
+                        {
+                            TunerHands["left"]["outline"].Add(new Point(x, y));
+                        }
+                        else
+                        {
+                            TunerHands["left"]["poi"].Add(new Point(x, y));
+                        }
+                    }
+
+                    if (!rightPixel.Equals(Color.White))
+                    {
+                        if (rightPixel.Equals(Color.Black))
+                        {
+                            TunerHands["right"]["outline"].Add(new Point(x, y));
+                        }
+                        else if (rightPixel.Equals(Color.Blue))
+                        {
+                            TunerHands["right"]["poi"].Add(new Point(x, y));
+                        }
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Tuner method to set the neutral hands as a reference for future hands input evaluation.
