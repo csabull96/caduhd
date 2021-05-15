@@ -33,7 +33,7 @@
                 droneState.HighestTemperature = int.Parse(properties[7].Substring(6));
                 droneState.ToF = int.Parse(properties[8].Substring(4));
                 droneState.Height = int.Parse(properties[9].Substring(2));
-                droneState.Battery = int.Parse(properties[10].Substring(4));
+                droneState.BatteryPercentage = int.Parse(properties[10].Substring(4));
                 droneState.Barometer = double.Parse(properties[11].Substring(5));
                 droneState.Time = int.Parse(properties[12].Substring(5));
 

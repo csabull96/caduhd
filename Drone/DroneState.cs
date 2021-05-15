@@ -7,6 +7,8 @@
     /// </summary>
     public class DroneState
     {
+        public bool Connected { get; set; } = false;
+
         /// <summary>
         /// Gets or sets the pitch value.
         /// </summary>
@@ -69,7 +71,7 @@
         /// <summary>
         /// Gets or sets the battery value.
         /// </summary>
-        public int Battery { get; set; } = 0;
+        public int BatteryPercentage { get; set; } = 0;
 
         /// <summary>
         /// Gets or sets the barometer value.
@@ -106,6 +108,6 @@
         /// Gets or sets the Wi-Fi value.
         /// The Wi-Fi SNR (signal to noise ratio).
         /// </summary>
-        public int Wifi { get; set; } = -1;
+        public int WiFiSnr { get; set; } = -1;
     }
 }

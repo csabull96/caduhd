@@ -18,7 +18,7 @@
     /// <summary>
     /// The implementation of the <see cref="IControllableDrone"/> for the DJI Tello.
     /// </summary>
-    public class Tello : AbstractDrone
+    public class Tello : AbstractDrone, IStreamer
     {
         private bool disposing;
 
@@ -77,10 +77,8 @@
             set => speed = AdjustSpeed(value);
         }
 
-        public delegate void NewDroneVideoFrameEventHandler(object source, NewDroneCameraFrameEventArgs args);
         public event NewDroneVideoFrameEventHandler NewCameraFrame;
 
-        public delegate void DroneStateEventHandler(object source, DroneStateChangedEventArgs args);
         public event DroneStateEventHandler StateChanged;
 
         private int isStreaming;
@@ -134,6 +132,8 @@
         public override void Dispose()
         {
             this.disposing = true;
+            this.telloStateReceiver.Close();
+            this.tello.Close();
         }
 
         /// <summary>
@@ -290,7 +290,6 @@
                 Interlocked.Exchange(ref this.isStreaming, NO);
 
             }, this.videoStreamCancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-
         }
 
         private void StopStreamingVideo()
@@ -362,9 +361,6 @@
                     }
                 }
 
-                // we only get here if _disposing = true
-                this.tello.Close();
-
             }, TaskCreationOptions.LongRunning);
         }
 
@@ -407,7 +403,7 @@
                         byte[] stateBytes = telloStateReceiver.Receive(ref this.telloIPEndPoint);
                         this.IsReachable = true;
                         this.droneState = telloStateParser.Parse(stateBytes);
-                        this.droneState.Wifi = snr;
+                        this.droneState.WiFiSnr = snr;
 
                         this.StateChanged?.Invoke(this, new DroneStateChangedEventArgs(droneState));
                         
@@ -425,11 +421,6 @@
                     {
 
                     }
-                }
-
-                if (this.disposing)
-                {
-                    this.telloStateReceiver.Close();
                 }
 
             }, TaskCreationOptions.LongRunning);

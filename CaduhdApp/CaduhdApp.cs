@@ -37,11 +37,31 @@ namespace Caduhd
 
             _handsAnalyzer = handsAnalyzer;
             _skinColorHandsDetector = skinColorHandsDetector;
-            _handsDroneController = new HandsDroneController(drone, droneControllerHandsInputEvaluator, droneControllerKeyInputEvaluator);
 
+            if (drone is IStreamer streamer)
+            {
+                streamer.NewCameraFrame += StreamerNewCameraFrame;
+            }
+
+            if (drone is IStateful stateful)
+            {
+                stateful.StateChanged += StatefulStateChanged; ;
+            }
+
+            _handsDroneController = new HandsDroneController(drone, droneControllerHandsInputEvaluator, droneControllerKeyInputEvaluator);
         }
 
-        public void AttachUI(ICaduhdUIConnector uiConnector)
+        private void StatefulStateChanged(object source, Drone.Event.DroneStateChangedEventArgs args)
+        {
+            _uiConnector.SetDroneState(args.DroneState);
+        }
+
+        private void StreamerNewCameraFrame(object source, Drone.Event.NewDroneCameraFrameEventArgs args)
+        {
+            _uiConnector.SetDroneCameraImage(args.Frame);
+        }
+
+        public void Bind(ICaduhdUIConnector uiConnector)
         {
             _uiConnector = uiConnector;
         }
@@ -50,7 +70,6 @@ namespace Caduhd
         {
             _handsDroneController.Dispose();
         }
-
 
         public void Input(KeyInfo keyInfo)
         {
@@ -121,8 +140,8 @@ namespace Caduhd
                     }
                 }
 
-               _uiConnector?.SetComputerCameraImage(frame);
-                _uiConnector?.SetHandsInputEvaluated(moveCommand);
+                _uiConnector?.SetComputerCameraImage(frame);
+                _uiConnector?.SetEvaluatedHandsInput(moveCommand);
 
                 Interlocked.Exchange(ref _isWebCameraFrameProcessorBusy, NO);
             }

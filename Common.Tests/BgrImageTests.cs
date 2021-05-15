@@ -76,7 +76,7 @@ namespace Caduhd.Common.Tests
         [Fact]
         public void WidthGetter_GetsCorrectWidth()
         {
-            Assert.Equal(_bitmap.Width, _bgrImage.Width);
+            Assert.Equal(_emguImage.Width, _bgrImage.Width);
         }
 
         [Fact]
@@ -163,6 +163,16 @@ namespace Caduhd.Common.Tests
             _bgrImage.DrawRectangle(rectangle, color, thickness);
 
             Assert.True(CompareImagesPixelByPixel(_emguImage, _bgrImage));
+        }
+
+        [Fact]
+        public void Merge_TheMergedImageHasTheCorrectSize()
+        {
+            BgrImage bgrImageUpsideDown = new BgrImage(_emguImage.Flip(FlipType.Horizontal));
+            BgrImage imageMerged = bgrImageUpsideDown.Merge(_bgrImage);
+
+            Assert.Equal(_bgrImage.Width, imageMerged.Width);
+            Assert.Equal(_bgrImage.Height, imageMerged.Height);
         }
 
         [Fact]

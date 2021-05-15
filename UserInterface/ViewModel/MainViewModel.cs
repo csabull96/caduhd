@@ -37,10 +37,13 @@
             var droneControllerKeyInputEvaluator = new TelloKeyInputEvaluator();
             var droneControllerHandsInputEvaluator = new DroneControllerHandsInputEvaluator();
 
-            app = new CaduhdApp(handsAnalyzer, skiColorHandDetector, drone, 
-                droneControllerKeyInputEvaluator, droneControllerHandsInputEvaluator);
+            app = new CaduhdApp(handsAnalyzer,
+                skiColorHandDetector,
+                drone,
+                droneControllerKeyInputEvaluator,
+                droneControllerHandsInputEvaluator);
 
-            app.AttachUI(UserInterfaceConnector);
+            app.Bind(UserInterfaceConnector);
 
             this.webCamera = new WebCamera(320, 180);
             this.webCamera.NewFrame += this.ProcessWebCameraFrame;

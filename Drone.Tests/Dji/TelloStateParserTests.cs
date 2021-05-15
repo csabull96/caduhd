@@ -29,7 +29,7 @@ namespace Caduhd.Drone.Tests.Dji
             Assert.Equal(50, parsedState.HighestTemperature);
             Assert.Equal(10, parsedState.ToF);
             Assert.Equal(0, parsedState.Height);
-            Assert.Equal(92, parsedState.Battery);
+            Assert.Equal(92, parsedState.BatteryPercentage);
             Assert.Equal(264.02, parsedState.Barometer);
             Assert.Equal(0, parsedState.Time);
             Assert.Equal(470.00, parsedState.AccelerationX);
@@ -53,7 +53,7 @@ namespace Caduhd.Drone.Tests.Dji
             Assert.Equal(50, parsedState.HighestTemperature);
             Assert.Equal(10, parsedState.ToF);
             Assert.Equal(0, parsedState.Height);
-            Assert.Equal(92, parsedState.Battery);
+            Assert.Equal(92, parsedState.BatteryPercentage);
             Assert.Equal(264.02, parsedState.Barometer);
             Assert.Equal(0, parsedState.Time);
             Assert.Equal(470.00, parsedState.AccelerationX);
@@ -77,7 +77,7 @@ namespace Caduhd.Drone.Tests.Dji
             Assert.Equal(51, parsedState.HighestTemperature);
             Assert.Equal(10, parsedState.ToF);
             Assert.Equal(0, parsedState.Height);
-            Assert.Equal(91, parsedState.Battery);
+            Assert.Equal(91, parsedState.BatteryPercentage);
             Assert.Equal(264.05, parsedState.Barometer);
             Assert.Equal(0, parsedState.Time);
             Assert.Equal(37.00, parsedState.AccelerationX);
