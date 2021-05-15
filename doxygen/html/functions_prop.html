@@ -23,7 +23,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CADUHD
    </div>
-   <div id="projectbrief">Controlling a drone using hand detection.</div>
+   <div id="projectbrief">Controlling a drone using hand detection</div>
   </td>
  </tr>
  </tbody>
@@ -84,14 +84,12 @@ $(function() {
 <li>Barometer
 : <a class="el" href="class_caduhd_1_1_drone_1_1_drone_state.html#a5563944e80b0f2fba9e772a8a5546214">Caduhd.Drone.DroneState</a>
 </li>
-<li>Battery
-: <a class="el" href="class_caduhd_1_1_drone_1_1_drone_state.html#abe1e528170e98a027fc59d1ea5d114a9">Caduhd.Drone.DroneState</a>
-</li>
 <li>BatteryLevel
 : <a class="el" href="class_caduhd_1_1_user_interface_1_1_user_interface_connector.html#a451e52d97929e897fb6a64e469b78cc1">Caduhd.UserInterface.UserInterfaceConnector</a>
 </li>
 <li>BatteryPercentage
-: <a class="el" href="class_caduhd_1_1_user_interface_1_1_user_interface_connector.html#a522ca860b4a9ec3ae65cc10b0ca46aa4">Caduhd.UserInterface.UserInterfaceConnector</a>
+: <a class="el" href="class_caduhd_1_1_drone_1_1_drone_state.html#a11fe84722d69300f7dd7181503088331">Caduhd.Drone.DroneState</a>
+, <a class="el" href="class_caduhd_1_1_user_interface_1_1_user_interface_connector.html#a522ca860b4a9ec3ae65cc10b0ca46aa4">Caduhd.UserInterface.UserInterfaceConnector</a>
 </li>
 <li>Bitmap
 : <a class="el" href="class_caduhd_1_1_common_1_1_bgr_image.html#a9cb8f639262b29255c3597b0e820d9a9">Caduhd.Common.BgrImage</a>
@@ -113,6 +111,12 @@ $(function() {
 <li>Center
 : <a class="el" href="class_caduhd_1_1_hands_detector_1_1_normalized_hands.html#aa81370c93bacd8b87d70689422f419c6">Caduhd.HandsDetector.NormalizedHands</a>
 </li>
+<li>Connect
+: <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_general_drone_key_input_evaluator.html#af20fd1803aff5f509d4d67fe1229a9eb">Caduhd.Controller.InputEvaluator.GeneralDroneKeyInputEvaluator</a>
+</li>
+<li>Connected
+: <a class="el" href="class_caduhd_1_1_drone_1_1_drone_state.html#a82c31f046a2888ca41b0345689ec449d">Caduhd.Drone.DroneState</a>
+</li>
 <li>CurrentDroneCameraFrame
 : <a class="el" href="class_caduhd_1_1_user_interface_1_1_user_interface_connector.html#a54d81850e29abed4105395a2ade5b0c1">Caduhd.UserInterface.UserInterfaceConnector</a>
 </li>
@@ -123,11 +127,15 @@ $(function() {
 
 
 <h3><a id="index_d"></a>- d -</h3><ul>
-<li>Direction
-: <a class="el" href="class_caduhd_1_1_user_interface_1_1_user_interface_connector.html#a636f6101222eb0b9f9c158169fc81ff5">Caduhd.UserInterface.UserInterfaceConnector</a>
-</li>
 <li>DroneState
 : <a class="el" href="class_caduhd_1_1_drone_1_1_event_1_1_drone_state_changed_event_args.html#a8c7c5eb0908b8ba51072dbfda7d0cf99">Caduhd.Drone.Event.DroneStateChangedEventArgs</a>
+</li>
+</ul>
+
+
+<h3><a id="index_e"></a>- e -</h3><ul>
+<li>EvaluatedHandsInput
+: <a class="el" href="class_caduhd_1_1_user_interface_1_1_user_interface_connector.html#ab05e422e2990d1b264c5ef6e7eb34207">Caduhd.UserInterface.UserInterfaceConnector</a>
 </li>
 </ul>
 
@@ -162,6 +170,9 @@ $(function() {
 <li>Hands
 : <a class="el" href="class_caduhd_1_1_hands_detector_1_1_hands_detector_result.html#a84ac97ca3ccb3091d413345ffb1733bb">Caduhd.HandsDetector.HandsDetectorResult</a>
 </li>
+<li>HandsAnalyzerState
+: <a class="el" href="class_caduhd_1_1_user_interface_1_1_user_interface_connector.html#a5d5c893051c9ac6017c801c6114f39c2">Caduhd.UserInterface.UserInterfaceConnector</a>
+</li>
 <li>HandsBackground
 : <a class="el" href="class_caduhd_1_1_controller_1_1_input_analyzer_1_1_hands_analyzer_result.html#ad9bb430452c070f158592a51821a268a">Caduhd.Controller.InputAnalyzer.HandsAnalyzerResult</a>
 , <a class="el" href="interface_caduhd_1_1_hands_detector_1_1_i_hands_detector_tuning.html#a3376fb4c9e2113ae2b70b9b1aa6edcc4">Caduhd.HandsDetector.IHandsDetectorTuning</a>
@@ -173,6 +184,9 @@ $(function() {
 <li>HandsForeground
 : <a class="el" href="class_caduhd_1_1_controller_1_1_input_analyzer_1_1_hands_analyzer_result.html#aaf85bc7345e47bf430efcb07c48f42c7">Caduhd.Controller.InputAnalyzer.HandsAnalyzerResult</a>
 , <a class="el" href="interface_caduhd_1_1_hands_detector_1_1_i_hands_detector_tuning.html#a1dc055432cb27e6fcb083d1a130583de">Caduhd.HandsDetector.IHandsDetectorTuning</a>
+</li>
+<li>HandsInputEvaluator
+: <a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#ac21f803998dd6a2a59f68cf9cd728307">Caduhd.Controller.HandsDroneController</a>
 </li>
 <li>Height
 : <a class="el" href="class_caduhd_1_1_common_1_1_bgr_image.html#a1a4e1fe0a27f00dfa518f2ea62671e84">Caduhd.Common.BgrImage</a>
@@ -188,7 +202,7 @@ $(function() {
 
 <h3><a id="index_i"></a>- i -</h3><ul>
 <li>Idle
-: <a class="el" href="class_caduhd_1_1_controller_1_1_command_1_1_move_command.html#a049fe5442caebe40f98e4eeaa760387a">Caduhd.Controller.Command.MoveCommand</a>
+: <a class="el" href="class_caduhd_1_1_drone_1_1_command_1_1_move_command.html#a503f55ebc7c3a5bcbb3dd0db99c3d7f4">Caduhd.Drone.Command.MoveCommand</a>
 </li>
 <li>Image
 : <a class="el" href="class_caduhd_1_1_hands_detector_1_1_hands_detector_result.html#ae42a01821601b2ff9af5011bc79d45ea">Caduhd.HandsDetector.HandsDetectorResult</a>
@@ -221,7 +235,7 @@ $(function() {
 : <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_general_drone_key_input_evaluator.html#aeedcdfaf7928f2e59c8822489cefcd99">Caduhd.Controller.InputEvaluator.GeneralDroneKeyInputEvaluator</a>
 </li>
 <li>Lateral
-: <a class="el" href="class_caduhd_1_1_controller_1_1_command_1_1_move_command.html#af222062c381300f3a70ade35271602ef">Caduhd.Controller.Command.MoveCommand</a>
+: <a class="el" href="class_caduhd_1_1_drone_1_1_command_1_1_move_command.html#a7f4faeca976eb19b25c845e98277ff0b">Caduhd.Drone.Command.MoveCommand</a>
 </li>
 <li>LatestHandsInputEvaluated
 : <a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#a007a33087f0a28899640a7b907da5acd">Caduhd.Controller.HandsDroneController</a>
@@ -237,7 +251,7 @@ $(function() {
 : <a class="el" href="class_caduhd_1_1_user_interface_1_1_user_interface_connector.html#a368d9ddb67b35ea889f3556a24ba2cf9">Caduhd.UserInterface.UserInterfaceConnector</a>
 </li>
 <li>Longitudinal
-: <a class="el" href="class_caduhd_1_1_controller_1_1_command_1_1_move_command.html#a85962f9dfdce0a263ed8d5b85fe27254">Caduhd.Controller.Command.MoveCommand</a>
+: <a class="el" href="class_caduhd_1_1_drone_1_1_command_1_1_move_command.html#a311e468f95221f13081b9a8c59bb8283">Caduhd.Drone.Command.MoveCommand</a>
 </li>
 <li>LowerBound
 : <a class="el" href="class_caduhd_1_1_common_1_1_range.html#a673c8a2dc67f415d25161658b051e5ae">Caduhd.Common.Range&lt; T &gt;</a>
@@ -268,7 +282,7 @@ $(function() {
 : <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_general_drone_key_input_evaluator.html#ad70a3d2367f35618cf4a7ee6e917eacd">Caduhd.Controller.InputEvaluator.GeneralDroneKeyInputEvaluator</a>
 </li>
 <li>Moving
-: <a class="el" href="class_caduhd_1_1_controller_1_1_command_1_1_move_command.html#a22eee84b7e89fc97478829fdac6591ff">Caduhd.Controller.Command.MoveCommand</a>
+: <a class="el" href="class_caduhd_1_1_drone_1_1_command_1_1_move_command.html#abf04033e44a7c3035138e0c9ad6e7d2c">Caduhd.Drone.Command.MoveCommand</a>
 </li>
 </ul>
 
@@ -298,6 +312,7 @@ $(function() {
 </li>
 <li>Result
 : <a class="el" href="class_caduhd_1_1_controller_1_1_input_analyzer_1_1_hands_analyzer.html#abe2be14f405a859ec75f84103da2cb80">Caduhd.Controller.InputAnalyzer.HandsAnalyzer</a>
+, <a class="el" href="interface_caduhd_1_1_controller_1_1_input_analyzer_1_1_i_hands_analyzer.html#a4d225a3e687505236284d5c9f804dc1b">Caduhd.Controller.InputAnalyzer.IHandsAnalyzer</a>
 , <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_drone_controller_hands_input_process_result.html#a73d70b1290b224dddbf570f1e986645a">Caduhd.Controller.InputEvaluator.DroneControllerHandsInputProcessResult</a>
 , <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_drone_controller_key_input_process_result.html#a1a2997dd959827fc2a1aaa1009886133">Caduhd.Controller.InputEvaluator.DroneControllerKeyInputProcessResult</a>
 </li>
@@ -341,9 +356,10 @@ $(function() {
 </li>
 <li>State
 : <a class="el" href="class_caduhd_1_1_controller_1_1_input_analyzer_1_1_hands_analyzer.html#af3106ac66c4a8a00c6ef1cc3c0299983">Caduhd.Controller.InputAnalyzer.HandsAnalyzer</a>
+, <a class="el" href="interface_caduhd_1_1_controller_1_1_input_analyzer_1_1_i_hands_analyzer.html#ac5fea71d640b60dcde8acd6d81539247">Caduhd.Controller.InputAnalyzer.IHandsAnalyzer</a>
 </li>
 <li>Still
-: <a class="el" href="class_caduhd_1_1_controller_1_1_command_1_1_move_command.html#aa763a88853221da14bc164f2ec319dd0">Caduhd.Controller.Command.MoveCommand</a>
+: <a class="el" href="class_caduhd_1_1_drone_1_1_command_1_1_move_command.html#a224e28f31d0bc24b11dbd31d7ae622b1">Caduhd.Drone.Command.MoveCommand</a>
 </li>
 <li>StopStreamingVideo
 : <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_tello_key_input_evaluator.html#a991cfee1a69b201caf20a36fe2798e54">Caduhd.Controller.InputEvaluator.TelloKeyInputEvaluator</a>
@@ -362,10 +378,12 @@ $(function() {
 : <a class="el" href="class_caduhd_1_1_drone_1_1_drone_state.html#a329cecb5267c860f0ad52759486a104b">Caduhd.Drone.DroneState</a>
 </li>
 <li>Tuned
-: <a class="el" href="class_caduhd_1_1_hands_detector_1_1_skin_color_hands_detector.html#a96c58f93f4b010670eba2f8afb63c300">Caduhd.HandsDetector.SkinColorHandsDetector</a>
+: <a class="el" href="interface_caduhd_1_1_hands_detector_1_1_i_skin_color_hands_detector.html#ad7f61615fe84082e362f7084d96d2625">Caduhd.HandsDetector.ISkinColorHandsDetector</a>
+, <a class="el" href="class_caduhd_1_1_hands_detector_1_1_skin_color_hands_detector.html#a96c58f93f4b010670eba2f8afb63c300">Caduhd.HandsDetector.SkinColorHandsDetector</a>
 </li>
-<li>TuningState
-: <a class="el" href="class_caduhd_1_1_user_interface_1_1_user_interface_connector.html#a036e537d5ff2e38a21a060c1fca5a5fb">Caduhd.UserInterface.UserInterfaceConnector</a>
+<li>TunerHands
+: <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_drone_controller_hands_input_evaluator.html#ad10242e062725be9a30417598f398063">Caduhd.Controller.InputEvaluator.DroneControllerHandsInputEvaluator</a>
+, <a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_tuneable_drone_controller_hands_input_evaluator.html#a1dce0962933a71c1724a55b1468c5182">Caduhd.Controller.InputEvaluator.ITuneableDroneControllerHandsInputEvaluator</a>
 </li>
 </ul>
 
@@ -382,7 +400,7 @@ $(function() {
 
 <h3><a id="index_v"></a>- v -</h3><ul>
 <li>Vertical
-: <a class="el" href="class_caduhd_1_1_controller_1_1_command_1_1_move_command.html#a35bb9e685b47bc82d26bb0125f3b9b4e">Caduhd.Controller.Command.MoveCommand</a>
+: <a class="el" href="class_caduhd_1_1_drone_1_1_command_1_1_move_command.html#affbb61e848c0435c5e4fa0b299166699">Caduhd.Drone.Command.MoveCommand</a>
 </li>
 </ul>
 
@@ -396,8 +414,9 @@ $(function() {
 : <a class="el" href="class_caduhd_1_1_common_1_1_bgr_image.html#a882e82c3cc7db254aadba9b41a58d21b">Caduhd.Common.BgrImage</a>
 , <a class="el" href="class_caduhd_1_1_input_1_1_camera_1_1_web_camera.html#a5792303a9d45a7a71b8266a461885e9e">Caduhd.Input.Camera.WebCamera</a>
 </li>
-<li>Wifi
-: <a class="el" href="class_caduhd_1_1_drone_1_1_drone_state.html#a24a9b3b395937b7391293f26e4581237">Caduhd.Drone.DroneState</a>
+<li>WiFiSnr
+: <a class="el" href="class_caduhd_1_1_drone_1_1_drone_state.html#a00cb72b83a1e2017827785fc4df36433">Caduhd.Drone.DroneState</a>
+, <a class="el" href="class_caduhd_1_1_user_interface_1_1_user_interface_connector.html#af73757d8a07898da692f02fea1f7e4c4">Caduhd.UserInterface.UserInterfaceConnector</a>
 </li>
 </ul>
 
@@ -418,7 +437,7 @@ $(function() {
 , <a class="el" href="class_caduhd_1_1_hands_detector_1_1_normalized_hand.html#a20f2f7b78105c21a2fdc3033f317b7ff">Caduhd.HandsDetector.NormalizedHand</a>
 </li>
 <li>Yaw
-: <a class="el" href="class_caduhd_1_1_controller_1_1_command_1_1_move_command.html#a485afd436e5f3f424ea8d7214f423a3d">Caduhd.Controller.Command.MoveCommand</a>
+: <a class="el" href="class_caduhd_1_1_drone_1_1_command_1_1_move_command.html#ab8898378b1fb072f9f1415c6314ec179">Caduhd.Drone.Command.MoveCommand</a>
 , <a class="el" href="class_caduhd_1_1_drone_1_1_drone_state.html#a7d9e6bd8d88aeea22c6b94a884a891fc">Caduhd.Drone.DroneState</a>
 </li>
 <li>YawLeft

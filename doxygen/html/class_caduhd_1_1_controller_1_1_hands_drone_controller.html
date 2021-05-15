@@ -23,7 +23,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CADUHD
    </div>
-   <div id="projectbrief">Controlling a drone using hand detection.</div>
+   <div id="projectbrief">Controlling a drone using hand detection</div>
   </td>
  </tr>
  </tbody>
@@ -70,15 +70,13 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_caduhd_1_1_controller_1_1_hands_drone_controller-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Caduhd.Controller.HandsDroneController Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>A drone controller that is used to control a <a class="el" href="interface_caduhd_1_1_controller_1_1_i_controllable_drone.html" title="IControllableDrone interface.">IControllableDrone</a> with hands and the keyboard.  
+<p>A drone controller that is used to control a AbstractDrone with hands and the keyboard.  
  <a href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for Caduhd.Controller.HandsDroneController:</div>
@@ -86,35 +84,38 @@ Inheritance diagram for Caduhd.Controller.HandsDroneController:</div>
  <div class="center">
   <img src="class_caduhd_1_1_controller_1_1_hands_drone_controller.png" usemap="#Caduhd.Controller.HandsDroneController_map" alt=""/>
   <map id="Caduhd.Controller.HandsDroneController_map" name="Caduhd.Controller.HandsDroneController_map">
-<area href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html" title="A drone controller that is used to control a IControllableDrone with the keyboard." alt="Caduhd.Controller.KeyboardDroneController" shape="rect" coords="138,56,404,80"/>
-<area href="interface_caduhd_1_1_controller_1_1_i_hands_input_handler.html" title="IHandsInputHandler interface." alt="Caduhd.Controller.IHandsInputHandler" shape="rect" coords="414,56,680,80"/>
-<area href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html" title="Abstract drone controller." alt="Caduhd.Controller.AbstractDroneController" shape="rect" coords="0,0,266,24"/>
-<area href="interface_caduhd_1_1_controller_1_1_i_key_input_handler.html" title="IKeyInputHandler interface." alt="Caduhd.Controller.IKeyInputHandler" shape="rect" coords="276,0,542,24"/>
+<area href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html" title="A drone controller that is used to control a AbstractDrone with the keyboard." alt="Caduhd.Controller.KeyboardDroneController" shape="rect" coords="138,112,404,136"/>
+<area href="interface_caduhd_1_1_controller_1_1_i_hands_input_handler.html" title="IHandsInputHandler interface." alt="Caduhd.Controller.IHandsInputHandler" shape="rect" coords="414,112,680,136"/>
+<area href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html" title="Abstract drone controller." alt="Caduhd.Controller.AbstractDroneController" shape="rect" coords="0,56,266,80"/>
+<area href="interface_caduhd_1_1_controller_1_1_i_key_input_handler.html" title="IKeyInputHandler interface." alt="Caduhd.Controller.IKeyInputHandler" shape="rect" coords="276,56,542,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5eabba5c2069bcada8166b71820b9ff2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#a5eabba5c2069bcada8166b71820b9ff2">HandsDroneController</a> (<a class="el" href="interface_caduhd_1_1_controller_1_1_i_controllable_drone.html">IControllableDrone</a> <a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a641b4a75a3812d8afcbf6c3d9f2b411b">drone</a>, <a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_drone_hands_input_evaluator.html">IDroneHandsInputEvaluator</a> <a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#aeda18a4ee73b0f60f355460f390bf582">handsInputEvaluator</a>, <a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_drone_key_input_evaluator.html">IDroneKeyInputEvaluator</a> <a class="el" href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html#a9e33c56a28c6aedaa7c6b39f5cf4a33b">keyInputEvaluator</a>)</td></tr>
-<tr class="memdesc:a5eabba5c2069bcada8166b71820b9ff2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a new instance of the <a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html" title="A drone controller that is used to control a IControllableDrone with hands and the keyboard.">HandsDroneController</a> class.  <a href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#a5eabba5c2069bcada8166b71820b9ff2">More...</a><br /></td></tr>
-<tr class="separator:a5eabba5c2069bcada8166b71820b9ff2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a184608233962df2bc040164757a03d98"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#a184608233962df2bc040164757a03d98">HandsDroneController</a> (<a class="el" href="class_caduhd_1_1_drone_1_1_abstract_drone.html">AbstractDrone</a> drone, <a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_drone_controller_hands_input_evaluator.html">IDroneControllerHandsInputEvaluator</a> handsInputEvaluator, <a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_drone_controller_key_input_evaluator.html">IDroneControllerKeyInputEvaluator</a> keyInputEvaluator)</td></tr>
+<tr class="memdesc:a184608233962df2bc040164757a03d98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a new instance of the <a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html" title="A drone controller that is used to control a AbstractDrone with hands and the keyboard.">HandsDroneController</a> class.  <a href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#a184608233962df2bc040164757a03d98">More...</a><br /></td></tr>
+<tr class="separator:a184608233962df2bc040164757a03d98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b08f88b4fa34acf96304ecf8d81e913"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_input_process_result.html">InputProcessResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#a7b08f88b4fa34acf96304ecf8d81e913">ProcessHandsInput</a> (<a class="el" href="class_caduhd_1_1_hands_detector_1_1_normalized_hands.html">NormalizedHands</a> hands)</td></tr>
 <tr class="memdesc:a7b08f88b4fa34acf96304ecf8d81e913"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes a hands input.  <a href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#a7b08f88b4fa34acf96304ecf8d81e913">More...</a><br /></td></tr>
 <tr class="separator:a7b08f88b4fa34acf96304ecf8d81e913"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_caduhd_1_1_controller_1_1_keyboard_drone_controller')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html">Caduhd.Controller.KeyboardDroneController</a></td></tr>
-<tr class="memitem:a007c35c0812d92de0ce1e875773d8fc3 inherit pub_methods_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html#a007c35c0812d92de0ce1e875773d8fc3">KeyboardDroneController</a> (<a class="el" href="interface_caduhd_1_1_controller_1_1_i_controllable_drone.html">IControllableDrone</a> <a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a641b4a75a3812d8afcbf6c3d9f2b411b">drone</a>, <a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_drone_key_input_evaluator.html">IDroneKeyInputEvaluator</a> <a class="el" href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html#a9e33c56a28c6aedaa7c6b39f5cf4a33b">keyInputEvaluator</a>)</td></tr>
-<tr class="memdesc:a007c35c0812d92de0ce1e875773d8fc3 inherit pub_methods_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a new instance of the <a class="el" href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html" title="A drone controller that is used to control a IControllableDrone with the keyboard.">KeyboardDroneController</a> class.  <a href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html#a007c35c0812d92de0ce1e875773d8fc3">More...</a><br /></td></tr>
-<tr class="separator:a007c35c0812d92de0ce1e875773d8fc3 inherit pub_methods_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3149e09c393c743ace55c7ca47461fb4 inherit pub_methods_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html#a3149e09c393c743ace55c7ca47461fb4">KeyboardDroneController</a> (<a class="el" href="class_caduhd_1_1_drone_1_1_abstract_drone.html">AbstractDrone</a> drone, <a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_drone_controller_key_input_evaluator.html">IDroneControllerKeyInputEvaluator</a> keyInputEvaluator)</td></tr>
+<tr class="memdesc:a3149e09c393c743ace55c7ca47461fb4 inherit pub_methods_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a new instance of the <a class="el" href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html" title="A drone controller that is used to control a AbstractDrone with the keyboard.">KeyboardDroneController</a> class.  <a href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html#a3149e09c393c743ace55c7ca47461fb4">More...</a><br /></td></tr>
+<tr class="separator:a3149e09c393c743ace55c7ca47461fb4 inherit pub_methods_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af19182a3977ae2e818069130c5f63bf9 inherit pub_methods_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_input_process_result.html">InputProcessResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html#af19182a3977ae2e818069130c5f63bf9">ProcessKeyInput</a> (<a class="el" href="class_caduhd_1_1_input_1_1_keyboard_1_1_key_info.html">KeyInfo</a> keyInfo)</td></tr>
 <tr class="memdesc:af19182a3977ae2e818069130c5f63bf9 inherit pub_methods_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes a key input.  <a href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html#af19182a3977ae2e818069130c5f63bf9">More...</a><br /></td></tr>
 <tr class="separator:af19182a3977ae2e818069130c5f63bf9 inherit pub_methods_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html">Caduhd.Controller.AbstractDroneController</a></td></tr>
-<tr class="memitem:a6599dd2d270365d17ae5bfc57ce45730 inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a6599dd2d270365d17ae5bfc57ce45730">AbstractDroneController</a> (<a class="el" href="interface_caduhd_1_1_controller_1_1_i_controllable_drone.html">IControllableDrone</a> <a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a641b4a75a3812d8afcbf6c3d9f2b411b">drone</a>)</td></tr>
-<tr class="memdesc:a6599dd2d270365d17ae5bfc57ce45730 inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a new instance of the <a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html" title="Abstract drone controller.">AbstractDroneController</a> class.  <a href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a6599dd2d270365d17ae5bfc57ce45730">More...</a><br /></td></tr>
-<tr class="separator:a6599dd2d270365d17ae5bfc57ce45730 inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe1584309ddd624c02aae1a5fed498a1 inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#afe1584309ddd624c02aae1a5fed498a1">AbstractDroneController</a> (<a class="el" href="class_caduhd_1_1_drone_1_1_abstract_drone.html">AbstractDrone</a> drone)</td></tr>
+<tr class="memdesc:afe1584309ddd624c02aae1a5fed498a1 inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a new instance of the <a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html" title="Abstract drone controller.">AbstractDroneController</a> class.  <a href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#afe1584309ddd624c02aae1a5fed498a1">More...</a><br /></td></tr>
+<tr class="separator:afe1584309ddd624c02aae1a5fed498a1 inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a291797d0d05e3e948e587383ee2931e8 inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a291797d0d05e3e948e587383ee2931e8">Connect</a> ()</td></tr>
 <tr class="memdesc:a291797d0d05e3e948e587383ee2931e8 inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a ConnectCommand to the drone.  <a href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a291797d0d05e3e948e587383ee2931e8">More...</a><br /></td></tr>
 <tr class="separator:a291797d0d05e3e948e587383ee2931e8 inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5509f8b99cd6000dc1febe57ea53df3a inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a5509f8b99cd6000dc1febe57ea53df3a">Dispose</a> ()</td></tr>
+<tr class="memdesc:a5509f8b99cd6000dc1febe57ea53df3a inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disposing this instance.  <a href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a5509f8b99cd6000dc1febe57ea53df3a">More...</a><br /></td></tr>
+<tr class="separator:a5509f8b99cd6000dc1febe57ea53df3a inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9219172685a4fccde34143f8e7dc1db7 inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a9219172685a4fccde34143f8e7dc1db7">StartStreamingVideo</a> ()</td></tr>
 <tr class="memdesc:a9219172685a4fccde34143f8e7dc1db7 inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a StartStreamingVideoCommand to the drone.  <a href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a9219172685a4fccde34143f8e7dc1db7">More...</a><br /></td></tr>
 <tr class="separator:a9219172685a4fccde34143f8e7dc1db7 inherit pub_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,35 +133,28 @@ Protected Member Functions</h2></td></tr>
 <tr class="memdesc:a69530c92cf70345ed127dedd889a1216 inherit pro_methods_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluated latest inputs together.  <a href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html#a69530c92cf70345ed127dedd889a1216">More...</a><br /></td></tr>
 <tr class="separator:a69530c92cf70345ed127dedd889a1216 inherit pro_methods_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html">Caduhd.Controller.AbstractDroneController</a></td></tr>
-<tr class="memitem:a309399f8d41ab58f0f0218008e33a248 inherit pro_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a309399f8d41ab58f0f0218008e33a248">InternalControl</a> (<a class="el" href="class_caduhd_1_1_controller_1_1_command_1_1_drone_command.html">DroneCommand</a> droneCommand)</td></tr>
+<tr class="memitem:a309399f8d41ab58f0f0218008e33a248 inherit pro_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a309399f8d41ab58f0f0218008e33a248">InternalControl</a> (<a class="el" href="class_caduhd_1_1_drone_1_1_command_1_1_drone_command.html">DroneCommand</a> droneCommand)</td></tr>
 <tr class="memdesc:a309399f8d41ab58f0f0218008e33a248 inherit pro_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends the requested DroneCommand to the drone. If the command equals the last command sent, then it won't be sent again.  <a href="class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a309399f8d41ab58f0f0218008e33a248">More...</a><br /></td></tr>
 <tr class="separator:a309399f8d41ab58f0f0218008e33a248 inherit pro_methods_class_caduhd_1_1_controller_1_1_abstract_drone_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:a007a33087f0a28899640a7b907da5acd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_caduhd_1_1_controller_1_1_command_1_1_move_command.html">MoveCommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#a007a33087f0a28899640a7b907da5acd">LatestHandsInputEvaluated</a><code> [get, set]</code></td></tr>
+<tr class="memitem:ac21f803998dd6a2a59f68cf9cd728307"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_tuneable_drone_controller_hands_input_evaluator.html">ITuneableDroneControllerHandsInputEvaluator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#ac21f803998dd6a2a59f68cf9cd728307">HandsInputEvaluator</a><code> [get]</code></td></tr>
+<tr class="memdesc:ac21f803998dd6a2a59f68cf9cd728307"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the inner hands input evaluator as a tuneable hands input evaluator.  <a href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#ac21f803998dd6a2a59f68cf9cd728307">More...</a><br /></td></tr>
+<tr class="separator:ac21f803998dd6a2a59f68cf9cd728307"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a007a33087f0a28899640a7b907da5acd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_caduhd_1_1_drone_1_1_command_1_1_move_command.html">MoveCommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#a007a33087f0a28899640a7b907da5acd">LatestHandsInputEvaluated</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a007a33087f0a28899640a7b907da5acd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets or sets the result of the latest hands input evaluation as MoveCommand.  <a href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#a007a33087f0a28899640a7b907da5acd">More...</a><br /></td></tr>
 <tr class="separator:a007a33087f0a28899640a7b907da5acd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header properties_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td colspan="2" onclick="javascript:toggleInherit('properties_class_caduhd_1_1_controller_1_1_keyboard_drone_controller')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el" href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html">Caduhd.Controller.KeyboardDroneController</a></td></tr>
-<tr class="memitem:a8825912f546c39d861d5480740121c9a inherit properties_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_caduhd_1_1_controller_1_1_command_1_1_drone_command.html">DroneCommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html#a8825912f546c39d861d5480740121c9a">LatestKeyInputEvaluated</a><code> [get, set]</code></td></tr>
+<tr class="memitem:a8825912f546c39d861d5480740121c9a inherit properties_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_caduhd_1_1_drone_1_1_command_1_1_drone_command.html">DroneCommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html#a8825912f546c39d861d5480740121c9a">LatestKeyInputEvaluated</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a8825912f546c39d861d5480740121c9a inherit properties_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets or sets the result of the latest key input evaluation as DroneCommand.  <a href="class_caduhd_1_1_controller_1_1_keyboard_drone_controller.html#a8825912f546c39d861d5480740121c9a">More...</a><br /></td></tr>
 <tr class="separator:a8825912f546c39d861d5480740121c9a inherit properties_class_caduhd_1_1_controller_1_1_keyboard_drone_controller"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a6ed5421fe6dd8e790e0095f3eb1a4e14"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_caduhd_1_1_controller_1_1_command_1_1_drone_command.html">DroneCommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#a6ed5421fe6dd8e790e0095f3eb1a4e14">EvaluateInputs</a> ()</td></tr>
-<tr class="separator:a6ed5421fe6dd8e790e0095f3eb1a4e14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:aeda18a4ee73b0f60f355460f390bf582"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_drone_hands_input_evaluator.html">IDroneHandsInputEvaluator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html#aeda18a4ee73b0f60f355460f390bf582">handsInputEvaluator</a></td></tr>
-<tr class="separator:aeda18a4ee73b0f60f355460f390bf582"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A drone controller that is used to control a <a class="el" href="interface_caduhd_1_1_controller_1_1_i_controllable_drone.html" title="IControllableDrone interface.">IControllableDrone</a> with hands and the keyboard. </p>
+<div class="textblock"><p>A drone controller that is used to control a AbstractDrone with hands and the keyboard. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a5eabba5c2069bcada8166b71820b9ff2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5eabba5c2069bcada8166b71820b9ff2">&#9670;&nbsp;</a></span>HandsDroneController()</h2>
+<a id="a184608233962df2bc040164757a03d98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a184608233962df2bc040164757a03d98">&#9670;&nbsp;</a></span>HandsDroneController()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -168,19 +162,19 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">Caduhd.Controller.HandsDroneController.HandsDroneController </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="interface_caduhd_1_1_controller_1_1_i_controllable_drone.html">IControllableDrone</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="class_caduhd_1_1_drone_1_1_abstract_drone.html">AbstractDrone</a>&#160;</td>
           <td class="paramname"><em>drone</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_drone_hands_input_evaluator.html">IDroneHandsInputEvaluator</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_drone_controller_hands_input_evaluator.html">IDroneControllerHandsInputEvaluator</a>&#160;</td>
           <td class="paramname"><em>handsInputEvaluator</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_drone_key_input_evaluator.html">IDroneKeyInputEvaluator</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_drone_controller_key_input_evaluator.html">IDroneControllerKeyInputEvaluator</a>&#160;</td>
           <td class="paramname"><em>keyInputEvaluator</em>&#160;</td>
         </tr>
         <tr>
@@ -191,12 +185,12 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Initializes a new instance of the <a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html" title="A drone controller that is used to control a IControllableDrone with hands and the keyboard.">HandsDroneController</a> class. </p>
+<p>Initializes a new instance of the <a class="el" href="class_caduhd_1_1_controller_1_1_hands_drone_controller.html" title="A drone controller that is used to control a AbstractDrone with hands and the keyboard.">HandsDroneController</a> class. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">drone</td><td>The <a class="el" href="interface_caduhd_1_1_controller_1_1_i_controllable_drone.html" title="IControllableDrone interface.">IControllableDrone</a> drone that we would like to control with this controller.</td></tr>
-    <tr><td class="paramname">handsInputEvaluator</td><td>The desired implementation of the IDroneHandsInputEvaluator interface.</td></tr>
-    <tr><td class="paramname">keyInputEvaluator</td><td>The desired implementation of the IDroneKeyInputEvaluator interface.</td></tr>
+    <tr><td class="paramname">drone</td><td>The AbstractDrone drone that we would like to control with this controller.</td></tr>
+    <tr><td class="paramname">handsInputEvaluator</td><td>The desired implementation of the IDroneControllerHandsInputEvaluator interface.</td></tr>
+    <tr><td class="paramname">keyInputEvaluator</td><td>The desired implementation of the IDroneControllerKeyInputEvaluator interface.</td></tr>
   </table>
   </dd>
 </dl>
@@ -233,31 +227,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a6ed5421fe6dd8e790e0095f3eb1a4e14"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ed5421fe6dd8e790e0095f3eb1a4e14">&#9670;&nbsp;</a></span>EvaluateInputs()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_caduhd_1_1_controller_1_1_command_1_1_drone_command.html">DroneCommand</a> Caduhd.Controller.HandsDroneController.EvaluateInputs </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a7b08f88b4fa34acf96304ecf8d81e913"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7b08f88b4fa34acf96304ecf8d81e913">&#9670;&nbsp;</a></span>ProcessHandsInput()</h2>
 
@@ -287,9 +256,9 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="aeda18a4ee73b0f60f355460f390bf582"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeda18a4ee73b0f60f355460f390bf582">&#9670;&nbsp;</a></span>handsInputEvaluator</h2>
+<h2 class="groupheader">Property Documentation</h2>
+<a id="ac21f803998dd6a2a59f68cf9cd728307"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac21f803998dd6a2a59f68cf9cd728307">&#9670;&nbsp;</a></span>HandsInputEvaluator</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -298,19 +267,20 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly <a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_drone_hands_input_evaluator.html">IDroneHandsInputEvaluator</a> Caduhd.Controller.HandsDroneController.handsInputEvaluator</td>
+          <td class="memname"><a class="el" href="interface_caduhd_1_1_controller_1_1_input_evaluator_1_1_i_tuneable_drone_controller_hands_input_evaluator.html">ITuneableDroneControllerHandsInputEvaluator</a> Caduhd.Controller.HandsDroneController.HandsInputEvaluator</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">get</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
+<p>Gets the inner hands input evaluator as a tuneable hands input evaluator. </p>
+
 </div>
 </div>
-<h2 class="groupheader">Property Documentation</h2>
 <a id="a007a33087f0a28899640a7b907da5acd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a007a33087f0a28899640a7b907da5acd">&#9670;&nbsp;</a></span>LatestHandsInputEvaluated</h2>
 
@@ -321,7 +291,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_caduhd_1_1_controller_1_1_command_1_1_move_command.html">MoveCommand</a> Caduhd.Controller.HandsDroneController.LatestHandsInputEvaluated</td>
+          <td class="memname"><a class="el" href="class_caduhd_1_1_drone_1_1_command_1_1_move_command.html">MoveCommand</a> Caduhd.Controller.HandsDroneController.LatestHandsInputEvaluated</td>
         </tr>
       </table>
   </td>
@@ -335,6 +305,9 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>C:/Users/csabull96/source/repos/caduhd/Controller/HandsDroneController.cs</li>
+</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Windows.Input;
+    using Caduhd.Application;
     using Caduhd.Controller.InputAnalyzer;
     using Caduhd.Controller.InputEvaluator;
     using Caduhd.Drone.Dji;

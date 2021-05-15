@@ -1,4 +1,5 @@
-﻿using Caduhd.Common;
+﻿using Caduhd.Application;
+using Caduhd.Common;
 using Caduhd.Controller.InputEvaluator;
 using Caduhd.Drone.Dji;
 using Caduhd.HandsDetector;
@@ -8,7 +9,6 @@ using System;
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xunit;
 

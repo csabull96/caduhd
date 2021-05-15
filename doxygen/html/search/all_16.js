@@ -1,14 +1,9 @@
 var searchData=
 [
-  ['webcamera_367',['WebCamera',['../class_caduhd_1_1_input_1_1_camera_1_1_web_camera.html',1,'Caduhd::Input::Camera']]],
-  ['webcamera_368',['webCamera',['../class_caduhd_1_1_user_interface_1_1_view_model_1_1_main_view_model.html#ae490abe44d7196606d07adc2d21c61b2',1,'Caduhd::UserInterface::ViewModel::MainViewModel']]],
-  ['webcamera_369',['WebCamera',['../class_caduhd_1_1_input_1_1_camera_1_1_web_camera.html#a47edbc0355fb0d617d33aa9da809a04f',1,'Caduhd.Input.Camera.WebCamera.WebCamera(int width, int height)'],['../class_caduhd_1_1_input_1_1_camera_1_1_web_camera.html#a39b983c2d5a4c77006e6de1744ac9572',1,'Caduhd.Input.Camera.WebCamera.WebCamera(ICapture capture, int fps=DEFAULT_FPS, int width=DEFAULT_WIDTH, int height=DEFAULT_HEIGHT)']]],
-  ['weight_370',['weight',['../class_caduhd_1_1_common_1_1_histogram.html#a59eb7cdbe7939198fbfb65e7f76f2e0c',1,'Caduhd.Common.Histogram.weight()'],['../class_caduhd_1_1_hands_detector_1_1_hand_builder.html#a93c00e85f433e5e23320aef54202e15e',1,'Caduhd.HandsDetector.HandBuilder.weight()']]],
-  ['weight_371',['Weight',['../class_caduhd_1_1_hands_detector_1_1_hand.html#a14354f35c9d35c93960d7de8fb66aede',1,'Caduhd.HandsDetector.Hand.Weight()'],['../class_caduhd_1_1_hands_detector_1_1_normalized_hand.html#a159cf0977a7fcb4f2bcae2463e671e87',1,'Caduhd.HandsDetector.NormalizedHand.Weight()']]],
-  ['width_372',['Width',['../class_caduhd_1_1_common_1_1_bgr_image.html#a882e82c3cc7db254aadba9b41a58d21b',1,'Caduhd.Common.BgrImage.Width()'],['../class_caduhd_1_1_input_1_1_camera_1_1_web_camera.html#a5792303a9d45a7a71b8266a461885e9e',1,'Caduhd.Input.Camera.WebCamera.Width()']]],
-  ['wifi_373',['Wifi',['../class_caduhd_1_1_drone_1_1_drone_state.html#a24a9b3b395937b7391293f26e4581237',1,'Caduhd::Drone::DroneState']]],
-  ['wifi_5fchecker_5ftime_5finterval_374',['WIFI_CHECKER_TIME_INTERVAL',['../class_caduhd_1_1_drone_1_1_dji_1_1_tello.html#a00a6eb3725d2d91a92590e45add6da3a',1,'Caduhd::Drone::Dji::Tello']]],
-  ['window_5fclosed_375',['Window_Closed',['../class_caduhd_1_1_user_interface_1_1_main_window.html#acb8b3fbf7700219800e41379ccf5ea5a',1,'Caduhd::UserInterface::MainWindow']]],
-  ['window_5fpreviewkeydown_376',['Window_PreviewKeyDown',['../class_caduhd_1_1_user_interface_1_1_main_window.html#a81ae8bb98de0a21c26184b14b7837f26',1,'Caduhd::UserInterface::MainWindow']]],
-  ['window_5fpreviewkeyup_377',['Window_PreviewKeyUp',['../class_caduhd_1_1_user_interface_1_1_main_window.html#a87210bd967e3b2cc82e489777e14484f',1,'Caduhd::UserInterface::MainWindow']]]
+  ['y_248',['Y',['../class_caduhd_1_1_common_1_1_point_d.html#a448b81182f83a1ac643d95e94596638e',1,'Caduhd.Common.PointD.Y()'],['../class_caduhd_1_1_hands_detector_1_1_hand.html#a8f261e78e53ab218c350233864d571af',1,'Caduhd.HandsDetector.Hand.Y()'],['../class_caduhd_1_1_hands_detector_1_1_normalized_hand.html#a20f2f7b78105c21a2fdc3033f317b7ff',1,'Caduhd.HandsDetector.NormalizedHand.Y()']]],
+  ['yaw_249',['Yaw',['../class_caduhd_1_1_drone_1_1_command_1_1_move_command.html#ab8898378b1fb072f9f1415c6314ec179',1,'Caduhd.Drone.Command.MoveCommand.Yaw()'],['../class_caduhd_1_1_drone_1_1_drone_state.html#a7d9e6bd8d88aeea22c6b94a884a891fc',1,'Caduhd.Drone.DroneState.Yaw()']]],
+  ['yaw_5fleft_250',['YAW_LEFT',['../class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a4f4ad49130e19459dd1a45b2aaf2b727',1,'Caduhd::Controller::InputEvaluator::AbstractDroneInputEvaluator']]],
+  ['yaw_5fright_251',['YAW_RIGHT',['../class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a03df66113b6322e2a343573bfd74014e',1,'Caduhd::Controller::InputEvaluator::AbstractDroneInputEvaluator']]],
+  ['yawleft_252',['YawLeft',['../class_caduhd_1_1_controller_1_1_input_evaluator_1_1_general_drone_key_input_evaluator.html#a490981607ac14a354ede48c03f1238b6',1,'Caduhd::Controller::InputEvaluator::GeneralDroneKeyInputEvaluator']]],
+  ['yawright_253',['YawRight',['../class_caduhd_1_1_controller_1_1_input_evaluator_1_1_general_drone_key_input_evaluator.html#abb259f1c492367e8d6af284e1ce44cb0',1,'Caduhd::Controller::InputEvaluator::GeneralDroneKeyInputEvaluator']]]
 ];

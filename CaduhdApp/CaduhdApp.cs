@@ -1,4 +1,4 @@
-﻿namespace Caduhd
+﻿namespace Caduhd.Application
 {
     using System;
     using System.Drawing;

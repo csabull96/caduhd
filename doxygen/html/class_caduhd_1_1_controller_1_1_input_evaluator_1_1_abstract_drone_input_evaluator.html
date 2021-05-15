@@ -23,7 +23,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CADUHD
    </div>
-   <div id="projectbrief">Controlling a drone using hand detection.</div>
+   <div id="projectbrief">Controlling a drone using hand detection</div>
   </td>
  </tr>
  </tbody>
@@ -68,7 +68,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pro-static-attribs">Static Protected Attributes</a> &#124;
-<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator Class Reference</div>  </div>
@@ -83,45 +82,38 @@ Inheritance diagram for Caduhd.Controller.InputEvaluator.AbstractDroneInputEvalu
  <div class="center">
   <img src="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.png" usemap="#Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator_map" alt=""/>
   <map id="Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator_map" name="Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator_map">
-<area href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_drone_hands_input_evaluator.html" title="Drone hands input evaluator." alt="Caduhd.Controller.InputEvaluator.DroneHandsInputEvaluator" shape="rect" coords="0,56,388,80"/>
-<area href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_general_drone_key_input_evaluator.html" title="General drone key input evaluator." alt="Caduhd.Controller.InputEvaluator.GeneralDroneKeyInputEvaluator" shape="rect" coords="398,56,786,80"/>
-<area href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_tello_key_input_evaluator.html" title="The specific key input evaluator for the Tello." alt="Caduhd.Controller.InputEvaluator.TelloKeyInputEvaluator" shape="rect" coords="398,112,786,136"/>
+<area href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_drone_controller_hands_input_evaluator.html" title="Drone hands input evaluator." alt="Caduhd.Controller.InputEvaluator.DroneControllerHandsInputEvaluator" shape="rect" coords="0,56,413,80"/>
+<area href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_general_drone_key_input_evaluator.html" title="General drone key input evaluator." alt="Caduhd.Controller.InputEvaluator.GeneralDroneKeyInputEvaluator" shape="rect" coords="423,56,836,80"/>
+<area href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_tello_key_input_evaluator.html" title="The specific key input evaluator for the Tello." alt="Caduhd.Controller.InputEvaluator.TelloKeyInputEvaluator" shape="rect" coords="423,112,836,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
 Static Protected Attributes</h2></td></tr>
-<tr class="memitem:aa998b0aaf943fe6f4264240c42c33267"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#aa998b0aaf943fe6f4264240c42c33267">MOVE_LEFT</a> = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a0d7483e71fb825a91bf905a3f009354e">NEGATIVE_SIGN_VALUE</a></td></tr>
+<tr class="memitem:aa998b0aaf943fe6f4264240c42c33267"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#aa998b0aaf943fe6f4264240c42c33267">MOVE_LEFT</a> = NEGATIVE_SIGN_VALUE</td></tr>
 <tr class="memdesc:aa998b0aaf943fe6f4264240c42c33267"><td class="mdescLeft">&#160;</td><td class="mdescRight">The value that represents a lateral movement to the left.  <a href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#aa998b0aaf943fe6f4264240c42c33267">More...</a><br /></td></tr>
 <tr class="separator:aa998b0aaf943fe6f4264240c42c33267"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9deec72bc7548fedce36c8eada5b67b0"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a9deec72bc7548fedce36c8eada5b67b0">MOVE_RIGHT</a> = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a251de87ddb0adfd96d9395d0eff5681a">POSITIVE_SIGN_VALUE</a></td></tr>
+<tr class="memitem:a9deec72bc7548fedce36c8eada5b67b0"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a9deec72bc7548fedce36c8eada5b67b0">MOVE_RIGHT</a> = POSITIVE_SIGN_VALUE</td></tr>
 <tr class="memdesc:a9deec72bc7548fedce36c8eada5b67b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The value that represents a lateral movement to the right.  <a href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a9deec72bc7548fedce36c8eada5b67b0">More...</a><br /></td></tr>
 <tr class="separator:a9deec72bc7548fedce36c8eada5b67b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0e798589bdefe059fcf426ef2b32be7"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#ae0e798589bdefe059fcf426ef2b32be7">MOVE_FORWARD</a> = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a251de87ddb0adfd96d9395d0eff5681a">POSITIVE_SIGN_VALUE</a></td></tr>
+<tr class="memitem:ae0e798589bdefe059fcf426ef2b32be7"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#ae0e798589bdefe059fcf426ef2b32be7">MOVE_FORWARD</a> = POSITIVE_SIGN_VALUE</td></tr>
 <tr class="memdesc:ae0e798589bdefe059fcf426ef2b32be7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The value that represents a longitudinal movement forward.  <a href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#ae0e798589bdefe059fcf426ef2b32be7">More...</a><br /></td></tr>
 <tr class="separator:ae0e798589bdefe059fcf426ef2b32be7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a947b92a1ad5d7cd8eb87d8f140a7c657"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a947b92a1ad5d7cd8eb87d8f140a7c657">MOVE_BACKWARD</a> = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a0d7483e71fb825a91bf905a3f009354e">NEGATIVE_SIGN_VALUE</a></td></tr>
+<tr class="memitem:a947b92a1ad5d7cd8eb87d8f140a7c657"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a947b92a1ad5d7cd8eb87d8f140a7c657">MOVE_BACKWARD</a> = NEGATIVE_SIGN_VALUE</td></tr>
 <tr class="memdesc:a947b92a1ad5d7cd8eb87d8f140a7c657"><td class="mdescLeft">&#160;</td><td class="mdescRight">The value that represents a longitudinal movement backward.  <a href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a947b92a1ad5d7cd8eb87d8f140a7c657">More...</a><br /></td></tr>
 <tr class="separator:a947b92a1ad5d7cd8eb87d8f140a7c657"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86350f967797559486b4eeaf0021ef71"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a86350f967797559486b4eeaf0021ef71">MOVE_UP</a> = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a251de87ddb0adfd96d9395d0eff5681a">POSITIVE_SIGN_VALUE</a></td></tr>
+<tr class="memitem:a86350f967797559486b4eeaf0021ef71"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a86350f967797559486b4eeaf0021ef71">MOVE_UP</a> = POSITIVE_SIGN_VALUE</td></tr>
 <tr class="memdesc:a86350f967797559486b4eeaf0021ef71"><td class="mdescLeft">&#160;</td><td class="mdescRight">The value that represents a vertical movement upward.  <a href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a86350f967797559486b4eeaf0021ef71">More...</a><br /></td></tr>
 <tr class="separator:a86350f967797559486b4eeaf0021ef71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4db8d9ad2b1c11d69fdff387b69ceaf4"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a4db8d9ad2b1c11d69fdff387b69ceaf4">MOVE_DOWN</a> = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a0d7483e71fb825a91bf905a3f009354e">NEGATIVE_SIGN_VALUE</a></td></tr>
+<tr class="memitem:a4db8d9ad2b1c11d69fdff387b69ceaf4"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a4db8d9ad2b1c11d69fdff387b69ceaf4">MOVE_DOWN</a> = NEGATIVE_SIGN_VALUE</td></tr>
 <tr class="memdesc:a4db8d9ad2b1c11d69fdff387b69ceaf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The value that represents a vertical movement downward.  <a href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a4db8d9ad2b1c11d69fdff387b69ceaf4">More...</a><br /></td></tr>
 <tr class="separator:a4db8d9ad2b1c11d69fdff387b69ceaf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f4ad49130e19459dd1a45b2aaf2b727"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a4f4ad49130e19459dd1a45b2aaf2b727">YAW_LEFT</a> = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a0d7483e71fb825a91bf905a3f009354e">NEGATIVE_SIGN_VALUE</a></td></tr>
+<tr class="memitem:a4f4ad49130e19459dd1a45b2aaf2b727"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a4f4ad49130e19459dd1a45b2aaf2b727">YAW_LEFT</a> = NEGATIVE_SIGN_VALUE</td></tr>
 <tr class="memdesc:a4f4ad49130e19459dd1a45b2aaf2b727"><td class="mdescLeft">&#160;</td><td class="mdescRight">The value that represents a yaw movement to the left.  <a href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a4f4ad49130e19459dd1a45b2aaf2b727">More...</a><br /></td></tr>
 <tr class="separator:a4f4ad49130e19459dd1a45b2aaf2b727"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03df66113b6322e2a343573bfd74014e"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a03df66113b6322e2a343573bfd74014e">YAW_RIGHT</a> = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a251de87ddb0adfd96d9395d0eff5681a">POSITIVE_SIGN_VALUE</a></td></tr>
+<tr class="memitem:a03df66113b6322e2a343573bfd74014e"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a03df66113b6322e2a343573bfd74014e">YAW_RIGHT</a> = POSITIVE_SIGN_VALUE</td></tr>
 <tr class="memdesc:a03df66113b6322e2a343573bfd74014e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The value that represents a yaw movement to the right.  <a href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a03df66113b6322e2a343573bfd74014e">More...</a><br /></td></tr>
 <tr class="separator:a03df66113b6322e2a343573bfd74014e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
-Static Private Attributes</h2></td></tr>
-<tr class="memitem:a251de87ddb0adfd96d9395d0eff5681a"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a251de87ddb0adfd96d9395d0eff5681a">POSITIVE_SIGN_VALUE</a> = 1</td></tr>
-<tr class="separator:a251de87ddb0adfd96d9395d0eff5681a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d7483e71fb825a91bf905a3f009354e"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a0d7483e71fb825a91bf905a3f009354e">NEGATIVE_SIGN_VALUE</a> = -1</td></tr>
-<tr class="separator:a0d7483e71fb825a91bf905a3f009354e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Abstract drone input evaluator. </p>
@@ -136,7 +128,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.MOVE_BACKWARD = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a0d7483e71fb825a91bf905a3f009354e">NEGATIVE_SIGN_VALUE</a></td>
+          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.MOVE_BACKWARD = NEGATIVE_SIGN_VALUE</td>
         </tr>
       </table>
   </td>
@@ -160,7 +152,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.MOVE_DOWN = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a0d7483e71fb825a91bf905a3f009354e">NEGATIVE_SIGN_VALUE</a></td>
+          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.MOVE_DOWN = NEGATIVE_SIGN_VALUE</td>
         </tr>
       </table>
   </td>
@@ -184,7 +176,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.MOVE_FORWARD = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a251de87ddb0adfd96d9395d0eff5681a">POSITIVE_SIGN_VALUE</a></td>
+          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.MOVE_FORWARD = POSITIVE_SIGN_VALUE</td>
         </tr>
       </table>
   </td>
@@ -208,7 +200,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.MOVE_LEFT = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a0d7483e71fb825a91bf905a3f009354e">NEGATIVE_SIGN_VALUE</a></td>
+          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.MOVE_LEFT = NEGATIVE_SIGN_VALUE</td>
         </tr>
       </table>
   </td>
@@ -232,7 +224,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.MOVE_RIGHT = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a251de87ddb0adfd96d9395d0eff5681a">POSITIVE_SIGN_VALUE</a></td>
+          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.MOVE_RIGHT = POSITIVE_SIGN_VALUE</td>
         </tr>
       </table>
   </td>
@@ -256,7 +248,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.MOVE_UP = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a251de87ddb0adfd96d9395d0eff5681a">POSITIVE_SIGN_VALUE</a></td>
+          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.MOVE_UP = POSITIVE_SIGN_VALUE</td>
         </tr>
       </table>
   </td>
@@ -270,50 +262,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a0d7483e71fb825a91bf905a3f009354e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0d7483e71fb825a91bf905a3f009354e">&#9670;&nbsp;</a></span>NEGATIVE_SIGN_VALUE</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.NEGATIVE_SIGN_VALUE = -1</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a251de87ddb0adfd96d9395d0eff5681a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a251de87ddb0adfd96d9395d0eff5681a">&#9670;&nbsp;</a></span>POSITIVE_SIGN_VALUE</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.POSITIVE_SIGN_VALUE = 1</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a4f4ad49130e19459dd1a45b2aaf2b727"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4f4ad49130e19459dd1a45b2aaf2b727">&#9670;&nbsp;</a></span>YAW_LEFT</h2>
 
@@ -324,7 +272,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.YAW_LEFT = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a0d7483e71fb825a91bf905a3f009354e">NEGATIVE_SIGN_VALUE</a></td>
+          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.YAW_LEFT = NEGATIVE_SIGN_VALUE</td>
         </tr>
       </table>
   </td>
@@ -348,7 +296,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.YAW_RIGHT = <a class="el" href="class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html#a251de87ddb0adfd96d9395d0eff5681a">POSITIVE_SIGN_VALUE</a></td>
+          <td class="memname">const int Caduhd.Controller.InputEvaluator.AbstractDroneInputEvaluator.YAW_RIGHT = POSITIVE_SIGN_VALUE</td>
         </tr>
       </table>
   </td>
@@ -362,6 +310,9 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>C:/Users/csabull96/source/repos/caduhd/Controller/InputEvaluator/AbstractDroneInputEvaluator.cs</li>
+</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

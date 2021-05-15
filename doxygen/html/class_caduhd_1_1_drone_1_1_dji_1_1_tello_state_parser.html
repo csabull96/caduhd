@@ -23,7 +23,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CADUHD
    </div>
-   <div id="projectbrief">Controlling a drone using hand detection.</div>
+   <div id="projectbrief">Controlling a drone using hand detection</div>
   </td>
  </tr>
  </tbody>
@@ -74,18 +74,18 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>The state parser for <a class="el" href="class_caduhd_1_1_drone_1_1_dji_1_1_tello.html" title="The implementation of the IControllableDrone for the DJI Tello.">Tello</a>.  
+<p>The state parser for <a class="el" href="class_caduhd_1_1_drone_1_1_dji_1_1_tello.html" title="The implementation of the AbstractDrone for the DJI Tello.">Tello</a>.  
  <a href="class_caduhd_1_1_drone_1_1_dji_1_1_tello_state_parser.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0fbeb8cde8dcbfc54f43f14c0fd1470d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_caduhd_1_1_drone_1_1_drone_state.html">DroneState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_caduhd_1_1_drone_1_1_dji_1_1_tello_state_parser.html#a0fbeb8cde8dcbfc54f43f14c0fd1470d">Parse</a> (byte[] stateData)</td></tr>
-<tr class="memdesc:a0fbeb8cde8dcbfc54f43f14c0fd1470d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses the state of the <a class="el" href="class_caduhd_1_1_drone_1_1_dji_1_1_tello.html" title="The implementation of the IControllableDrone for the DJI Tello.">Tello</a> received as a sequence of bytes. After converting the bytes into ASCII characters it has to match the following pattern: “pitch:d;roll:d;yaw:d;vgx:d;vgyd;vgz:d;templ:d;temph:d;tof:d;h:d;bat:d;baro:%.2f; time:d;agx:%.2f;agy:%.2f;agz:%.2f;\r<br  />
-”  <a href="class_caduhd_1_1_drone_1_1_dji_1_1_tello_state_parser.html#a0fbeb8cde8dcbfc54f43f14c0fd1470d">More...</a><br /></td></tr>
+<tr class="memdesc:a0fbeb8cde8dcbfc54f43f14c0fd1470d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses the state of the <a class="el" href="class_caduhd_1_1_drone_1_1_dji_1_1_tello.html" title="The implementation of the AbstractDrone for the DJI Tello.">Tello</a> received as a sequence of bytes. After converting the bytes into ASCII characters it has to match the following pattern: “pitch:d;roll:d;yaw:d;vgx:d;vgyd;vgz:d;templ:d;temph:d;tof:d;h:d;bat:d;baro:%.2f; time:d;agx:%.2f;agy:%.2f;agz:%.2f;\r<br  />
+”.  <a href="class_caduhd_1_1_drone_1_1_dji_1_1_tello_state_parser.html#a0fbeb8cde8dcbfc54f43f14c0fd1470d">More...</a><br /></td></tr>
 <tr class="separator:a0fbeb8cde8dcbfc54f43f14c0fd1470d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The state parser for <a class="el" href="class_caduhd_1_1_drone_1_1_dji_1_1_tello.html" title="The implementation of the IControllableDrone for the DJI Tello.">Tello</a>. </p>
+<div class="textblock"><p>The state parser for <a class="el" href="class_caduhd_1_1_drone_1_1_dji_1_1_tello.html" title="The implementation of the AbstractDrone for the DJI Tello.">Tello</a>. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a0fbeb8cde8dcbfc54f43f14c0fd1470d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0fbeb8cde8dcbfc54f43f14c0fd1470d">&#9670;&nbsp;</a></span>Parse()</h2>
@@ -103,18 +103,21 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Parses the state of the <a class="el" href="class_caduhd_1_1_drone_1_1_dji_1_1_tello.html" title="The implementation of the IControllableDrone for the DJI Tello.">Tello</a> received as a sequence of bytes. After converting the bytes into ASCII characters it has to match the following pattern: “pitch:d;roll:d;yaw:d;vgx:d;vgyd;vgz:d;templ:d;temph:d;tof:d;h:d;bat:d;baro:%.2f; time:d;agx:%.2f;agy:%.2f;agz:%.2f;\r<br  />
-” </p>
+<p>Parses the state of the <a class="el" href="class_caduhd_1_1_drone_1_1_dji_1_1_tello.html" title="The implementation of the AbstractDrone for the DJI Tello.">Tello</a> received as a sequence of bytes. After converting the bytes into ASCII characters it has to match the following pattern: “pitch:d;roll:d;yaw:d;vgx:d;vgyd;vgz:d;templ:d;temph:d;tof:d;h:d;bat:d;baro:%.2f; time:d;agx:%.2f;agy:%.2f;agz:%.2f;\r<br  />
+”. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">stateData</td><td>The <a class="el" href="class_caduhd_1_1_drone_1_1_dji_1_1_tello.html" title="The implementation of the IControllableDrone for the DJI Tello.">Tello</a>'s state as a sequence of bytes.</td></tr>
+    <tr><td class="paramname">stateData</td><td>The <a class="el" href="class_caduhd_1_1_drone_1_1_dji_1_1_tello.html" title="The implementation of the AbstractDrone for the DJI Tello.">Tello</a>'s state as a sequence of bytes.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_caduhd_1_1_drone_1_1_dji_1_1_tello.html" title="The implementation of the IControllableDrone for the DJI Tello.">Tello</a>'s parsed state information as <a class="el" href="class_caduhd_1_1_drone_1_1_drone_state.html" title="Drone state.">DroneState</a>.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_caduhd_1_1_drone_1_1_dji_1_1_tello.html" title="The implementation of the AbstractDrone for the DJI Tello.">Tello</a>'s parsed state information as <a class="el" href="class_caduhd_1_1_drone_1_1_drone_state.html" title="Drone state.">DroneState</a>.</dd></dl>
 
 </div>
 </div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>C:/Users/csabull96/source/repos/caduhd/Drone/Dji/TelloStateParser.cs</li>
+</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

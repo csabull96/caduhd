@@ -7,7 +7,7 @@
     <ProjectGuid>{A8127DC8-8DC7-411B-AB07-B1B0C0DFB62D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Caduhd</RootNamespace>
+    <RootNamespace>Caduhd.Application</RootNamespace>
     <AssemblyName>CaduhdApp</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

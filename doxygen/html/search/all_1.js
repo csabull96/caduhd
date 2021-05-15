@@ -1,21 +1,15 @@
 var searchData=
 [
-  ['abstractdronecontroller_1',['AbstractDroneController',['../class_caduhd_1_1_controller_1_1_abstract_drone_controller.html#a6599dd2d270365d17ae5bfc57ce45730',1,'Caduhd.Controller.AbstractDroneController.AbstractDroneController()'],['../class_caduhd_1_1_controller_1_1_abstract_drone_controller.html',1,'Caduhd.Controller.AbstractDroneController']]],
-  ['abstractdroneinputevaluator_2',['AbstractDroneInputEvaluator',['../class_caduhd_1_1_controller_1_1_input_evaluator_1_1_abstract_drone_input_evaluator.html',1,'Caduhd::Controller::InputEvaluator']]],
-  ['acceleration_3',['Acceleration',['../class_caduhd_1_1_drone_1_1_drone_state.html#a3c9747acffe892f3dc65305c04599f02',1,'Caduhd::Drone::DroneState']]],
-  ['accelerationx_4',['AccelerationX',['../class_caduhd_1_1_drone_1_1_drone_state.html#ae20f20fecad5ca41c6c342b5df10c311',1,'Caduhd::Drone::DroneState']]],
-  ['accelerationy_5',['AccelerationY',['../class_caduhd_1_1_drone_1_1_drone_state.html#ab381d5d811644e4ef1b906643c2213d4',1,'Caduhd::Drone::DroneState']]],
-  ['accelerationz_6',['AccelerationZ',['../class_caduhd_1_1_drone_1_1_drone_state.html#aca8a9705f05379deffd7b010d8492394',1,'Caduhd::Drone::DroneState']]],
-  ['adjustspeed_7',['AdjustSpeed',['../class_caduhd_1_1_drone_1_1_dji_1_1_tello.html#a5a85310d770ab4ccb3c7c267a7be034e',1,'Caduhd::Drone::Dji::Tello']]],
-  ['adjustvalueifwrong_8',['AdjustValueIfWrong',['../class_caduhd_1_1_controller_1_1_command_1_1_move_command.html#a330a9f78ae18fb774cde7612ab747443',1,'Caduhd::Controller::Command::MoveCommand']]],
-  ['advancestate_9',['AdvanceState',['../class_caduhd_1_1_controller_1_1_input_analyzer_1_1_hands_analyzer.html#a1c70e434016855def4c3ecb518f003ed',1,'Caduhd::Controller::InputAnalyzer::HandsAnalyzer']]],
-  ['allowed_5fnumber_5fof_5fconsecutive_5fempty_5fframes_10',['ALLOWED_NUMBER_OF_CONSECUTIVE_EMPTY_FRAMES',['../class_caduhd_1_1_drone_1_1_dji_1_1_tello.html#acfc9881529494e1906ecb43a8fce859e',1,'Caduhd::Drone::Dji::Tello']]],
-  ['analyzeleft_11',['AnalyzeLeft',['../class_caduhd_1_1_controller_1_1_input_analyzer_1_1_hands_analyzer.html#a1616595f80969b920323cc8dd9306aac',1,'Caduhd::Controller::InputAnalyzer::HandsAnalyzer']]],
-  ['analyzeright_12',['AnalyzeRight',['../class_caduhd_1_1_controller_1_1_input_analyzer_1_1_hands_analyzer.html#aba82226b56ec642c92e167047dcedd35',1,'Caduhd::Controller::InputAnalyzer::HandsAnalyzer']]],
-  ['analyzingleft_13',['AnalyzingLeft',['../namespace_caduhd_1_1_controller_1_1_input_analyzer.html#acf324b1e77afce0614a5ad7ee7102b32a362a7dbc4dbda41cfa3e3293f81fabac',1,'Caduhd::Controller::InputAnalyzer']]],
-  ['analyzingright_14',['AnalyzingRight',['../namespace_caduhd_1_1_controller_1_1_input_analyzer.html#acf324b1e77afce0614a5ad7ee7102b32a053b22e16aea97ffd54d011ed3746f66',1,'Caduhd::Controller::InputAnalyzer']]],
-  ['app_15',['App',['../class_caduhd_1_1_user_interface_1_1_app.html',1,'Caduhd::UserInterface']]],
-  ['append_16',['Append',['../class_caduhd_1_1_hands_detector_1_1_hand_builder.html#a1946024a41510779292d34debba30d66',1,'Caduhd::HandsDetector::HandBuilder']]],
-  ['asbytes_17',['AsBytes',['../class_caduhd_1_1_common_1_1_string_extensions.html#a9e1236d943bf1dd49c35935c4927b040',1,'Caduhd::Common::StringExtensions']]],
-  ['asstring_18',['AsString',['../class_caduhd_1_1_common_1_1_byte_array_extensions.html#a5b0fdfb83785e371613e1625bcb46d28',1,'Caduhd::Common::ByteArrayExtensions']]]
+  ['barometer_14',['Barometer',['../class_caduhd_1_1_drone_1_1_drone_state.html#a5563944e80b0f2fba9e772a8a5546214',1,'Caduhd::Drone::DroneState']]],
+  ['baseviewmodel_15',['BaseViewModel',['../class_caduhd_1_1_user_interface_1_1_view_model_1_1_base_view_model.html',1,'Caduhd::UserInterface::ViewModel']]],
+  ['batterylevel_16',['BatteryLevel',['../class_caduhd_1_1_user_interface_1_1_user_interface_connector.html#a451e52d97929e897fb6a64e469b78cc1',1,'Caduhd::UserInterface::UserInterfaceConnector']]],
+  ['batterypercentage_17',['BatteryPercentage',['../class_caduhd_1_1_drone_1_1_drone_state.html#a11fe84722d69300f7dd7181503088331',1,'Caduhd.Drone.DroneState.BatteryPercentage()'],['../class_caduhd_1_1_user_interface_1_1_user_interface_connector.html#a522ca860b4a9ec3ae65cc10b0ca46aa4',1,'Caduhd.UserInterface.UserInterfaceConnector.BatteryPercentage()']]],
+  ['bgrimage_18',['BgrImage',['../class_caduhd_1_1_common_1_1_bgr_image.html#a7347132c6c7decad08a311c6c3eead11',1,'Caduhd.Common.BgrImage.BgrImage(Bitmap bitmap)'],['../class_caduhd_1_1_common_1_1_bgr_image.html#acc228b4555126c30d29ba89246d6272b',1,'Caduhd.Common.BgrImage.BgrImage(Mat mat)'],['../class_caduhd_1_1_common_1_1_bgr_image.html#ae472cffe0020f121bd7abe434ff84424',1,'Caduhd.Common.BgrImage.BgrImage(Image&lt; Bgr, byte &gt; image)'],['../class_caduhd_1_1_common_1_1_bgr_image.html#af0b93b3e640e0c592490f26bfab8fa23',1,'Caduhd.Common.BgrImage.BgrImage(string filename)'],['../class_caduhd_1_1_common_1_1_bgr_image.html',1,'Caduhd.Common.BgrImage']]],
+  ['bgrpixel_19',['BgrPixel',['../class_caduhd_1_1_common_1_1_bgr_pixel.html#af72fa706506b8e5cf67c211956f9f7a1',1,'Caduhd.Common.BgrPixel.BgrPixel(Color color)'],['../class_caduhd_1_1_common_1_1_bgr_pixel.html#a660f5f0736d457234d0db85c973b2933',1,'Caduhd.Common.BgrPixel.BgrPixel(int blue, int green, int red)'],['../class_caduhd_1_1_common_1_1_bgr_pixel.html',1,'Caduhd.Common.BgrPixel']]],
+  ['bind_20',['Bind',['../class_caduhd_1_1_application_1_1_caduhd_app.html#a82e30a7c30b19375aeb3d148bac57d49',1,'Caduhd::Application::CaduhdApp']]],
+  ['bitmap_21',['Bitmap',['../class_caduhd_1_1_common_1_1_bgr_image.html#a9cb8f639262b29255c3597b0e820d9a9',1,'Caduhd::Common::BgrImage']]],
+  ['blue_22',['Blue',['../class_caduhd_1_1_common_1_1_bgr_pixel.html#a644eaa634bf2599447467e515eda6eda',1,'Caduhd.Common.BgrPixel.Blue()'],['../class_caduhd_1_1_common_1_1_color_map.html#a2468b9fd6b6bc4c9eb5cb608cbe3b6a7',1,'Caduhd.Common.ColorMap.Blue()']]],
+  ['bluepergreen_23',['BluePerGreen',['../class_caduhd_1_1_common_1_1_color_map.html#a5134e866d8be7d237f77d8ed138c9c6c',1,'Caduhd::Common::ColorMap']]],
+  ['blueperred_24',['BluePerRed',['../class_caduhd_1_1_common_1_1_color_map.html#afc0b7ca16b647217aae71af111d69965',1,'Caduhd::Common::ColorMap']]],
+  ['build_25',['Build',['../class_caduhd_1_1_hands_detector_1_1_hand_builder.html#ade49faa9f2455387d0fed9ef9513b6de',1,'Caduhd::HandsDetector::HandBuilder']]]
 ];

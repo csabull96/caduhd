@@ -1,4 +1,4 @@
-﻿namespace Caduhd
+﻿namespace Caduhd.Application
 {
     using Caduhd.Common;
     using Caduhd.Controller.InputAnalyzer;
