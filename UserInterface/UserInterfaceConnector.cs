@@ -184,7 +184,7 @@
         /// <param name="image">The image received from the drone's camera.</param>
         public void SetDroneCameraImage(BgrImage image)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            Application.Current?.Dispatcher.Invoke(() =>
             {
                 this.droneCameraFrame = this.BitmapToBitmapSource(image.Bitmap, PixelFormats.Bgr24);
                 this.OnPropertyChanged(nameof(this.CurrentDroneCameraFrame));
@@ -197,7 +197,7 @@
         /// <param name="image">The image from the computer's primary camera.</param>
         public void SetComputerCameraImage(BgrImage image)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            Application.Current?.Dispatcher.Invoke(() =>
             {
                 this.webCameraFrame = this.BitmapToBitmapSource(image.Bitmap, PixelFormats.Bgr24);
                 this.OnPropertyChanged(nameof(this.CurrentWebCameraFrame));
@@ -231,7 +231,7 @@
         /// <param name="handsInputEvaluated">The evaluated hands input as <see cref="MoveCommand"/>.</param>
         public void SetEvaluatedHandsInput(MoveCommand handsInputEvaluated)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            Application.Current?.Dispatcher.Invoke(() =>
             {
                  this.EvaluatedHandsInput = handsInputEvaluated == null ? "l/r:0 f/b:0 u/d:0 yaw:0" :
                  $"l/r:{handsInputEvaluated.Lateral} f/b:{handsInputEvaluated.Longitudinal} u/d:{handsInputEvaluated.Vertical} yaw:{handsInputEvaluated.Yaw}";
