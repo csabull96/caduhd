@@ -1,6 +1,7 @@
 ﻿namespace Caduhd
 {
     using Caduhd.Common;
+    using Caduhd.Controller.InputAnalyzer;
     using Caduhd.Drone;
     using Caduhd.Drone.Command;
 
@@ -9,6 +10,12 @@
     /// </summary>
     public interface ICaduhdUIConnector
     {
+        /// <summary>
+        /// Sets the hands analyzer state.
+        /// </summary>
+        /// <param name="handsAnalyzerState">The state of the hands analyzer.</param>
+        void SetHandsAnalyzerState(HandsAnalyzerState handsAnalyzerState);
+
         /// <summary>
         /// Sets the image coming from the drone's camera.
         /// </summary>

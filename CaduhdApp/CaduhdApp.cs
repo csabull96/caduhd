@@ -69,6 +69,7 @@
         public void Bind(ICaduhdUIConnector uiConnector)
         {
             this.uiConnector = uiConnector;
+            this.uiConnector.SetHandsAnalyzerState(this.handsAnalyzer.State);
         }
 
         /// <summary>
@@ -114,6 +115,8 @@
         {
             if (Interlocked.CompareExchange(ref this.isWebCameraFrameProcessorBusy, YES, NO) == NO)
             {
+                this.uiConnector.SetHandsAnalyzerState(this.handsAnalyzer.State);
+
                 BgrImage frame = image;
                 MoveCommand moveCommand = null;
 

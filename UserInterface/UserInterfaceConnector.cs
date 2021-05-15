@@ -8,6 +8,7 @@
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Caduhd.Common;
+    using Caduhd.Controller.InputAnalyzer;
     using Caduhd.Drone;
     using Caduhd.Drone.Command;
 
@@ -18,7 +19,7 @@
     {
         private BitmapSource webCameraFrame;
         private BitmapSource droneCameraFrame;
-        private string tuningState;
+        private HandsAnalyzerState handsAnalyzerState;
         private string leftHand;
         private string rightHand;
         private string direction;
@@ -45,16 +46,16 @@
         /// <summary>
         /// Gets or sets the state of the tuning.
         /// </summary>
-        public string TuningState
+        public HandsAnalyzerState HandsAnalyzerState
         {
             get
             {
-                return this.tuningState;
+                return this.handsAnalyzerState;
             }
 
             set
             {
-                this.tuningState = value;
+                this.handsAnalyzerState = value;
                 this.OnPropertyChanged();
             }
         }
@@ -96,7 +97,7 @@
         /// <summary>
         /// Gets or sets the direction representation.
         /// </summary>
-        public string Direction
+        public string EvaluatedHandsInput
         {
             get
             {
@@ -121,6 +122,11 @@
         public string Height => $"Height: {this.height} cm";
 
         /// <summary>
+        /// Gets the Wi-Fi's signal-to-noise ratio.
+        /// </summary>
+        public int WiFiSnr => this.wiFiSnr;
+
+        /// <summary>
         /// Gets the batter level.
         /// </summary>
         public int BatteryLevel => this.batteryLevel;
@@ -129,34 +135,6 @@
         /// Gets the battery level as percentage string.
         /// </summary>
         public string BatteryPercentage => $"{this.batteryLevel}%";
-
-        /// <summary>
-        /// Gets the Wi-Fi's signal-to-noise ratio.
-        /// </summary>
-        public int WiFiSnr => this.wiFiSnr;
-
-        /// <summary>
-        /// Sets the current web camera frame.
-        /// </summary>
-        /// <param name="bitmap">Web camera frame as <see cref="Bitmap"/>.</param>
-        public void SetCurrentWebCameraFrame(Bitmap bitmap)
-        {
-            this.webCameraFrame = this.BitmapToBitmapSource(bitmap, PixelFormats.Bgr24);
-            this.OnPropertyChanged(nameof(this.CurrentWebCameraFrame));
-        }
-
-        /// <summary>
-        /// Sets the current drone camera frame.
-        /// </summary>
-        /// <param name="bitmap">Drone camera frame as <see cref="Bitmap"/>.</param>
-        public void SetCurrentDroneCameraFrame(Bitmap bitmap)
-        {
-            if (bitmap != null)
-            {
-                this.droneCameraFrame = this.BitmapToBitmapSource(bitmap, PixelFormats.Bgr24);
-                this.OnPropertyChanged(nameof(this.CurrentDroneCameraFrame));
-            }
-        }
 
         /// <summary>
         /// Sets the speed.
@@ -238,6 +216,15 @@
         }
 
         /// <summary>
+        /// Sets the state of the hands analyzer tuning.
+        /// </summary>
+        /// <param name="handsAnalyzerState">The state of the hands analyzer.</param>
+        public void SetHandsAnalyzerState(HandsAnalyzerState handsAnalyzerState)
+        {
+            this.HandsAnalyzerState = handsAnalyzerState;
+        }
+
+        /// <summary>
         /// Sets the evaluated hands input.
         /// </summary>
         /// <param name="handsInputEvaluated">The evaluated hands input as <see cref="MoveCommand"/>.</param>
@@ -245,7 +232,7 @@
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                 this.Direction = handsInputEvaluated == null ? "l/r:0 f/b:0 u/d:0 yaw:0" :
+                 this.EvaluatedHandsInput = handsInputEvaluated == null ? "l/r:0 f/b:0 u/d:0 yaw:0" :
                  $"l/r:{handsInputEvaluated.Lateral} f/b:{handsInputEvaluated.Longitudinal} u/d:{handsInputEvaluated.Vertical} yaw:{handsInputEvaluated.Yaw}";
             });
         }

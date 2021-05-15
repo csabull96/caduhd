@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:Caduhd.UserInterface.Converters"
         xmlns:local="clr-namespace:Caduhd.UserInterface"
         xmlns:viewModel="clr-namespace:Caduhd.UserInterface.ViewModel"
-        Title="MainWindow"
+        Title="CADUHD"
         WindowState="Maximized"
         PreviewKeyDown="Window_PreviewKeyDown"
         PreviewKeyUp="Window_PreviewKeyUp"
@@ -17,6 +17,7 @@
     <Window.Resources>
         <viewModel:MainViewModel x:Key="MainViewModel" />
         <converters:WiFiSnrToWiFiSnrImageConverter x:Key="WiFiSnrToWiFiSnrImageConverter" />
+        <converters:HandsAnalyzerStateToUserInstructionConverter x:Key="HandsAnalyzerStateToUserInstructionConverter" />
     </Window.Resources>
     <Grid DataContext="{StaticResource MainViewModel}"
           Background="WhiteSmoke">
@@ -94,21 +95,11 @@
                                Grid.Column="0"
                                Margin="10 0 0 0"
                                VerticalAlignment="Center"
-                               Text="{Binding UserInterfaceConnector.TuningState}" />
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0"
-                                   Text="{Binding UserInterfaceConnector.LeftHand}"/>
-                        <TextBlock Grid.Column="1"
-                                   HorizontalAlignment="Center"
-                                   Text="{Binding UserInterfaceConnector.Direction}" />
-                        <TextBlock Grid.Column="2"
-                                   Text="{Binding UserInterfaceConnector.RightHand}" />
-                    </Grid>
+                               HorizontalAlignment="Center"
+                               Text="{Binding UserInterfaceConnector.HandsAnalyzerState, Converter={StaticResource HandsAnalyzerStateToUserInstructionConverter}}" />
+                    <TextBlock Grid.Row="1"
+                               HorizontalAlignment="Center"
+                               Text="{Binding UserInterfaceConnector.EvaluatedHandsInput}" />
                     <Image Margin="10 0 10 10"
                            Width="320"
                            Height="180"
