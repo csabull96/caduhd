@@ -1,46 +1,46 @@
-﻿using Caduhd.Common;
-using Caduhd.Controller.InputAnalyzer;
-using Caduhd.HandsDetector;
-using Moq;
-using System.Drawing;
-using Xunit;
-
-namespace Caduhd.Controller.Tests.InputAnalyzer
+﻿namespace Caduhd.Controller.Tests.InputAnalyzer
 {
+    using System.Drawing;
+    using Caduhd.Common;
+    using Caduhd.Controller.InputAnalyzer;
+    using Caduhd.HandsDetector;
+    using Moq;
+    using Xunit;
+
     public class HandsAnalyzerResultTests
     {
-        private HandsColorMaps _handsColorMaps;
-        private BgrImage _handsBackground;
-        private BgrImage _handsForeground;
-        private HandsAnalyzerResult _handsAnalyzerResult;
+        private readonly HandsColorMaps handsColorMaps;
+        private readonly BgrImage handsBackground;
+        private readonly BgrImage handsForeground;
+        private readonly HandsAnalyzerResult handsAnalyzerResult;
 
         public HandsAnalyzerResultTests()
         {
             var histogramMock = new Mock<IHistogram>();
             var colorMap = new ColorMap(histogramMock.Object, histogramMock.Object, histogramMock.Object);
 
-            _handsColorMaps = new HandsColorMaps(colorMap, colorMap);
-            _handsBackground = BgrImage.GetBlank(100, 100, Color.Red);
-            _handsForeground = BgrImage.GetBlank(100, 100, Color.Green);
-            _handsAnalyzerResult = new HandsAnalyzerResult(_handsColorMaps, _handsBackground, _handsForeground);
+            this.handsColorMaps = new HandsColorMaps(colorMap, colorMap);
+            this.handsBackground = BgrImage.GetBlank(100, 100, Color.Red);
+            this.handsForeground = BgrImage.GetBlank(100, 100, Color.Green);
+            this.handsAnalyzerResult = new HandsAnalyzerResult(this.handsColorMaps, this.handsBackground, this.handsForeground);
         }
 
         [Fact]
         public void HandsColorMapsGetter_ReturnsTheObjectSetThroughTheConstructor()
         {
-            Assert.Same(_handsColorMaps, _handsAnalyzerResult.HandsColorMaps);
+            Assert.Same(this.handsColorMaps, this.handsAnalyzerResult.HandsColorMaps);
         }
 
         [Fact]
         public void HandsBackgroundGetter_ReturnsTheObjectSetThroughTheConstructor()
         {
-            Assert.Same(_handsBackground, _handsAnalyzerResult.HandsBackground);
+            Assert.Same(this.handsBackground, this.handsAnalyzerResult.HandsBackground);
         }
 
         [Fact]
         public void HandsForegroundGetter_ReturnsTheObjectSetThroughTheConstructor()
         {
-            Assert.Same(_handsForeground, _handsAnalyzerResult.HandsForeground);
+            Assert.Same(this.handsForeground, this.handsAnalyzerResult.HandsForeground);
         }
     }
 }

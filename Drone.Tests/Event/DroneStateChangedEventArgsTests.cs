@@ -1,8 +1,8 @@
-﻿using Caduhd.Drone.Event;
-using Xunit;
-
-namespace Caduhd.Drone.Tests.Event
+﻿namespace Caduhd.Drone.Tests.Event
 {
+    using Caduhd.Drone.Event;
+    using Xunit;
+
     public class DroneStateChangedEventArgsTests
     {
         [Fact]

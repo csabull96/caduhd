@@ -1,9 +1,9 @@
-﻿using Caduhd.Input.Keyboard;
-using System.Windows.Input;
-using Xunit;
-
-namespace Caduhd.Input.Tests.Keyboard
+﻿namespace Caduhd.Input.Tests.Keyboard
 {
+    using System.Windows.Input;
+    using Caduhd.Input.Keyboard;
+    using Xunit;
+
     public class KeyInfoTests
     {
         [Theory]

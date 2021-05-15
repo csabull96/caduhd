@@ -1,17 +1,18 @@
-﻿using Caduhd.Controller.InputEvaluator;
-using Caduhd.Drone.Command;
-using Caduhd.Input.Keyboard;
-using System.Windows.Input;
-using Xunit;
-
-namespace Caduhd.Controller.Tests.InputEvaluator
+﻿namespace Caduhd.Controller.Tests.InputEvaluator
 {
+    using System.Windows.Input;
+    using Caduhd.Controller.InputEvaluator;
+    using Caduhd.Drone.Command;
+    using Caduhd.Input.Keyboard;
+    using Xunit;
+
     public class GeneralDroneKeyInputEvaluatorTests
     {
-        private IDroneControllerKeyInputEvaluator _generalKeyInputEvaluator;
+        private readonly IDroneControllerKeyInputEvaluator generalKeyInputEvaluator;
+
         public GeneralDroneKeyInputEvaluatorTests()
         {
-            _generalKeyInputEvaluator = new GeneralDroneKeyInputEvaluator();
+            this.generalKeyInputEvaluator = new GeneralDroneKeyInputEvaluator();
         }
 
         [Fact]
@@ -19,7 +20,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
         {
             var expectedCommand = new TakeOffCommand();
             var takeOffKeyInfo = new KeyInfo(Key.Enter, KeyState.Down);
-            var commandEvaluated = _generalKeyInputEvaluator.EvaluateKey(takeOffKeyInfo);
+            var commandEvaluated = this.generalKeyInputEvaluator.EvaluateKey(takeOffKeyInfo);
             Assert.Equal(expectedCommand, commandEvaluated);
         }
 
@@ -28,7 +29,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
         {
             var expectedCommand = new LandCommand();
             var landKeyInfo = new KeyInfo(Key.Space, KeyState.Down);
-            var commandEvaluated = _generalKeyInputEvaluator.EvaluateKey(landKeyInfo);
+            var commandEvaluated = this.generalKeyInputEvaluator.EvaluateKey(landKeyInfo);
             Assert.Equal(expectedCommand, commandEvaluated);
         }
 
@@ -37,7 +38,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
         {
             var expectedCommand = new MoveCommand(0, 1, 0, 0);
             var moveForwardKeyInfo = new KeyInfo(Key.Up, KeyState.Down);
-            var commandEvaluated = _generalKeyInputEvaluator.EvaluateKey(moveForwardKeyInfo);
+            var commandEvaluated = this.generalKeyInputEvaluator.EvaluateKey(moveForwardKeyInfo);
             Assert.Equal(expectedCommand, commandEvaluated);
         }
 
@@ -46,7 +47,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
         {
             var expectedCommand = new MoveCommand(0, -1, 0, 0);
             var moveBackwardKeyInfo = new KeyInfo(Key.Down, KeyState.Down);
-            var commandEvaluated = _generalKeyInputEvaluator.EvaluateKey(moveBackwardKeyInfo);
+            var commandEvaluated = this.generalKeyInputEvaluator.EvaluateKey(moveBackwardKeyInfo);
             Assert.Equal(expectedCommand, commandEvaluated);
         }
 
@@ -55,7 +56,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
         {
             var expectedCommand = new MoveCommand(-1, 0, 0, 0);
             var moveLeftKeyInfo = new KeyInfo(Key.Left, KeyState.Down);
-            var commandEvaluated = _generalKeyInputEvaluator.EvaluateKey(moveLeftKeyInfo);
+            var commandEvaluated = this.generalKeyInputEvaluator.EvaluateKey(moveLeftKeyInfo);
             Assert.Equal(expectedCommand, commandEvaluated);
         }
 
@@ -64,7 +65,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
         {
             var expectedCommand = new MoveCommand(1, 0, 0, 0);
             var moveRightKeyInfo = new KeyInfo(Key.Right, KeyState.Down);
-            var commandEvaluated = _generalKeyInputEvaluator.EvaluateKey(moveRightKeyInfo);
+            var commandEvaluated = this.generalKeyInputEvaluator.EvaluateKey(moveRightKeyInfo);
             Assert.Equal(expectedCommand, commandEvaluated);
         }
 
@@ -73,7 +74,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
         {
             var expectedCommand = new MoveCommand(0, 0, 1, 0);
             var moveUpwardsKeyInfo = new KeyInfo(Key.W, KeyState.Down);
-            var commandEvaluated = _generalKeyInputEvaluator.EvaluateKey(moveUpwardsKeyInfo);
+            var commandEvaluated = this.generalKeyInputEvaluator.EvaluateKey(moveUpwardsKeyInfo);
             Assert.Equal(expectedCommand, commandEvaluated);
         }
 
@@ -82,7 +83,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
         {
             var expectedCommand = new MoveCommand(0, 0, -1, 0);
             var moveDownwardsKeyInfo = new KeyInfo(Key.S, KeyState.Down);
-            var commandEvaluated = _generalKeyInputEvaluator.EvaluateKey(moveDownwardsKeyInfo);
+            var commandEvaluated = this.generalKeyInputEvaluator.EvaluateKey(moveDownwardsKeyInfo);
             Assert.Equal(expectedCommand, commandEvaluated);
         }
 
@@ -91,7 +92,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
         {
             var expectedCommand = new MoveCommand(0, 0, 0, -1);
             var yawLeftKeyInfo = new KeyInfo(Key.A, KeyState.Down);
-            var commandEvaluated = _generalKeyInputEvaluator.EvaluateKey(yawLeftKeyInfo);
+            var commandEvaluated = this.generalKeyInputEvaluator.EvaluateKey(yawLeftKeyInfo);
             Assert.Equal(expectedCommand, commandEvaluated);
         }
 
@@ -100,7 +101,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
         {
             var expectedCommand = new MoveCommand(0, 0, 0, 1);
             var yawRightKeyInfo = new KeyInfo(Key.D, KeyState.Down);
-            var commandEvaluated = _generalKeyInputEvaluator.EvaluateKey(yawRightKeyInfo);
+            var commandEvaluated = this.generalKeyInputEvaluator.EvaluateKey(yawRightKeyInfo);
             Assert.Equal(expectedCommand, commandEvaluated);
         }
 
@@ -117,10 +118,10 @@ namespace Caduhd.Controller.Tests.InputEvaluator
             var thirdKeyInfo = new KeyInfo(third, KeyState.Down);
             var fourthKeyInfo = new KeyInfo(fourth, KeyState.Down);
 
-            _generalKeyInputEvaluator.EvaluateKey(secondKeyInfo);
-            _generalKeyInputEvaluator.EvaluateKey(firstKeyInfo);
-            _generalKeyInputEvaluator.EvaluateKey(thirdKeyInfo);
-            var commandEvaluated = _generalKeyInputEvaluator.EvaluateKey(fourthKeyInfo);
+            this.generalKeyInputEvaluator.EvaluateKey(secondKeyInfo);
+            this.generalKeyInputEvaluator.EvaluateKey(firstKeyInfo);
+            this.generalKeyInputEvaluator.EvaluateKey(thirdKeyInfo);
+            var commandEvaluated = this.generalKeyInputEvaluator.EvaluateKey(fourthKeyInfo);
 
             Assert.Equal(expectedCommand, commandEvaluated);
         }
@@ -134,7 +135,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
         public void EvaluateKey_NotSupportedKey_EvaluatedAsNull(Key key)
         {
             var notSupportedKeyInfo = new KeyInfo(key, KeyState.Down);
-            var commandEvaluated = _generalKeyInputEvaluator.EvaluateKey(notSupportedKeyInfo);
+            var commandEvaluated = this.generalKeyInputEvaluator.EvaluateKey(notSupportedKeyInfo);
             Assert.Null(commandEvaluated);
         }
     }

@@ -1,23 +1,23 @@
-﻿using Caduhd.Common;
-using Caduhd.Drone.Dji;
-using Xunit;
-
-namespace Caduhd.Drone.Tests.Dji
+﻿namespace Caduhd.Drone.Tests.Dji
 {
+    using Caduhd.Common;
+    using Caduhd.Drone.Dji;
+    using Xunit;
+
     public class TelloStateParserTests
     {
-        private TelloStateParser _telloStateParser;
+        private TelloStateParser telloStateParser;
 
         public TelloStateParserTests()
         {
-            _telloStateParser = new TelloStateParser();
+            this.telloStateParser = new TelloStateParser();
         }
 
         [Fact]
-        public void parse_()
+        public void Parse_Sample0_ParsedCorrectly()
         {
             var telloStateAsBytes = "pitch:27;roll:-29;yaw:4;vgx:0;vgy:0;vgz:0;templ:48;temph:50;tof:10;h:0;bat:92;baro:264.02;time:0;agx:470.00;agy:454.00;agz:-772.00;".AsBytes();
-            var parsedState = _telloStateParser.Parse(telloStateAsBytes);
+            var parsedState = this.telloStateParser.Parse(telloStateAsBytes);
 
             Assert.Equal(27, parsedState.Pitch);
             Assert.Equal(-29, parsedState.Roll);
@@ -41,7 +41,7 @@ namespace Caduhd.Drone.Tests.Dji
         public void Parse_Sample1_ParsedCorrectly()
         {
             var telloStateAsBytes = "pitch:27;roll:-29;yaw:4;vgx:0;vgy:0;vgz:0;templ:48;temph:50;tof:10;h:0;bat:92;baro:264.02;time:0;agx:470.00;agy:454.00;agz:-772.00;".AsBytes();
-            var parsedState = _telloStateParser.Parse(telloStateAsBytes);
+            var parsedState = this.telloStateParser.Parse(telloStateAsBytes);
 
             Assert.Equal(27, parsedState.Pitch);
             Assert.Equal(-29, parsedState.Roll);
@@ -65,7 +65,7 @@ namespace Caduhd.Drone.Tests.Dji
         public void Parse_Sample2_ParsedCorrectly()
         {
             var telloStateAsBytes = "pitch:1;roll:17;yaw:-148;vgx:0;vgy:0;vgz:0;templ:49;temph:51;tof:10;h:0;bat:91;baro:264.05;time:0;agx:37.00;agy:-361.00;agz:-982.00;".AsBytes();
-            var parsedState = _telloStateParser.Parse(telloStateAsBytes);
+            var parsedState = this.telloStateParser.Parse(telloStateAsBytes);
 
             Assert.Equal(1, parsedState.Pitch);
             Assert.Equal(17, parsedState.Roll);
@@ -84,6 +84,5 @@ namespace Caduhd.Drone.Tests.Dji
             Assert.Equal(-361.00, parsedState.AccelerationY);
             Assert.Equal(-982.00, parsedState.AccelerationZ);
         }
-
     }
 }

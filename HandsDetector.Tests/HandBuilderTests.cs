@@ -1,15 +1,14 @@
-﻿using Caduhd.HandsDetector;
-using Xunit;
-
-namespace Caduhd.HandsDetector.Tests
+﻿namespace Caduhd.HandsDetector.Tests
 {
+    using Xunit;
+
     public class HandBuilderTests
     {
-        private HandBuilder _handBuilder;
+        private HandBuilder handBuilder;
 
         public HandBuilderTests()
         {
-            _handBuilder = new HandBuilder();
+            this.handBuilder = new HandBuilder();
         }
 
         [Theory]
@@ -19,8 +18,8 @@ namespace Caduhd.HandsDetector.Tests
         [InlineData(38, 56)]
         public void Append_OnePointAdded_HandMatchesPoint(int x, int y)
         {
-            _handBuilder.Append(x, y);
-            var hand = _handBuilder.Build();
+            this.handBuilder.Append(x, y);
+            var hand = this.handBuilder.Build();
             Assert.Equal(x, hand.X);
             Assert.Equal(y, hand.Y);
             Assert.Equal(1, hand.Weight);
@@ -44,11 +43,11 @@ namespace Caduhd.HandsDetector.Tests
                     totalX += x;
                     totalY += y;
 
-                    _handBuilder.Append(x, y);
+                    this.handBuilder.Append(x, y);
                 }
             }
 
-            var hand = _handBuilder.Build();
+            var hand = this.handBuilder.Build();
 
             Assert.Equal(totalX / weight, hand.X);
             Assert.Equal(totalY / weight, hand.Y);

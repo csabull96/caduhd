@@ -1,60 +1,58 @@
-﻿using Caduhd.HandsDetector;
-using System;
-using Xunit;
-
-namespace Caduhd.HandsDetector.Tests
+﻿namespace Caduhd.HandsDetector.Tests
 {
+    using System;
+    using Caduhd.HandsDetector;
+    using Xunit;
+
     public class NormalizedHandTests
     {
         private const double X = 0.3;
         private const double Y = 0.9;
         private const double WEIGHT = 0.333;
 
-        private NormalizedHand _normalizedHandFromParameterlessConstructor;
-        private NormalizedHand _normalizedHandFromParameterizedConstructor;
+        private readonly NormalizedHand normalizedHandFromParameterlessConstructor;
+        private readonly NormalizedHand normalizedHandFromParameterizedConstructor;
 
         public NormalizedHandTests()
         {
-            _normalizedHandFromParameterlessConstructor = 
-                new NormalizedHand();
-            _normalizedHandFromParameterizedConstructor =
-                new NormalizedHand(X, Y, WEIGHT);
+            this.normalizedHandFromParameterlessConstructor = new NormalizedHand();
+            this.normalizedHandFromParameterizedConstructor = new NormalizedHand(X, Y, WEIGHT);
         }
 
         [Fact]
         public void XGetter_ParameterlessConstructor_ReturnsZero()
         {
-            Assert.Equal(0, _normalizedHandFromParameterlessConstructor.X);
+            Assert.Equal(0, this.normalizedHandFromParameterlessConstructor.X);
         }
 
         [Fact]
         public void YGetter_ParameterlessConstructor_ReturnsZero()
         {
-            Assert.Equal(0, _normalizedHandFromParameterlessConstructor.Y);
+            Assert.Equal(0, this.normalizedHandFromParameterlessConstructor.Y);
         }
 
         [Fact]
         public void WeightGetter_ParameterlessConstructor_ReturnsZero()
         {
-            Assert.Equal(0, _normalizedHandFromParameterlessConstructor.Weight);
+            Assert.Equal(0, this.normalizedHandFromParameterlessConstructor.Weight);
         }
 
         [Fact]
         public void XGetter_ParameterizedConstructor_ReturnsZero()
         {
-            Assert.Equal(X, _normalizedHandFromParameterizedConstructor.X);
+            Assert.Equal(X, this.normalizedHandFromParameterizedConstructor.X);
         }
 
         [Fact]
         public void YGetter_ParameterizedConstructor_ReturnsZero()
         {
-            Assert.Equal(Y, _normalizedHandFromParameterizedConstructor.Y);
+            Assert.Equal(Y, this.normalizedHandFromParameterizedConstructor.Y);
         }
 
         [Fact]
         public void WeightGetter_ParameterizedConstructor_ReturnsZero()
         {
-            Assert.Equal(WEIGHT, _normalizedHandFromParameterizedConstructor.Weight);
+            Assert.Equal(WEIGHT, this.normalizedHandFromParameterizedConstructor.Weight);
         }
 
         [Theory]

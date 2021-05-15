@@ -1,10 +1,10 @@
-﻿using Caduhd.Common;
-using Caduhd.Drone.Event;
-using System.Drawing;
-using Xunit;
-
-namespace Caduhd.Drone.Tests.Event
+﻿namespace Caduhd.Drone.Tests.Event
 {
+    using System.Drawing;
+    using Caduhd.Common;
+    using Caduhd.Drone.Event;
+    using Xunit;
+
     public class NewDroneCameraFrameEventArgsTests
     {
         [Fact]

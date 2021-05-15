@@ -1,9 +1,9 @@
-﻿using System;
-using System.Text;
-using Xunit;
-
-namespace Caduhd.Common.Tests
+﻿namespace Caduhd.Common.Tests
 {
+    using System;
+    using System.Text;
+    using Xunit;
+
     public class ByteArrayExtensionsTests
     {
         [Fact]
@@ -16,7 +16,7 @@ namespace Caduhd.Common.Tests
         [Fact]
         public void AsString_ValidByteArray_ReturnsBytesAsASCIICharacters()
         {
-            string charactersExpected = GetASCIICharacters();
+            string charactersExpected = this.GetASCIICharacters();
             byte[] byteArray = Encoding.ASCII.GetBytes(charactersExpected);
             Assert.Equal(charactersExpected, byteArray.AsString());
         }
@@ -28,6 +28,7 @@ namespace Caduhd.Common.Tests
             {
                 characters.Append(Convert.ToChar(i));
             }
+
             return characters.ToString();
         }
     }

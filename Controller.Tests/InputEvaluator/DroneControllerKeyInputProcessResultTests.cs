@@ -1,9 +1,9 @@
-﻿using Caduhd.Controller.InputEvaluator;
-using Caduhd.Drone.Command;
-using Xunit;
-
-namespace Caduhd.Controller.Tests.InputEvaluator
+﻿namespace Caduhd.Controller.Tests.InputEvaluator
 {
+    using Caduhd.Controller.InputEvaluator;
+    using Caduhd.Drone.Command;
+    using Xunit;
+
     public class DroneControllerKeyInputProcessResultTests
     {
         [Fact]

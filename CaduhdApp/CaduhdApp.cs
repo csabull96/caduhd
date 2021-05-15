@@ -115,7 +115,10 @@
         {
             if (Interlocked.CompareExchange(ref this.isWebCameraFrameProcessorBusy, YES, NO) == NO)
             {
-                this.uiConnector.SetHandsAnalyzerState(this.handsAnalyzer.State);
+                if (this.handsAnalyzer != null)
+                {
+                    this.uiConnector.SetHandsAnalyzerState(this.handsAnalyzer.State);
+                }
 
                 BgrImage frame = image;
                 MoveCommand moveCommand = null;

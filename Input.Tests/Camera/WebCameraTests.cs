@@ -1,33 +1,32 @@
-﻿using Caduhd.Input.Camera;
-using Emgu.CV;
-using Emgu.CV.Structure;
-using Moq;
-using System;
-using System.Drawing;
-using System.Threading.Tasks;
-using Xunit;
-
-namespace Caduhd.Input.Tests.Camera
+﻿namespace Caduhd.Input.Tests.Camera
 {
+    using System;
+    using System.Drawing;
+    using System.Threading.Tasks;
+    using Caduhd.Input.Camera;
+    using Emgu.CV;
+    using Emgu.CV.Structure;
+    using Moq;
+    using Xunit;
+
     public class WebCameraTests
     {
-        private int _width;
-        private int _height;
-        private Mat _fakeFrame;
-        private Color _customColor;
-        private Mock<ICapture> _captureMock;
+        private readonly int width;
+        private readonly int height;
+        private readonly Mat fakeFrame;
+        private readonly Color customColor;
+        private readonly Mock<ICapture> captureMock;
 
         public WebCameraTests()
         {
-            _width = 1920;
-            _height = 1080;
+            this.width = 1920;
+            this.height = 1080;
 
-            _customColor = Color.FromArgb(97, 1, 227);
-            _fakeFrame = new Image<Bgr, byte>(_width, _height, new Bgr(_customColor)).Mat; 
+            this.customColor = Color.FromArgb(97, 1, 227);
+            this.fakeFrame = new Image<Bgr, byte>(this.width, this.height, new Bgr(this.customColor)).Mat;
 
-
-            _captureMock = new Mock<ICapture>();
-            _captureMock.Setup(c => c.QueryFrame()).Returns(_fakeFrame);
+            this.captureMock = new Mock<ICapture>();
+            this.captureMock.Setup(c => c.QueryFrame()).Returns(this.fakeFrame);
         }
 
         [Theory]
@@ -63,46 +62,45 @@ namespace Caduhd.Input.Tests.Camera
         [InlineData(-23, 1280, 720)]
         public void Constructor_InvalidFps_CannotConstructWebCamera(int fps, int width, int height)
         {
-            Assert.Throws<ArgumentException>(() => new WebCamera(_captureMock.Object, fps, width, height));
+            Assert.Throws<ArgumentException>(() => new WebCamera(this.captureMock.Object, fps, width, height));
         }
 
         [Fact]
         public void Constructor_CameraIsOffByDefault()
         {
-            IWebCamera webCamera = new WebCamera(_width, _height);
+            IWebCamera webCamera = new WebCamera(this.width, this.height);
             Assert.False(webCamera.IsOn);
         }
 
         [Fact]
         public void Constructor_CaptureIsPassedToConstructor_CameraIsOffByDefault()
         {
-            IWebCamera webCamera = new WebCamera(_captureMock.Object);
+            IWebCamera webCamera = new WebCamera(this.captureMock.Object);
             Assert.False(webCamera.IsOn);
         }
 
         [Fact]
         public async Task Constructor_SuccessfulConstruction_NoFrameQueried()
         {
-            IWebCamera webCamera = new WebCamera(_captureMock.Object);
+            IWebCamera webCamera = new WebCamera(this.captureMock.Object);
             await Task.Delay(100);
-            _captureMock.Verify(c => c.QueryFrame(), Times.Never);
+            this.captureMock.Verify(c => c.QueryFrame(), Times.Never);
         }
 
         [Fact]
         public async Task Constructor_CameraTurnedOn_FrameQueried()
         {
-            IWebCamera webCamera = new WebCamera(_captureMock.Object);
+            IWebCamera webCamera = new WebCamera(this.captureMock.Object);
             webCamera.On();
             await Task.Delay(100);
-            _captureMock.Verify(c => c.QueryFrame(), Times.AtLeastOnce);
+            this.captureMock.Verify(c => c.QueryFrame(), Times.AtLeastOnce);
         }
-
 
         [Fact]
         public async Task Constructor_SuccessfulConstruction_NewFrameNotFired()
         {
             bool fired = false;
-            IWebCamera webCamera = new WebCamera(_captureMock.Object);
+            IWebCamera webCamera = new WebCamera(this.captureMock.Object);
             webCamera.NewFrame += (s, e) => { fired = true; };
             await Task.Delay(100);
             Assert.False(fired);
@@ -112,7 +110,7 @@ namespace Caduhd.Input.Tests.Camera
         public async Task Constructor_CameraTurnedOn_NewFrameFired()
         {
             bool fired = false;
-            IWebCamera webCamera = new WebCamera(_captureMock.Object);
+            IWebCamera webCamera = new WebCamera(this.captureMock.Object);
             webCamera.NewFrame += (s, e) => { fired = true; };
             webCamera.On();
             await Task.Delay(100);
@@ -123,7 +121,7 @@ namespace Caduhd.Input.Tests.Camera
         public async Task Constructor_CameraTurnedOnThenTurnedOff_NewFrameNotFiredAfterOff()
         {
             bool fired = false;
-            IWebCamera webCamera = new WebCamera(_captureMock.Object);
+            IWebCamera webCamera = new WebCamera(this.captureMock.Object);
             webCamera.NewFrame += (s, e) => { fired = true; };
             webCamera.On();
             fired = false;
@@ -136,7 +134,7 @@ namespace Caduhd.Input.Tests.Camera
         public async Task Constructor_CameraTurnedOnOffAndOnAgain_NewFrameFiredAgainAfterSecondOn()
         {
             bool fired = false;
-            IWebCamera webCamera = new WebCamera(_captureMock.Object);
+            IWebCamera webCamera = new WebCamera(this.captureMock.Object);
             webCamera.NewFrame += (s, e) => { fired = true; };
             webCamera.On();
             webCamera.Off();

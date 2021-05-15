@@ -1,8 +1,7 @@
-﻿using Caduhd.HandsDetector;
-using Xunit;
-
-namespace Caduhd.HandsDetector.Tests
+﻿namespace Caduhd.HandsDetector.Tests
 {
+    using Xunit;
+
     public class NormalizedHandsTests
     {
         private const double LEFT_X = 0.32;
@@ -12,44 +11,43 @@ namespace Caduhd.HandsDetector.Tests
         private const double RIGHT_Y = 0.47;
         private const double RIGHT_WEIGHT = 0.17;
 
-        private NormalizedHand _left;
-        private NormalizedHand _right;
-        private NormalizedHands _hands;
+        private readonly NormalizedHand left;
+        private readonly NormalizedHand right;
+        private readonly NormalizedHands hands;
 
         public NormalizedHandsTests()
         {
-            _left = new NormalizedHand(LEFT_X, LEFT_Y, LEFT_WEIGHT);
-            _right = new NormalizedHand(RIGHT_X, RIGHT_Y, RIGHT_WEIGHT);
-            _hands = new NormalizedHands(_left, _right);
+            this.left = new NormalizedHand(LEFT_X, LEFT_Y, LEFT_WEIGHT);
+            this.right = new NormalizedHand(RIGHT_X, RIGHT_Y, RIGHT_WEIGHT);
+            this.hands = new NormalizedHands(this.left, this.right);
         }
 
         [Fact]
         public void LeftGetter_ReturnsLeftHandPassedToConstructor()
         {
-            Assert.Same(_left, _hands.Left);
+            Assert.Same(this.left, this.hands.Left);
         }
 
         [Fact]
         public void RightGetter_ReturnsRightHandPassedToConstructor()
         {
-            Assert.Same(_right, _hands.Right);
+            Assert.Same(this.right, this.hands.Right);
         }
 
         [Fact]
         public void CenterGetter_ReturnsCenterPointOfHands()
         {
-            double centerX = (_left.X + _right.X) / 2;
-            double centerY = (_left.Y + _right.Y) / 2;
+            double centerX = (this.left.X + this.right.X) / 2;
+            double centerY = (this.left.Y + this.right.Y) / 2;
 
-            Assert.Equal(centerX, _hands.Center.X);
-            Assert.Equal(centerY, _hands.Center.Y);
+            Assert.Equal(centerX, this.hands.Center.X);
+            Assert.Equal(centerY, this.hands.Center.Y);
         }
 
         [Fact]
         public void RatioOfLeftWeightToRightWeightGetter_ReturnsRatioOfHandsWeightCorrectly()
         {
-            Assert.Equal(LEFT_WEIGHT / RIGHT_WEIGHT, _hands.RatioOfLeftWeightToRightWeight);
+            Assert.Equal(LEFT_WEIGHT / RIGHT_WEIGHT, this.hands.RatioOfLeftWeightToRightWeight);
         }
-
     }
 }

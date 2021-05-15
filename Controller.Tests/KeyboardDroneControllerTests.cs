@@ -1,45 +1,45 @@
-﻿using Caduhd.Controller.InputEvaluator;
-using Caduhd.Drone;
-using Caduhd.Drone.Command;
-using Caduhd.Input.Keyboard;
-using Moq;
-using System.Windows.Input;
-using Xunit;
-
-namespace Caduhd.Controller.Tests
+﻿namespace Caduhd.Controller.Tests
 {
+    using System.Windows.Input;
+    using Caduhd.Controller.InputEvaluator;
+    using Caduhd.Drone;
+    using Caduhd.Drone.Command;
+    using Caduhd.Input.Keyboard;
+    using Moq;
+    using Xunit;
+
     public class KeyboardDroneControllerTests
     {
-        private readonly Mock<AbstractDrone> _controllableDroneMock;
-        private readonly Mock<IDroneControllerKeyInputEvaluator> _keyInputEvaluatorMock;
-        private readonly KeyboardDroneController _droneController;
+        private readonly Mock<AbstractDrone> controllableDroneMock;
+        private readonly Mock<IDroneControllerKeyInputEvaluator> keyInputEvaluatorMock;
+        private readonly KeyboardDroneController droneController;
 
         public KeyboardDroneControllerTests()
         {
-            _controllableDroneMock = new Mock<AbstractDrone>();
-            _keyInputEvaluatorMock = new Mock<IDroneControllerKeyInputEvaluator>();
-            _droneController = new KeyboardDroneController(_controllableDroneMock.Object, _keyInputEvaluatorMock.Object);
+            this.controllableDroneMock = new Mock<AbstractDrone>();
+            this.keyInputEvaluatorMock = new Mock<IDroneControllerKeyInputEvaluator>();
+            this.droneController = new KeyboardDroneController(this.controllableDroneMock.Object, this.keyInputEvaluatorMock.Object);
         }
 
         [Fact]
         public void Connect_DroneControlCalledOnce()
         {
-            _droneController.Connect();
-            _controllableDroneMock.Verify(d => d.Control(It.IsAny<ConnectCommand>()), Times.Once);
+            this.droneController.Connect();
+            this.controllableDroneMock.Verify(d => d.Control(It.IsAny<ConnectCommand>()), Times.Once);
         }
 
         [Fact]
         public void StartStreamingVideo_DroneControlCalledOnce()
         {
-            _droneController.StartStreamingVideo();
-            _controllableDroneMock.Verify(d => d.Control(It.IsAny<StartStreamingVideoCommand>()), Times.Once);
+            this.droneController.StartStreamingVideo();
+            this.controllableDroneMock.Verify(d => d.Control(It.IsAny<StartStreamingVideoCommand>()), Times.Once);
         }
 
         [Fact]
         public void StopStreamingVideo_DroneControlCalledOnce()
         {
-            _droneController.StopStreamingVideo();
-            _controllableDroneMock.Verify(d => d.Control(It.IsAny<StopStreamingVideoCommand>()), Times.Once);
+            this.droneController.StopStreamingVideo();
+            this.controllableDroneMock.Verify(d => d.Control(It.IsAny<StopStreamingVideoCommand>()), Times.Once);
         }
 
         [Fact]
@@ -50,16 +50,16 @@ namespace Caduhd.Controller.Tests
                 Lateral = 0,
                 Longitudinal = 0,
                 Vertical = -1,
-                Yaw = 0
+                Yaw = 0,
             };
 
-            _keyInputEvaluatorMock
+            this.keyInputEvaluatorMock
                 .Setup(kie => kie.EvaluateKey(It.IsAny<KeyInfo>()))
                 .Returns(moveCommand);
 
-            _droneController.ProcessKeyInput(new KeyInfo(Key.W, KeyState.Down));
+            this.droneController.ProcessKeyInput(new KeyInfo(Key.W, KeyState.Down));
 
-            _controllableDroneMock.Verify(d => d.Control(moveCommand), Times.Once);
+            this.controllableDroneMock.Verify(d => d.Control(moveCommand), Times.Once);
         }
 
         [Fact]
@@ -70,16 +70,16 @@ namespace Caduhd.Controller.Tests
                 Lateral = 0,
                 Longitudinal = 0,
                 Vertical = -1,
-                Yaw = 0
+                Yaw = 0,
             };
 
-            _keyInputEvaluatorMock
+            this.keyInputEvaluatorMock
                 .Setup(kie => kie.EvaluateKey(It.IsAny<KeyInfo>()))
                 .Returns(moveCommand);
 
-            var result = _droneController.ProcessKeyInput(new KeyInfo(Key.W, KeyState.Down));
+            var result = this.droneController.ProcessKeyInput(new KeyInfo(Key.W, KeyState.Down));
 
-            _controllableDroneMock.Verify(d => d.Control(moveCommand), Times.Once);
+            this.controllableDroneMock.Verify(d => d.Control(moveCommand), Times.Once);
 
             Assert.IsType<DroneControllerKeyInputProcessResult>(result);
             DroneCommand resultDroneCommand = (result as DroneControllerKeyInputProcessResult).Result;
@@ -93,13 +93,13 @@ namespace Caduhd.Controller.Tests
         {
             MoveCommand moveCommand = null;
 
-            _keyInputEvaluatorMock
+            this.keyInputEvaluatorMock
                 .Setup(kie => kie.EvaluateKey(It.IsAny<KeyInfo>()))
                 .Returns(moveCommand);
 
-            _droneController.ProcessKeyInput(new KeyInfo(Key.H, KeyState.Down));
+            this.droneController.ProcessKeyInput(new KeyInfo(Key.H, KeyState.Down));
 
-            _controllableDroneMock.Verify(d => d.Control(It.IsAny<DroneCommand>()), Times.Never);
+            this.controllableDroneMock.Verify(d => d.Control(It.IsAny<DroneCommand>()), Times.Never);
         }
 
         [Fact]
@@ -107,13 +107,13 @@ namespace Caduhd.Controller.Tests
         {
             MoveCommand moveCommand = null;
 
-            _keyInputEvaluatorMock
+            this.keyInputEvaluatorMock
                 .Setup(kie => kie.EvaluateKey(It.IsAny<KeyInfo>()))
                 .Returns(moveCommand);
 
-            var result = _droneController.ProcessKeyInput(new KeyInfo(Key.H, KeyState.Down));
+            var result = this.droneController.ProcessKeyInput(new KeyInfo(Key.H, KeyState.Down));
 
-            _controllableDroneMock.Verify(d => d.Control(It.IsAny<DroneCommand>()), Times.Never);
+            this.controllableDroneMock.Verify(d => d.Control(It.IsAny<DroneCommand>()), Times.Never);
 
             Assert.Null(result);
         }

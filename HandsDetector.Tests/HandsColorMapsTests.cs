@@ -1,35 +1,34 @@
-﻿using Caduhd.Common;
-using Caduhd.HandsDetector;
-using Moq;
-using System;
-using Xunit;
-
-namespace Caduhd.HandsDetector.Tests
+﻿namespace Caduhd.HandsDetector.Tests
 {
+    using System;
+    using Caduhd.Common;
+    using Moq;
+    using Xunit;
+
     public class HandsColorMapsTests
     {
-        private HandsColorMaps _handsColorMaps;
-        private ColorMap _leftColorMap;
-        private ColorMap _rightColorMap;
+        private readonly HandsColorMaps handsColorMaps;
+        private readonly ColorMap leftColorMap;
+        private readonly ColorMap rightColorMap;
 
         public HandsColorMapsTests()
         {
             var histogramMock = new Mock<IHistogram>();
-            _leftColorMap = new ColorMap(histogramMock.Object, histogramMock.Object, histogramMock.Object);
-            _rightColorMap = new ColorMap(histogramMock.Object, histogramMock.Object, histogramMock.Object);
-            _handsColorMaps = new HandsColorMaps(_leftColorMap, _rightColorMap);
+            this.leftColorMap = new ColorMap(histogramMock.Object, histogramMock.Object, histogramMock.Object);
+            this.rightColorMap = new ColorMap(histogramMock.Object, histogramMock.Object, histogramMock.Object);
+            this.handsColorMaps = new HandsColorMaps(this.leftColorMap, this.rightColorMap);
         }
 
         [Fact]
         public void LeftGetter_ReturnsColorMapThatWasSetThroughConstructor()
         {
-            Assert.Same(_leftColorMap, _handsColorMaps.Left);
+            Assert.Same(this.leftColorMap, this.handsColorMaps.Left);
         }
 
         [Fact]
         public void RightGetter_ReturnsColorMapThatWasSetThroughConstructor()
         {
-            Assert.Same(_rightColorMap, _handsColorMaps.Right);
+            Assert.Same(this.rightColorMap, this.handsColorMaps.Right);
         }
 
         [Fact]
@@ -41,13 +40,13 @@ namespace Caduhd.HandsDetector.Tests
         [Fact]
         public void Constructor_OnlyLeftColorMapIsNull_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new HandsColorMaps(null, _rightColorMap));
+            Assert.Throws<ArgumentNullException>(() => new HandsColorMaps(null, this.rightColorMap));
         }
 
         [Fact]
         public void Constructor_OnlyRightMapIsNull_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new HandsColorMaps(_leftColorMap, null));
+            Assert.Throws<ArgumentNullException>(() => new HandsColorMaps(this.leftColorMap, null));
         }
     }
 }

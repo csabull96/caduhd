@@ -1,27 +1,28 @@
-﻿using Caduhd.Controller.InputEvaluator;
-using Caduhd.Drone.Command;
-using Caduhd.HandsDetector;
-using Xunit;
-
-namespace Caduhd.Controller.Tests.InputEvaluator
+﻿namespace Caduhd.Controller.Tests.InputEvaluator
 {
+    using Caduhd.Controller.InputEvaluator;
+    using Caduhd.Drone.Command;
+    using Caduhd.HandsDetector;
+    using Xunit;
+
     public class DroneHandsInputEvaluatorTests
     {
-        private DroneControllerHandsInputEvaluator _handsInputEvaluator;
-        private NormalizedHands _neutralHands;
+        private readonly DroneControllerHandsInputEvaluator handsInputEvaluator;
+        private readonly NormalizedHands neutralHands;
+
         public DroneHandsInputEvaluatorTests()
         {
             var left = new NormalizedHand(0.15, 0.5, 0.15);
             var right = new NormalizedHand(0.85, 0.5, 0.15);
-            _neutralHands = new NormalizedHands(left, right);
-            _handsInputEvaluator = new DroneControllerHandsInputEvaluator();
-            _handsInputEvaluator.Tune(_neutralHands);
+            this.neutralHands = new NormalizedHands(left, right);
+            this.handsInputEvaluator = new DroneControllerHandsInputEvaluator();
+            this.handsInputEvaluator.Tune(this.neutralHands);
         }
 
         [Fact]
         public void EvaluateHands_NeutralHands_NoMovement()
         {
-            Assert.Equal(MoveCommand.Idle, _handsInputEvaluator.EvaluateHands(_neutralHands));
+            Assert.Equal(MoveCommand.Idle, this.handsInputEvaluator.EvaluateHands(this.neutralHands));
         }
 
         [Fact]
@@ -33,7 +34,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
             var right = new NormalizedHand(0.85, 0.7, 0.15);
             var hands = new NormalizedHands(left, right);
 
-            Assert.Equal(expectedMoveCommand, _handsInputEvaluator.EvaluateHands(hands));
+            Assert.Equal(expectedMoveCommand, this.handsInputEvaluator.EvaluateHands(hands));
         }
 
         [Fact]
@@ -45,7 +46,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
             var right = new NormalizedHand(0.85, 0.2, 0.15);
             var hands = new NormalizedHands(left, right);
 
-            Assert.Equal(expectedMoveCommand, _handsInputEvaluator.EvaluateHands(hands));
+            Assert.Equal(expectedMoveCommand, this.handsInputEvaluator.EvaluateHands(hands));
         }
 
         [Fact]
@@ -57,7 +58,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
             var right = new NormalizedHand(0.85, 0.5, 0.25);
             var hands = new NormalizedHands(left, right);
 
-            Assert.Equal(expectedMoveCommand, _handsInputEvaluator.EvaluateHands(hands));
+            Assert.Equal(expectedMoveCommand, this.handsInputEvaluator.EvaluateHands(hands));
         }
 
         [Fact]
@@ -69,7 +70,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
             var right = new NormalizedHand(0.85, 0.5, 0.08);
             var hands = new NormalizedHands(left, right);
 
-            Assert.Equal(expectedMoveCommand, _handsInputEvaluator.EvaluateHands(hands));
+            Assert.Equal(expectedMoveCommand, this.handsInputEvaluator.EvaluateHands(hands));
         }
 
         [Fact]
@@ -81,7 +82,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
             var right = new NormalizedHand(0.85, 0.2, 0.15);
             var hands = new NormalizedHands(left, right);
 
-            Assert.Equal(expectedMoveCommand, _handsInputEvaluator.EvaluateHands(hands));
+            Assert.Equal(expectedMoveCommand, this.handsInputEvaluator.EvaluateHands(hands));
         }
 
         [Fact]
@@ -93,7 +94,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
             var right = new NormalizedHand(0.85, 0.8, 0.15);
             var hands = new NormalizedHands(left, right);
 
-            Assert.Equal(expectedMoveCommand, _handsInputEvaluator.EvaluateHands(hands));
+            Assert.Equal(expectedMoveCommand, this.handsInputEvaluator.EvaluateHands(hands));
         }
 
         [Fact]
@@ -105,7 +106,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
             var right = new NormalizedHand(0.85, 0.5, 0.08);
             var hands = new NormalizedHands(left, right);
 
-            Assert.Equal(expectedMoveCommand, _handsInputEvaluator.EvaluateHands(hands));
+            Assert.Equal(expectedMoveCommand, this.handsInputEvaluator.EvaluateHands(hands));
         }
 
         [Fact]
@@ -117,7 +118,7 @@ namespace Caduhd.Controller.Tests.InputEvaluator
             var right = new NormalizedHand(0.85, 0.5, 0.25);
             var hands = new NormalizedHands(left, right);
 
-            Assert.Equal(expectedMoveCommand, _handsInputEvaluator.EvaluateHands(hands));
+            Assert.Equal(expectedMoveCommand, this.handsInputEvaluator.EvaluateHands(hands));
         }
     }
 }

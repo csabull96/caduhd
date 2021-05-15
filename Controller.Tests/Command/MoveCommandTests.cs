@@ -1,8 +1,8 @@
-﻿using Caduhd.Drone.Command;
-using Xunit;
-
-namespace Caduhd.Controller.Tests.Command
+﻿namespace Caduhd.Controller.Tests.Command
 {
+    using Caduhd.Drone.Command;
+    using Xunit;
+
     public class MoveCommandTests
     {
         private const int LATERAL = 1;
@@ -10,61 +10,61 @@ namespace Caduhd.Controller.Tests.Command
         private const int VERTICAL = -1;
         private const int YAW = 0;
 
-        private MoveCommand _moveCommandFromParameterlessConstructor;
-        private MoveCommand _moveCommandFromParameterizedConstructor;
+        private readonly MoveCommand moveCommandFromParameterlessConstructor;
+        private readonly MoveCommand moveCommandFromParameterizedConstructor;
 
         public MoveCommandTests()
         {
-            _moveCommandFromParameterlessConstructor = new MoveCommand();
-            _moveCommandFromParameterizedConstructor = new MoveCommand(LATERAL, LONGITUDINAL , VERTICAL, YAW);
+            this.moveCommandFromParameterlessConstructor = new MoveCommand();
+            this.moveCommandFromParameterizedConstructor = new MoveCommand(LATERAL, LONGITUDINAL, VERTICAL, YAW);
         }
 
         [Fact]
         public void LateralGetter_ParameterlessConstructor_ReturnsZero()
         {
-            Assert.Equal(0, _moveCommandFromParameterlessConstructor.Lateral);
+            Assert.Equal(0, this.moveCommandFromParameterlessConstructor.Lateral);
         }
 
         [Fact]
         public void LateralGetter_ParameterizedConstructor_ReturnsValueSetThroughConstructor()
         {
-            Assert.Equal(LATERAL, _moveCommandFromParameterizedConstructor.Lateral);
+            Assert.Equal(LATERAL, this.moveCommandFromParameterizedConstructor.Lateral);
         }
 
         [Fact]
         public void LongitudinalGetter_ParameterlessConstructor_ReturnsZero()
         {
-            Assert.Equal(0, _moveCommandFromParameterlessConstructor.Longitudinal);
+            Assert.Equal(0, this.moveCommandFromParameterlessConstructor.Longitudinal);
         }
 
         [Fact]
         public void LongitudinalGetter_ParameterizedConstructor_ReturnsValueSetThroughConstructor()
         {
-            Assert.Equal(LONGITUDINAL, _moveCommandFromParameterizedConstructor.Longitudinal);
+            Assert.Equal(LONGITUDINAL, this.moveCommandFromParameterizedConstructor.Longitudinal);
         }
 
         [Fact]
         public void VerticalGetter_ParameterlessConstructor_ReturnsZero()
         {
-            Assert.Equal(0, _moveCommandFromParameterlessConstructor.Vertical);
+            Assert.Equal(0, this.moveCommandFromParameterlessConstructor.Vertical);
         }
 
         [Fact]
         public void VerticalGetter_ParameterizedConstructor_ReturnsValueSetThroughConstructor()
         {
-            Assert.Equal(VERTICAL, _moveCommandFromParameterizedConstructor.Vertical);
+            Assert.Equal(VERTICAL, this.moveCommandFromParameterizedConstructor.Vertical);
         }
 
         [Fact]
         public void YawGetter_ParameterlessConstructor_ReturnsZero()
         {
-            Assert.Equal(0, _moveCommandFromParameterlessConstructor.Yaw);
+            Assert.Equal(0, this.moveCommandFromParameterlessConstructor.Yaw);
         }
 
         [Fact]
         public void YawGetter_ParameterizedConstructor_ReturnsValueSetThroughConstructor()
         {
-            Assert.Equal(YAW, _moveCommandFromParameterizedConstructor.Yaw);
+            Assert.Equal(YAW, this.moveCommandFromParameterizedConstructor.Yaw);
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace Caduhd.Controller.Tests.Command
         [Fact]
         public void StillGetter_OnActiveMovement_ReturnsFalse()
         {
-            Assert.False(_moveCommandFromParameterizedConstructor.Still);
+            Assert.False(this.moveCommandFromParameterizedConstructor.Still);
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace Caduhd.Controller.Tests.Command
         [Fact]
         public void MovingGetter_OnActiveMovement_ReturnsTrue()
         {
-            Assert.True(_moveCommandFromParameterizedConstructor.Moving);
+            Assert.True(this.moveCommandFromParameterizedConstructor.Moving);
         }
 
         [Fact]
@@ -116,43 +116,42 @@ namespace Caduhd.Controller.Tests.Command
         [Fact]
         public void Copy_OriginalAndCopy_DifferentReferences()
         {
-            var copy = _moveCommandFromParameterizedConstructor.Copy();
-            Assert.NotSame(_moveCommandFromParameterizedConstructor, copy);
+            var copy = this.moveCommandFromParameterizedConstructor.Copy();
+            Assert.NotSame(this.moveCommandFromParameterizedConstructor, copy);
         }
 
         [Fact]
         public void Copy_OriginalAndCopy_SameType()
         {
-            var copy = _moveCommandFromParameterizedConstructor.Copy();
+            var copy = this.moveCommandFromParameterizedConstructor.Copy();
             Assert.IsType<MoveCommand>(copy);
         }
 
         [Fact]
         public void Equals_ComparandIsNull_ReturnsFalse()
         {
-            Assert.False(_moveCommandFromParameterizedConstructor.Equals(null));
+            Assert.False(this.moveCommandFromParameterizedConstructor.Equals(null));
         }
 
         [Fact]
         public void Equals_ComparandIsMoveCommand_ReturnsTrue()
         {
             var comparand = new MoveCommand(LATERAL, LONGITUDINAL, VERTICAL, YAW);
-            Assert.True(_moveCommandFromParameterizedConstructor.Equals(comparand));
+            Assert.True(this.moveCommandFromParameterizedConstructor.Equals(comparand));
         }
 
         [Fact]
         public void Equals_ComparandIsMoveCommandWithMovementCommandReference_ReturnsTrue()
         {
             MovementCommand comparand = new MoveCommand(LATERAL, LONGITUDINAL, VERTICAL, YAW);
-            Assert.True(_moveCommandFromParameterizedConstructor.Equals(comparand));
+            Assert.True(this.moveCommandFromParameterizedConstructor.Equals(comparand));
         }
 
         [Fact]
         public void Equals_ComparandIsMoveCommandWithDroneCommandReference_ReturnsTrue()
         {
             DroneCommand comparand = new MoveCommand(LATERAL, LONGITUDINAL, VERTICAL, YAW);
-            Assert.True(_moveCommandFromParameterizedConstructor.Equals(comparand));
+            Assert.True(this.moveCommandFromParameterizedConstructor.Equals(comparand));
         }
-
     }
 }

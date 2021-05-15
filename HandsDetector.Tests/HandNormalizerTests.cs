@@ -1,8 +1,8 @@
-﻿using Caduhd.HandsDetector;
-using Xunit;
-
-namespace Caduhd.HandsDetector.Tests
+﻿namespace Caduhd.HandsDetector.Tests
 {
+    using Caduhd.HandsDetector;
+    using Xunit;
+
     public class HandNormalizerTests
     {
         [Theory]

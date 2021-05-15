@@ -1,10 +1,10 @@
-﻿using Caduhd.Common;
-using Caduhd.Input.Camera;
-using System.Drawing;
-using Xunit;
-
-namespace Caduhd.Input.Tests.Camera
+﻿namespace Caduhd.Input.Tests.Camera
 {
+    using System.Drawing;
+    using Caduhd.Common;
+    using Caduhd.Input.Camera;
+    using Xunit;
+
     public class NewWebCameraFrameEventArgsTests
     {
         [Fact]
@@ -14,6 +14,5 @@ namespace Caduhd.Input.Tests.Camera
             var eventArgs = new NewWebCameraFrameEventArgs(image);
             Assert.Same(image, eventArgs.Frame);
         }
-
     }
 }

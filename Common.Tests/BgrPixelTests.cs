@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using Xunit;
-
-namespace Caduhd.Common.Tests
+﻿namespace Caduhd.Common.Tests
 {
+    using System.Collections.Generic;
+    using System.Drawing;
+    using Xunit;
+
     public class BgrPixelTests
     {
         public static IEnumerable<object[]> ColorChannelsTestData => new List<object[]>()
@@ -11,7 +11,7 @@ namespace Caduhd.Common.Tests
             new object[] { 0, 0, 0 },
             new object[] { 127, 98, 24 },
             new object[] { 101, 233, 27 },
-            new object[] { 255, 255, 255 }
+            new object[] { 255, 255, 255 },
         };
 
         [Theory]

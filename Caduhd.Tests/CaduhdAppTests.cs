@@ -1,42 +1,45 @@
-﻿using Caduhd.Application;
-using Caduhd.Common;
-using Caduhd.Controller.InputEvaluator;
-using Caduhd.Drone.Dji;
-using Caduhd.HandsDetector;
-using Caduhd.Input.Keyboard;
-using Moq;
-using System;
-using System.Drawing;
-using System.Net;
-using System.Net.Sockets;
-using System.Windows.Input;
-using Xunit;
-
-namespace Caduhd.Tests
+﻿namespace Caduhd.Tests
 {
+    using System;
+    using System.Drawing;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Windows.Input;
+    using Caduhd.Application;
+    using Caduhd.Common;
+    using Caduhd.Controller.InputEvaluator;
+    using Caduhd.Drone.Dji;
+    using Caduhd.HandsDetector;
+    using Caduhd.Input.Keyboard;
+    using Moq;
+    using Xunit;
+
+    /// <summary>
+    /// Unit tests for the <see cref="CaduhdApp"/> class.
+    /// </summary>
     public class CaduhdAppTests : IDisposable
     {
-        private CaduhdApp _caduhdApp;
-        private Tello _tello;
-        private UdpClient _udpClient;
-        private IPEndPoint _anyEndPoint;
+        private readonly Tello tello;
+        private readonly UdpClient udpClient;
+        private CaduhdApp caduhdApp;
+        private IPEndPoint anyEndPoint;
 
         public CaduhdAppTests()
         {
             string ip = "127.0.0.1";
             int port = 8889;
 
-            _tello = new Tello(ip, port);
+            this.tello = new Tello(ip, port);
 
-            _udpClient = new UdpClient(new IPEndPoint(IPAddress.Parse(ip), port));
-            _udpClient.Client.ReceiveTimeout = 1000;
+            this.udpClient = new UdpClient(new IPEndPoint(IPAddress.Parse(ip), port));
+            this.udpClient.Client.ReceiveTimeout = 1000;
 
-            _anyEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            this.anyEndPoint = new IPEndPoint(IPAddress.Any, 0);
         }
 
         public void Dispose()
         {
-            _udpClient.Dispose();
+            this.udpClient.Dispose();
         }
 
         [Fact]
@@ -45,21 +48,21 @@ namespace Caduhd.Tests
             var keyInputEvaluator = new TelloKeyInputEvaluator();
             var handsInputEvaluator = new DroneControllerHandsInputEvaluator();
 
-            _caduhdApp = new CaduhdApp(null, null, _tello, keyInputEvaluator, handsInputEvaluator);
+            this.caduhdApp = new CaduhdApp(null, null, this.tello, keyInputEvaluator, handsInputEvaluator);
             string response = string.Empty;
 
-            _caduhdApp.Input(new KeyInfo(Key.D0, KeyState.Down));
+            this.caduhdApp.Input(new KeyInfo(Key.D0, KeyState.Down));
 
             try
             {
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
             }
             catch (SocketException)
             {
             }
 
             // it needs to be disposed of here
-            _tello.Dispose();
+            this.tello.Dispose();
 
             Assert.Equal("command", response);
         }
@@ -70,21 +73,21 @@ namespace Caduhd.Tests
             var keyInputEvaluator = new GeneralDroneKeyInputEvaluator();
             var handsInputEvaluator = new DroneControllerHandsInputEvaluator();
 
-            _caduhdApp = new CaduhdApp(null, null, _tello, keyInputEvaluator, handsInputEvaluator);
+            this.caduhdApp = new CaduhdApp(null, null, this.tello, keyInputEvaluator, handsInputEvaluator);
             string response = string.Empty;
 
-            _caduhdApp.Input(new KeyInfo(Key.D0, KeyState.Down));
+            this.caduhdApp.Input(new KeyInfo(Key.D0, KeyState.Down));
 
             try
             {
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
             }
             catch (SocketException)
             {
             }
 
             // it needs to be disposed of here
-            _tello.Dispose();
+            this.tello.Dispose();
 
             Assert.Equal("command", response);
         }
@@ -107,21 +110,21 @@ namespace Caduhd.Tests
             var handsInputEvaluator = new DroneControllerHandsInputEvaluator();
             handsInputEvaluator.Tune(hands);
 
-            _caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, _tello, keyInputEvaluator, handsInputEvaluator);
+            this.caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, this.tello, keyInputEvaluator, handsInputEvaluator);
 
             string response = string.Empty;
-            _caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
+            this.caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
 
             try
             {
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
             }
             catch (SocketException)
             {
             }
 
             // it needs to be disposed of here
-            _tello.Dispose();
+            this.tello.Dispose();
 
             Assert.Equal("rc 0 0 0 0", response);
         }
@@ -148,23 +151,23 @@ namespace Caduhd.Tests
             var handsInputEvaluator = new DroneControllerHandsInputEvaluator();
             handsInputEvaluator.Tune(neutralHands);
 
-            _caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, _tello, keyInputEvaluator, handsInputEvaluator);
+            this.caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, this.tello, keyInputEvaluator, handsInputEvaluator);
 
             string response = string.Empty;
-            _caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
+            this.caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
 
             try
             {
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
             }
             catch (SocketException)
             {
             }
 
             // it needs to be disposed of here
-            _tello.Dispose();
+            this.tello.Dispose();
 
-            Assert.Equal($"rc 0 0 -{_tello.Speed} 0", response);
+            Assert.Equal($"rc 0 0 -{this.tello.Speed} 0", response);
         }
 
         [Fact]
@@ -189,27 +192,27 @@ namespace Caduhd.Tests
             var handsInputEvaluator = new DroneControllerHandsInputEvaluator();
             handsInputEvaluator.Tune(neutralHands);
 
-            _caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, _tello, keyInputEvaluator, handsInputEvaluator);
+            this.caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, this.tello, keyInputEvaluator, handsInputEvaluator);
 
-            _caduhdApp.Input(new KeyInfo(Key.Left, KeyState.Down));
-            _udpClient.Client.ReceiveTimeout = 1000;
+            this.caduhdApp.Input(new KeyInfo(Key.Left, KeyState.Down));
+            this.udpClient.Client.ReceiveTimeout = 1000;
 
             string response = string.Empty;
             bool handsInputIgnored = false;
 
             try
             {
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
             }
             catch (SocketException)
             {
             }
 
-            _caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
+            this.caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
 
             try
             {
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
             }
             catch (SocketException e)
             {
@@ -217,10 +220,9 @@ namespace Caduhd.Tests
                 {
                     handsInputIgnored = true;
                 }
-
             }
 
-            _tello.Dispose();
+            this.tello.Dispose();
             Assert.True(handsInputIgnored);
         }
 
@@ -246,27 +248,27 @@ namespace Caduhd.Tests
             var handsInputEvaluator = new DroneControllerHandsInputEvaluator();
             handsInputEvaluator.Tune(neutralHands);
 
-            _caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, _tello, keyInputEvaluator, handsInputEvaluator);
+            this.caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, this.tello, keyInputEvaluator, handsInputEvaluator);
 
-            _caduhdApp.Input(new KeyInfo(Key.Space, KeyState.Down));
-            _udpClient.Client.ReceiveTimeout = 1000;
+            this.caduhdApp.Input(new KeyInfo(Key.Space, KeyState.Down));
+            this.udpClient.Client.ReceiveTimeout = 1000;
 
             string response = string.Empty;
             bool handsInputIgnored = false;
 
             try
             {
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
             }
             catch (SocketException)
             {
             }
 
-            _caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
+            this.caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
 
             try
             {
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
             }
             catch (SocketException e)
             {
@@ -274,12 +276,11 @@ namespace Caduhd.Tests
                 {
                     handsInputIgnored = true;
                 }
-
             }
 
-            _tello.Dispose();
+            this.tello.Dispose();
             Assert.False(handsInputIgnored);
-            Assert.Equal($"rc 0 0 {_tello.Speed} 0", response);
+            Assert.Equal($"rc 0 0 {this.tello.Speed} 0", response);
         }
 
         [Fact]
@@ -303,41 +304,40 @@ namespace Caduhd.Tests
             var neutralHands = new NormalizedHands(neutralLeft, neutralRight);
             handsInputEvaluator.Tune(neutralHands);
 
-            _caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, _tello, keyInputEvaluator, handsInputEvaluator);
+            this.caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, this.tello, keyInputEvaluator, handsInputEvaluator);
 
-            _caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
-            _udpClient.Client.ReceiveTimeout = 1000;
+            this.caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
+            this.udpClient.Client.ReceiveTimeout = 1000;
 
             string response = string.Empty;
             bool handsInputIgnored = false;
 
             try
             {
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
-                Assert.Equal($"rc 0 0 {_tello.Speed} 0", response);
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
+                Assert.Equal($"rc 0 0 {this.tello.Speed} 0", response);
             }
             catch (SocketException)
             {
             }
 
-            _caduhdApp.Input(new KeyInfo(Key.D, KeyState.Down));
+            this.caduhdApp.Input(new KeyInfo(Key.D, KeyState.Down));
 
             try
             {
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
             }
             catch (SocketException e)
             {
-                if (e.SocketErrorCode== SocketError.TimedOut)
+                if (e.SocketErrorCode == SocketError.TimedOut)
                 {
                     handsInputIgnored = true;
                 }
-
             }
 
-            _tello.Dispose();
+            this.tello.Dispose();
             Assert.False(handsInputIgnored);
-            Assert.Equal($"rc 0 0 0 {_tello.Speed}", response);
+            Assert.Equal($"rc 0 0 0 {this.tello.Speed}", response);
         }
 
         [Fact]
@@ -347,31 +347,30 @@ namespace Caduhd.Tests
             var keyInputEvaluator = new GeneralDroneKeyInputEvaluator();
             var handsInputEvaluator = new DroneControllerHandsInputEvaluator();
 
-            _caduhdApp = new CaduhdApp(null, skinColorHandsDetector, _tello, keyInputEvaluator, handsInputEvaluator);
+            this.caduhdApp = new CaduhdApp(null, skinColorHandsDetector, this.tello, keyInputEvaluator, handsInputEvaluator);
 
-            _udpClient.Client.ReceiveTimeout = 1000;
+            this.udpClient.Client.ReceiveTimeout = 1000;
 
             var keyInfo = new KeyInfo(Key.Right, KeyState.Down);
 
-            _caduhdApp.Input(keyInfo);
-            _caduhdApp.Input(keyInfo);
+            this.caduhdApp.Input(keyInfo);
+            this.caduhdApp.Input(keyInfo);
 
             int counter = 0;
 
             try
             {
-                string response = _udpClient.Receive(ref _anyEndPoint).AsString();
-                Assert.Equal($"rc {_tello.Speed} 0 0 0", response);
+                string response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
+                Assert.Equal($"rc {this.tello.Speed} 0 0 0", response);
                 counter++;
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
                 counter++;
             }
             catch (SocketException)
             {
             }
 
-          
-            _tello.Dispose();
+            this.tello.Dispose();
             Assert.Equal(1, counter);
         }
 
@@ -382,29 +381,29 @@ namespace Caduhd.Tests
             var keyInputEvaluator = new GeneralDroneKeyInputEvaluator();
             var handsInputEvaluator = new DroneControllerHandsInputEvaluator();
 
-            _caduhdApp = new CaduhdApp(null, skinColorHandsDetector, _tello, keyInputEvaluator, handsInputEvaluator);
+            this.caduhdApp = new CaduhdApp(null, skinColorHandsDetector, this.tello, keyInputEvaluator, handsInputEvaluator);
 
-            _udpClient.Client.ReceiveTimeout = 1000;
+            this.udpClient.Client.ReceiveTimeout = 1000;
 
-            _caduhdApp.Input(new KeyInfo(Key.Right, KeyState.Down));
-            _caduhdApp.Input(new KeyInfo(Key.Up, KeyState.Down));
+            this.caduhdApp.Input(new KeyInfo(Key.Right, KeyState.Down));
+            this.caduhdApp.Input(new KeyInfo(Key.Up, KeyState.Down));
 
             int counter = 0;
 
             try
             {
-                string response = _udpClient.Receive(ref _anyEndPoint).AsString();
-                Assert.Equal($"rc {_tello.Speed} 0 0 0", response);
+                string response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
+                Assert.Equal($"rc {this.tello.Speed} 0 0 0", response);
                 counter++;
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
-                Assert.Equal($"rc {_tello.Speed} {_tello.Speed} 0 0", response);
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
+                Assert.Equal($"rc {this.tello.Speed} {this.tello.Speed} 0 0", response);
                 counter++;
             }
             catch (SocketException)
             {
             }
 
-            _tello.Dispose();
+            this.tello.Dispose();
             Assert.Equal(2, counter);
         }
 
@@ -430,27 +429,27 @@ namespace Caduhd.Tests
             var handsInputEvaluator = new DroneControllerHandsInputEvaluator();
             handsInputEvaluator.Tune(neutralHands);
 
-            _caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, _tello, keyInputEvaluator, handsInputEvaluator);
+            this.caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, this.tello, keyInputEvaluator, handsInputEvaluator);
 
-            _caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
-            _caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
+            this.caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
+            this.caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
 
-            _udpClient.Client.ReceiveTimeout = 1000;
+            this.udpClient.Client.ReceiveTimeout = 1000;
             int counter = 0;
 
             try
             {
-                string response = _udpClient.Receive(ref _anyEndPoint).AsString();
-                Assert.Equal($"rc -{_tello.Speed} 0 0 0", response);
+                string response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
+                Assert.Equal($"rc -{this.tello.Speed} 0 0 0", response);
                 counter++;
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
                 counter++;
             }
             catch (SocketException)
             {
             }
 
-            _tello.Dispose();
+            this.tello.Dispose();
             Assert.Equal(1, counter);
         }
 
@@ -481,28 +480,28 @@ namespace Caduhd.Tests
             var neutralHands = new NormalizedHands(neutralLeft, neutralRight);
             handsInputEvaluator.Tune(neutralHands);
 
-            _caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, _tello, keyInputEvaluator, handsInputEvaluator);
+            this.caduhdApp = new CaduhdApp(null, skinColorHandsDetectorMock.Object, this.tello, keyInputEvaluator, handsInputEvaluator);
 
-            _caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
-            _caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
+            this.caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
+            this.caduhdApp.Input(BgrImage.GetBlank(1, 1, Color.Black));
 
-            _udpClient.Client.ReceiveTimeout = 1000;
+            this.udpClient.Client.ReceiveTimeout = 1000;
             int counter = 0;
 
             try
             {
-                string response = _udpClient.Receive(ref _anyEndPoint).AsString();
-                Assert.Equal($"rc 0 0 {_tello.Speed} 0", response);
+                string response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
+                Assert.Equal($"rc 0 0 {this.tello.Speed} 0", response);
                 counter++;
-                response = _udpClient.Receive(ref _anyEndPoint).AsString();
-                Assert.Equal($"rc 0 0 -{_tello.Speed} 0", response);
+                response = this.udpClient.Receive(ref this.anyEndPoint).AsString();
+                Assert.Equal($"rc 0 0 -{this.tello.Speed} 0", response);
                 counter++;
             }
             catch (SocketException)
             {
             }
 
-            _tello.Dispose();
+            this.tello.Dispose();
             Assert.Equal(2, counter);
         }
     }

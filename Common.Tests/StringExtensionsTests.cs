@@ -1,8 +1,8 @@
-﻿using System.Text;
-using Xunit;
-
-namespace Caduhd.Common.Tests
+﻿namespace Caduhd.Common.Tests
 {
+    using System.Text;
+    using Xunit;
+
     public class StringExtensionsTests
     {
         private const int FIRST = 32;
@@ -25,7 +25,7 @@ namespace Caduhd.Common.Tests
         [Fact]
         public void AsBytes_ASCIICharacters_ReturnsCharactersAsByteArray()
         {
-            byte[] bytesExpected = GetBytes();
+            byte[] bytesExpected = this.GetBytes();
             string characters = Encoding.ASCII.GetString(bytesExpected);
             Assert.Equal(bytesExpected, characters.AsBytes());
         }
@@ -37,6 +37,7 @@ namespace Caduhd.Common.Tests
             {
                 bytes[i - FIRST] = (byte)i;
             }
+
             return bytes;
         }
     }

@@ -1,11 +1,11 @@
-﻿using Caduhd.Common;
-using Moq;
-using System;
-using System.Drawing;
-using Xunit;
-
-namespace Caduhd.HandsDetector.Tests
+﻿namespace Caduhd.HandsDetector.Tests
 {
+    using System;
+    using System.Drawing;
+    using Caduhd.Common;
+    using Moq;
+    using Xunit;
+
     public class SkinColorHandsDetectorTests
     {
         private const int WIDTH = 720;
@@ -15,22 +15,22 @@ namespace Caduhd.HandsDetector.Tests
 
         private const double HAND_POSITION_TOLERANCE = 0.01;
 
-        private Color _skinColor;
+        private readonly Color skinColor;
 
-        private BgrImage _handsBackground;
-        private BgrImage _handsForeground;
+        private readonly BgrImage handsBackground;
+        private readonly BgrImage handsForeground;
 
-        private SkinColorHandsDetector _handsDetector;
+        private readonly SkinColorHandsDetector handsDetector;
 
         public SkinColorHandsDetectorTests()
         {
             int blue = 44;
             int green = 87;
             int red = 123;
-            _skinColor = Color.FromArgb(red, green, blue);
+            this.skinColor = Color.FromArgb(red, green, blue);
 
-            _handsBackground = BgrImage.GetBlank(WIDTH, HEIGHT, Color.White);
-            _handsForeground = _handsBackground.Copy();
+            this.handsBackground = BgrImage.GetBlank(WIDTH, HEIGHT, Color.White);
+            this.handsForeground = this.handsBackground.Copy();
 
             var blueHistogramMock = new Mock<IHistogram>();
             blueHistogramMock.Setup(bh => bh.Smallest).Returns(blue - PIXEL_TOLERANCE);
@@ -45,20 +45,22 @@ namespace Caduhd.HandsDetector.Tests
             redHistogramMock.Setup(bh => bh.Greatest).Returns(red + PIXEL_TOLERANCE);
 
             var leftColorMap = new ColorMap(blueHistogramMock.Object,
-                greenHistogramMock.Object, redHistogramMock.Object);
+                greenHistogramMock.Object,
+                redHistogramMock.Object);
 
             var rightColorMap = new ColorMap(blueHistogramMock.Object,
-                greenHistogramMock.Object, redHistogramMock.Object);
+                greenHistogramMock.Object,
+                redHistogramMock.Object);
 
             var handsColorMaps = new HandsColorMaps(leftColorMap, rightColorMap);
 
             var tuningMock = new Mock<IHandsDetectorTuning>();
-            tuningMock.Setup(t => t.HandsBackground).Returns(_handsBackground);
-            tuningMock.Setup(t => t.HandsForeground).Returns(_handsForeground);
+            tuningMock.Setup(t => t.HandsBackground).Returns(this.handsBackground);
+            tuningMock.Setup(t => t.HandsForeground).Returns(this.handsForeground);
             tuningMock.Setup(t => t.HandsColorMaps).Returns(handsColorMaps);
 
-            _handsDetector = new SkinColorHandsDetector();
-            _handsDetector.Tune(tuningMock.Object);
+            this.handsDetector = new SkinColorHandsDetector();
+            this.handsDetector.Tune(tuningMock.Object);
         }
 
         [Theory]
@@ -68,10 +70,10 @@ namespace Caduhd.HandsDetector.Tests
         public void DetectHands_ColorBased_HandsDetectedCorrectly(double leftX, double leftY, double rightX, double rightY, double radius)
         {
             int fill = -1;
-            _handsForeground.DrawCircle(leftX, leftY, _skinColor, radius, fill);
-            _handsForeground.DrawCircle(rightX, rightY, _skinColor, radius, fill);
+            this.handsForeground.DrawCircle(leftX, leftY, this.skinColor, radius, fill);
+            this.handsForeground.DrawCircle(rightX, rightY, this.skinColor, radius, fill);
 
-            var handsDetectorResult = _handsDetector.DetectHands(_handsForeground);
+            var handsDetectorResult = this.handsDetector.DetectHands(this.handsForeground);
             Assert.True(Math.Abs(leftX - handsDetectorResult.Hands.Left.X) < HAND_POSITION_TOLERANCE);
             Assert.True(Math.Abs(leftY - handsDetectorResult.Hands.Left.Y) < HAND_POSITION_TOLERANCE);
             Assert.True(Math.Abs(rightX - handsDetectorResult.Hands.Right.X) < HAND_POSITION_TOLERANCE);
