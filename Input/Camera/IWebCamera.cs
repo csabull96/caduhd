@@ -7,6 +7,9 @@
     /// <param name="args">The event arguments.</param>
     public delegate void NewWebCameraFrameEventHandler(object sender, NewWebCameraFrameEventArgs args);
 
+    /// <summary>
+    /// Web camera interface.
+    /// </summary>
     public interface IWebCamera
     {
         /// <summary>

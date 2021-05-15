@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
+        xmlns:converters="clr-namespace:Caduhd.UserInterface.Converters"
         xmlns:local="clr-namespace:Caduhd.UserInterface"
         xmlns:viewModel="clr-namespace:Caduhd.UserInterface.ViewModel"
         Title="MainWindow"
@@ -15,6 +16,7 @@
         d:DesignHeight="1080">
     <Window.Resources>
         <viewModel:MainViewModel x:Key="MainViewModel" />
+        <converters:WiFiSnrToWiFiSnrImageConverter x:Key="WiFiSnrToWiFiSnrImageConverter" />
     </Window.Resources>
     <Grid DataContext="{StaticResource MainViewModel}"
           Background="WhiteSmoke">
@@ -39,6 +41,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0"
@@ -60,13 +63,18 @@
                     <ProgressBar Width="42"
                                  Height="16"
                                  Margin="10 0 10 0"
-                                 Grid.Column="7"
+                                 Grid.Column="4"
                                  HorizontalAlignment="Right"
                                  VerticalAlignment="Center"
                                  Maximum="100"
                                  Value="{Binding UserInterfaceConnector.BatteryLevel, Mode=OneWay}"
                                  Minimum="0" />
-                    <TextBlock Grid.Column="7"
+                    <Image Grid.Column="3"
+                           Width="20"
+                           Height="20"
+                           Stretch="Fill"
+                           Source="{Binding UserInterfaceConnector.WiFiSnr, Converter={StaticResource WiFiSnrToWiFiSnrImageConverter}}"/>
+                    <TextBlock Grid.Column="4"
                                Text="{Binding UserInterfaceConnector.BatteryPercentage, Mode=OneWay}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"

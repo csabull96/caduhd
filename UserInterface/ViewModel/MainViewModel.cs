@@ -1,14 +1,13 @@
 ﻿namespace Caduhd.UserInterface.ViewModel
 {
+    using System;
+    using System.Windows.Input;
     using Caduhd.Controller.InputAnalyzer;
     using Caduhd.Controller.InputEvaluator;
     using Caduhd.Drone.Dji;
     using Caduhd.HandsDetector;
     using Caduhd.Input.Camera;
     using Caduhd.Input.Keyboard;
-    using System;
-    using System.Windows.Input;
-
 
     /// <summary>
     /// Main view model.
@@ -18,12 +17,7 @@
         private readonly IWebCamera webCamera;
         private readonly KeyEventProcessor keyEventProcessor;
 
-        private CaduhdApp app;
-
-        /// <summary>
-        /// Gets the user interface connector for data binding between this view model and the UI.
-        /// </summary>
-        public UserInterfaceConnector UserInterfaceConnector { get; private set; } = new UserInterfaceConnector();
+        private readonly CaduhdApp app;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
@@ -37,13 +31,13 @@
             var droneControllerKeyInputEvaluator = new TelloKeyInputEvaluator();
             var droneControllerHandsInputEvaluator = new DroneControllerHandsInputEvaluator();
 
-            app = new CaduhdApp(handsAnalyzer,
+            this.app = new CaduhdApp(handsAnalyzer,
                 skiColorHandDetector,
                 drone,
                 droneControllerKeyInputEvaluator,
                 droneControllerHandsInputEvaluator);
 
-            app.Bind(UserInterfaceConnector);
+            this.app.Bind(this.UserInterfaceConnector);
 
             this.webCamera = new WebCamera(320, 180);
             this.webCamera.NewFrame += this.ProcessWebCameraFrame;
@@ -52,13 +46,18 @@
         }
 
         /// <summary>
+        /// Gets the user interface connector for data binding between this view model and the UI.
+        /// </summary>
+        public UserInterfaceConnector UserInterfaceConnector { get; private set; } = new UserInterfaceConnector();
+
+        /// <summary>
         /// Handles the key events coming from the UI.
         /// </summary>
         /// <param name="keyEventArgs">The key event arguments.</param>
         public void HandleKeyEvent(KeyEventArgs keyEventArgs)
         {
             KeyInfo keyInfo = this.keyEventProcessor.ProcessKeyEvent(keyEventArgs.Key, keyEventArgs.IsDown, keyEventArgs.IsRepeat);
-            app.Input(keyInfo);
+            this.app.Input(keyInfo);
         }
 
         /// <summary>
@@ -66,23 +65,8 @@
         /// </summary>
         public void ConnectToDrone()
         {
-           
-        }
-
-        /// <summary>
-        /// Tells the drone controller to turn on the drone's camera.
-        /// </summary>
-        public void StartStreamingDroneVideo()
-        {
-            
-        }
-
-        /// <summary>
-        /// Tells the drone controller to turn off the drone's camera.
-        /// </summary>
-        public void StopStreamingDroneVideo()
-        {
-            
+            this.app.Input(new KeyInfo(Key.D0, KeyState.Down));
+            this.app.Input(new KeyInfo(Key.D0, KeyState.Up));
         }
 
         /// <summary>
@@ -95,7 +79,7 @@
 
         private void ProcessWebCameraFrame(object sender, NewWebCameraFrameEventArgs args)
         {
-            app.Input(args.Frame);
+            this.app.Input(args.Frame);
         }
     }
 }

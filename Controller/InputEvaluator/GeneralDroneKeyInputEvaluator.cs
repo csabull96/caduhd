@@ -83,7 +83,7 @@
         /// Evaluates the input <see cref="KeyInfo"/>.
         /// </summary>
         /// <param name="keyInfo"><see cref="KeyInfo"/> to evaluate.</param>
-        /// <returns>The evaluated <paramref name="keyUpdated"/> as a <see cref="DroneCommand"/>. If key is not supported then it returns null.</returns>
+        /// <returns>The evaluated <paramref name="keyInfo"/> as a <see cref="DroneCommand"/>. If key is not supported then it returns null.</returns>
         public DroneCommand EvaluateKey(KeyInfo keyInfo)
         {
             return this.TryUpdateInputKey(keyInfo) ? this.EvaluateInputKeys(keyInfo) : null;
@@ -174,13 +174,13 @@
             {
                 // if "key" is not an input key -> InvalidOperationException, because GetInputKeys().Count(ki => ki.Key == key) == 0
                 // if "key" is defined as an input key more than once -> InvalidOperationException, because 1 < GetInputKeys().Count(ki => ki.Key == key)
-                KeyInfo keyInfoToUpdate = GetInputKeys().Single(ki => ki.Key == keyInfo.Key);
+                KeyInfo keyInfoToUpdate = this.GetInputKeys().Single(ki => ki.Key == keyInfo.Key);
                 if (keyInfoToUpdate.KeyState != keyInfo.KeyState)
                 {
                     keyInfoToUpdate.KeyState = keyInfo.KeyState;
                     return true;
                 }
-                
+
                 return false;
             }
             catch

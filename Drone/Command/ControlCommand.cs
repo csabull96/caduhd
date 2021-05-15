@@ -3,5 +3,7 @@
     /// <summary>
     /// Control command.
     /// </summary>
-    public abstract class ControlCommand : DroneCommand { }
+    public abstract class ControlCommand : DroneCommand
+    {
+    }
 }

@@ -9,16 +9,6 @@
     public class HandsColorMaps
     {
         /// <summary>
-        /// Gets the color map for the left hand.
-        /// </summary>
-        public ColorMap Left { get; private set; }
-
-        /// <summary>
-        /// Gets the color map for the right hand.
-        /// </summary>
-        public ColorMap Right { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="HandsColorMaps"/> class.
         /// </summary>
         /// <param name="left">Color map of the left hand.</param>
@@ -38,5 +28,15 @@
             this.Left = left;
             this.Right = right;
         }
+
+        /// <summary>
+        /// Gets the color map for the left hand.
+        /// </summary>
+        public ColorMap Left { get; private set; }
+
+        /// <summary>
+        /// Gets the color map for the right hand.
+        /// </summary>
+        public ColorMap Right { get; private set; }
     }
 }

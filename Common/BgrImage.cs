@@ -1,18 +1,57 @@
 ﻿namespace Caduhd.Common
 {
-    using Emgu.CV;
-    using Emgu.CV.Structure;
     using System.Collections.Generic;
     using System.Drawing;
+    using Emgu.CV;
+    using Emgu.CV.Structure;
 
     /// <summary>
     /// A wrapper class around the Emgu.CV.Image class.
     /// </summary>
     public class BgrImage
     {
+        /// <summary>
+        /// The thickness value to fill a drawn object.
+        /// </summary>
         public const int FILL_DRAWING = -1;
 
         private readonly Image<Bgr, byte> image;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BgrImage"/> class.
+        /// </summary>
+        /// <param name="bitmap">The Bitmap object that the BgrImage is going to be constructed from.</param>
+        public BgrImage(Bitmap bitmap)
+            : this(new Image<Bgr, byte>(bitmap))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BgrImage"/> class.
+        /// </summary>
+        /// <param name="mat">The Emgu.CV.Mat object that the BgrImage is going to be constructed from.</param>
+        public BgrImage(Mat mat)
+            : this(mat.ToImage<Bgr, byte>())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BgrImage"/> class.
+        /// </summary>
+        /// <param name="image">The Emgu.CV.Image object that the BgrImage is going to be constructed from.</param>
+        public BgrImage(Image<Bgr, byte> image)
+        {
+            this.image = image;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BgrImage"/> class.
+        /// </summary>
+        /// <param name="filename">The name of the file.</param>
+        public BgrImage(string filename)
+        {
+            this.image = new Image<Bgr, byte>(filename);
+        }
 
         /// <summary>
         /// Gets the width of the image.
@@ -37,42 +76,6 @@
         /// Gets the image as Bitmap.
         /// </summary>
         public Bitmap Bitmap => this.image.Bitmap;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BgrImage"/> class.
-        /// </summary>
-        /// <param name="bitmap">The Bitmap object that the BgrImage is going to be constructed from.</param>
-        public BgrImage(Bitmap bitmap)
-            : this(new Image<Bgr, byte>(bitmap))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BgrImage"/> class.
-        /// </summary>
-        /// <param name="mat">The Emgu.CV.Mat object that the BgrImage is going to be constructed from.</param>
-        public BgrImage(Mat mat) 
-            : this(mat.ToImage<Bgr, byte>())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BgrImage"/> class.
-        /// </summary>
-        /// <param name="image">The Emgu.CV.Image object that the BgrImage is going to be constructed from.</param>
-        public BgrImage(Image<Bgr, byte> image)
-        {
-            this.image = image;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BgrImage"/> class.
-        /// </summary>
-        /// <param name="filename">The name of the file.</param>
-        public BgrImage(string filename)
-        {
-            this.image = new Image<Bgr, byte>(filename);
-        }
 
         /// <summary>
         /// Gets a blank BgrImage with the specified width, height and color.

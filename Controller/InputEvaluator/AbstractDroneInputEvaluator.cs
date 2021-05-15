@@ -5,9 +5,6 @@
     /// </summary>
     public abstract class AbstractDroneInputEvaluator
     {
-        private const int POSITIVE_SIGN_VALUE = 1;
-        private const int NEGATIVE_SIGN_VALUE = -1;
-
         /// <summary>
         /// The value that represents a lateral movement to the left.
         /// </summary>
@@ -47,5 +44,8 @@
         /// The value that represents a yaw movement to the right.
         /// </summary>
         protected const int YAW_RIGHT = POSITIVE_SIGN_VALUE;
+
+        private const int POSITIVE_SIGN_VALUE = 1;
+        private const int NEGATIVE_SIGN_VALUE = -1;
     }
 }

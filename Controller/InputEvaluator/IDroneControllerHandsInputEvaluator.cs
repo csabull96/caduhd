@@ -14,7 +14,5 @@
         /// <param name="hands"><see cref="NormalizedHands"/> to evaluate.</param>
         /// <returns>The evaluated <paramref name="hands"/> as <see cref="MoveCommand"/>.</returns>
         MoveCommand EvaluateHands(NormalizedHands hands);
-
-
     }
 }

@@ -9,11 +9,6 @@
     public class NewDroneCameraFrameEventArgs : EventArgs
     {
         /// <summary>
-        /// Gets the new frame as <see cref="BgrImage"/>.
-        /// </summary>
-        public BgrImage Frame { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="NewDroneCameraFrameEventArgs"/> class.
         /// </summary>
         /// <param name="frame">Gets the new frame as <see cref="BgrImage"/>.</param>
@@ -21,5 +16,10 @@
         {
             this.Frame = frame;
         }
+
+        /// <summary>
+        /// Gets the new frame as <see cref="BgrImage"/>.
+        /// </summary>
+        public BgrImage Frame { get; private set; }
     }
 }

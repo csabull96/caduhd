@@ -1,8 +1,8 @@
 ﻿namespace Caduhd.Controller
 {
+    using System;
     using Caduhd.Drone;
     using Caduhd.Drone.Command;
-    using System;
 
     /// <summary>
     /// Abstract drone controller.
@@ -16,7 +16,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractDroneController"/> class.
         /// </summary>
-        /// <param name="drone">The <see cref="IControllableDrone"/> that we would like to control with this controller.</param>
+        /// <param name="drone">The <see cref="AbstractDrone"/> that we would like to control with this controller.</param>
         public AbstractDroneController(AbstractDrone drone)
         {
             this.drone = drone;
@@ -28,9 +28,12 @@
         /// </summary>
         public void Connect() => this.InternalControl(new ConnectCommand());
 
+        /// <summary>
+        /// Disposing this instance.
+        /// </summary>
         public void Dispose()
         {
-            (drone as IDisposable)?.Dispose();
+            (this.drone as IDisposable)?.Dispose();
         }
 
         /// <summary>
@@ -54,8 +57,7 @@
         /// <param name="droneCommand">The requested <see cref="DroneCommand"/>.</param>
         protected void InternalControl(DroneCommand droneCommand)
         {
-            if (this.lastCommandSentToDrone == null ||
-                droneCommand != null && !this.lastCommandSentToDrone.Equals(droneCommand))
+            if (this.lastCommandSentToDrone == null || (droneCommand != null && !this.lastCommandSentToDrone.Equals(droneCommand)))
             {
                 this.lastCommandSentToDrone = droneCommand.Copy();
                 this.drone.Control(droneCommand);

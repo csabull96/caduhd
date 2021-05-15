@@ -1,5 +1,8 @@
 ﻿namespace Caduhd.Common
 {
+    /// <summary>
+    /// An implementation of the generic <see cref="Range{T}"/> to represent a range with double type boundaries.
+    /// </summary>
     public class DoubleRange : Range<double>
     {
         /// <summary>
@@ -21,8 +24,8 @@
         /// <returns>True if value is within the range, false otherwise.</returns>
         public override bool IsWithinRange(double value, bool isLowerBoundInclusive = true, bool isUpperBoundInclusive = true)
         {
-            bool lowerBoundCheck = isLowerBoundInclusive ? LowerBound <= value : LowerBound < value;
-            bool upperBoundCheck = isUpperBoundInclusive ? value <= UpperBound : value < UpperBound;
+            bool lowerBoundCheck = isLowerBoundInclusive ? this.LowerBound <= value : this.LowerBound < value;
+            bool upperBoundCheck = isUpperBoundInclusive ? value <= this.UpperBound : value < this.UpperBound;
             return lowerBoundCheck && upperBoundCheck;
         }
     }

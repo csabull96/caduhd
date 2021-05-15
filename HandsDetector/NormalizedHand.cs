@@ -11,24 +11,12 @@
             "{0} has to be greater or equal than 0.0 and smaller or equal than 1.0. Value was: {1}";
 
         /// <summary>
-        /// Gets the normalized x coordinate of the hand's position.
-        /// </summary>
-        public double X { get; private set; }
-
-        /// <summary>
-        /// Gets the normalized y coordinate of the hand's position.
-        /// </summary>
-        public double Y { get; private set; }
-
-        /// <summary>
-        /// Gets the normalized weight of the hand.
-        /// </summary>
-        public double Weight { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="NormalizedHand"/> class.
         /// </summary>
-        public NormalizedHand() : this(0, 0, 0) { }
+        public NormalizedHand()
+            : this(0, 0, 0)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NormalizedHand"/> class.
@@ -60,5 +48,20 @@
             this.Y = y;
             this.Weight = weight;
         }
+
+        /// <summary>
+        /// Gets the normalized x coordinate of the hand's position.
+        /// </summary>
+        public double X { get; private set; }
+
+        /// <summary>
+        /// Gets the normalized y coordinate of the hand's position.
+        /// </summary>
+        public double Y { get; private set; }
+
+        /// <summary>
+        /// Gets the normalized weight of the hand.
+        /// </summary>
+        public double Weight { get; private set; }
     }
 }

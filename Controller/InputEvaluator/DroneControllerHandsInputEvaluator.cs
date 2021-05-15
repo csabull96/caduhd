@@ -1,13 +1,13 @@
 ﻿namespace Caduhd.Controller.InputEvaluator
 {
-    using Caduhd.Common;
-    using Caduhd.Drone.Command;
-    using Caduhd.HandsDetector;
     using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
     using System.Reflection;
+    using Caduhd.Common;
+    using Caduhd.Drone.Command;
+    using Caduhd.HandsDetector;
 
     /// <summary>
     /// Drone hands input evaluator.
@@ -32,19 +32,20 @@
         // the neutral state of hands (hands as input)
         private NormalizedHands neutralHands;
 
-        public Dictionary<string, Dictionary<string, List<Point>>> TunerHands { get; private set; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DroneControllerHandsInputEvaluator"/> class.
+        /// </summary>
         public DroneControllerHandsInputEvaluator()
         {
-            TunerHands = new Dictionary<string, Dictionary<string, List<Point>>>();
+            this.TunerHands = new Dictionary<string, Dictionary<string, List<Point>>>();
 
-            TunerHands.Add("left", new Dictionary<string, List<Point>>());
-            TunerHands["left"].Add("poi", new List<Point>());
-            TunerHands["left"].Add("outline", new List<Point>());
+            this.TunerHands.Add("left", new Dictionary<string, List<Point>>());
+            this.TunerHands["left"].Add("poi", new List<Point>());
+            this.TunerHands["left"].Add("outline", new List<Point>());
 
-            TunerHands.Add("right", new Dictionary<string, List<Point>>());
-            TunerHands["right"].Add("poi", new List<Point>());
-            TunerHands["right"].Add("outline", new List<Point>());
+            this.TunerHands.Add("right", new Dictionary<string, List<Point>>());
+            this.TunerHands["right"].Add("poi", new List<Point>());
+            this.TunerHands["right"].Add("outline", new List<Point>());
 
             var assembly = Assembly.GetExecutingAssembly();
 
@@ -79,11 +80,11 @@
                     {
                         if (leftPixel.Equals(Color.Black))
                         {
-                            TunerHands["left"]["outline"].Add(new Point(x, y));
+                            this.TunerHands["left"]["outline"].Add(new Point(x, y));
                         }
                         else
                         {
-                            TunerHands["left"]["poi"].Add(new Point(x, y));
+                            this.TunerHands["left"]["poi"].Add(new Point(x, y));
                         }
                     }
 
@@ -91,16 +92,21 @@
                     {
                         if (rightPixel.Equals(Color.Black))
                         {
-                            TunerHands["right"]["outline"].Add(new Point(x, y));
+                            this.TunerHands["right"]["outline"].Add(new Point(x, y));
                         }
                         else if (rightPixel.Equals(Color.Blue))
                         {
-                            TunerHands["right"]["poi"].Add(new Point(x, y));
+                            this.TunerHands["right"]["poi"].Add(new Point(x, y));
                         }
                     }
                 }
             }
         }
+
+        /// <summary>
+        /// Gets dictionary that contains the points of the predefined tuner hands.
+        /// </summary>
+        public Dictionary<string, Dictionary<string, List<Point>>> TunerHands { get; private set; }
 
         /// <summary>
         /// Tuner method to set the neutral hands as a reference for future hands input evaluation.
@@ -117,25 +123,25 @@
         {
             MoveCommand moveCommand = new MoveCommand();
 
-            Lateral(hands, moveCommand);
-            Longitudinal(hands, moveCommand);
-            Vertical(hands, moveCommand);
-            Yaw(hands, moveCommand);
+            this.Lateral(hands, moveCommand);
+            this.Longitudinal(hands, moveCommand);
+            this.Vertical(hands, moveCommand);
+            this.Yaw(hands, moveCommand);
 
             return moveCommand;
         }
 
         private void Lateral(NormalizedHands hands, MoveCommand moveCommand)
         {
-            double deltaY = neutralHands.Right.Y - neutralHands.Left.Y;
-            double deltaX = neutralHands.Right.X - neutralHands.Left.X;
+            double deltaY = this.neutralHands.Right.Y - this.neutralHands.Left.Y;
+            double deltaX = this.neutralHands.Right.X - this.neutralHands.Left.X;
             double neutralGradient = deltaY / deltaX;
-            double neutralAngle = ConvertRadiansToDegrees(Math.Atan(neutralGradient));
+            double neutralAngle = this.ConvertRadiansToDegrees(Math.Atan(neutralGradient));
 
             deltaY = hands.Right.Y - hands.Left.Y;
             deltaX = hands.Right.X - hands.Left.X;
             double actualGradient = deltaY / deltaX;
-            double actualAngle = ConvertRadiansToDegrees(Math.Atan(actualGradient));
+            double actualAngle = this.ConvertRadiansToDegrees(Math.Atan(actualGradient));
 
             double deltaAngle = neutralAngle - actualAngle;
             double absoluteDeltaAngle = Math.Abs(deltaAngle);
@@ -143,58 +149,72 @@
             if (LATERAL_ANGLE_THRESHOLD < absoluteDeltaAngle)
             {
                 if (deltaAngle < 0)
+                {
                     moveCommand.Lateral = MOVE_RIGHT;
+                }
                 else if (0 < deltaAngle)
+                {
                     moveCommand.Lateral = MOVE_LEFT;
+                }
             }
         }
 
         private void Longitudinal(NormalizedHands hands, MoveCommand moveCommand)
         {
-            double leftRatio = hands.Left.Weight / neutralHands.Left.Weight;
-            double rightRatio = hands.Right.Weight / neutralHands.Right.Weight;
+            double leftRatio = hands.Left.Weight / this.neutralHands.Left.Weight;
+            double rightRatio = hands.Right.Weight / this.neutralHands.Right.Weight;
 
-            if (LONGITUDINAL_UPPER_THRESHOLD < leftRatio &&
-                LONGITUDINAL_UPPER_THRESHOLD < rightRatio)
+            if (LONGITUDINAL_UPPER_THRESHOLD < leftRatio && LONGITUDINAL_UPPER_THRESHOLD < rightRatio)
+            {
                 moveCommand.Longitudinal = MOVE_FORWARD;
-            else if (leftRatio < LONGITUDINAL_LOWER_THRESHOLD &&
-                rightRatio < LONGITUDINAL_LOWER_THRESHOLD)
+            }
+            else if (leftRatio < LONGITUDINAL_LOWER_THRESHOLD && rightRatio < LONGITUDINAL_LOWER_THRESHOLD)
+            {
                 moveCommand.Longitudinal = MOVE_BACKWARD;
+            }
         }
 
         private void Vertical(NormalizedHands hands, MoveCommand moveCommand)
         {
-            double deltaY = neutralHands.Center.Y - hands.Left.Y;
-            double deltaX = neutralHands.Center.X - hands.Left.X;
+            double deltaY = this.neutralHands.Center.Y - hands.Left.Y;
+            double deltaX = this.neutralHands.Center.X - hands.Left.X;
             double gradient = deltaY / deltaX;
-            double alpha = ConvertRadiansToDegrees(Math.Atan(gradient));
-            deltaY = hands.Right.Y - neutralHands.Center.Y;
-            deltaX = hands.Right.X - neutralHands.Center.X;
+            double alpha = this.ConvertRadiansToDegrees(Math.Atan(gradient));
+            deltaY = hands.Right.Y - this.neutralHands.Center.Y;
+            deltaX = hands.Right.X - this.neutralHands.Center.X;
             gradient = deltaY / deltaX;
-            double beta = ConvertRadiansToDegrees(Math.Atan(gradient));
+            double beta = this.ConvertRadiansToDegrees(Math.Atan(gradient));
             double deltaAngle = alpha - beta;
 
-            bool areBothHandsUp = neutralHands.Left.Y > hands.Left.Y && neutralHands.Right.Y > hands.Right.Y;
-            bool areBothHandsDown = neutralHands.Left.Y < hands.Left.Y && neutralHands.Right.Y < hands.Right.Y;
+            bool areBothHandsUp = this.neutralHands.Left.Y > hands.Left.Y && this.neutralHands.Right.Y > hands.Right.Y;
+            bool areBothHandsDown = this.neutralHands.Left.Y < hands.Left.Y && this.neutralHands.Right.Y < hands.Right.Y;
 
             double angle = 180 - Math.Abs(deltaAngle);
             if (angle < VERTICAL_ANGLE_THRESHOLD)
             {
                 if (deltaAngle < 0 && areBothHandsDown)
+                {
                     moveCommand.Vertical = MOVE_DOWN;
+                }
                 else if (deltaAngle > 0 && areBothHandsUp)
+                {
                     moveCommand.Vertical = MOVE_UP;
+                }
             }
         }
 
         private void Yaw(NormalizedHands hands, MoveCommand moveCommand)
         {
-            double handsWeightRatio = hands.Left.Weight / (neutralHands.RatioOfLeftWeightToRightWeight * hands.Right.Weight);
+            double handsWeightRatio = hands.Left.Weight / (this.neutralHands.RatioOfLeftWeightToRightWeight * hands.Right.Weight);
 
             if (handsWeightRatio < YAW_LOWER_THRESHOLD)
+            {
                 moveCommand.Yaw = YAW_LEFT;
+            }
             else if (handsWeightRatio > YAW_UPPDER_THRESHOLD)
+            {
                 moveCommand.Yaw = YAW_RIGHT;
+            }
         }
 
         private double ConvertRadiansToDegrees(double radians) => 180 / Math.PI * radians;

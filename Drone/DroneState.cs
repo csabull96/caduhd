@@ -7,6 +7,9 @@
     /// </summary>
     public class DroneState
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether the drone was connected to or not.
+        /// </summary>
         public bool Connected { get; set; } = false;
 
         /// <summary>

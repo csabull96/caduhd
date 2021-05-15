@@ -16,9 +16,9 @@
         private const int DIVISOR_TO_GET_VALID_HAND_WEIGHT_LOWER_BOUND_FROM_NEUTRAL_HAND_WEIGHT = 6;
         private const int DIVISOR_TO_GET_HAND_MARKER_CIRCLE_RADIUS_FROM_IMAGE_SIZE = 11520;
 
-        private readonly BgrPixel BACKGROUND_PIXEL = new BgrPixel(Color.Red);
-        private readonly BgrPixel SKIN_PIXEL = new BgrPixel(Color.White);
-        private readonly BgrPixel UNKNOWN_PIXEL = new BgrPixel(Color.Green);
+        private readonly BgrPixel backgroundPixel = new BgrPixel(Color.Red);
+        private readonly BgrPixel skinPixel = new BgrPixel(Color.White);
+        private readonly BgrPixel unknownPixel = new BgrPixel(Color.Green);
 
         private IHandsDetectorTuning tuning;
 
@@ -28,9 +28,6 @@
         /// Gets a value indicating whether the hand detector is tuned or not.
         /// </summary>
         public bool Tuned { get; private set; }
-
-
-
 
         /// <summary>
         /// A method to tune the hand detector.
@@ -110,15 +107,15 @@
 
                     if (this.IsBackground(pixel, x, y))
                     {
-                        image.SetPixel(BACKGROUND_PIXEL, x, y);
+                        image.SetPixel(this.backgroundPixel, x, y);
                     }
                     else if (!colorMap.Satisfies(pixel))
                     {
-                        image.SetPixel(UNKNOWN_PIXEL, x, y);
+                        image.SetPixel(this.unknownPixel, x, y);
                     }
                     else
                     {
-                        image.SetPixel(SKIN_PIXEL, x, y);
+                        image.SetPixel(this.skinPixel, x, y);
                         handBuilder.Append(x, y);
                     }
                 }

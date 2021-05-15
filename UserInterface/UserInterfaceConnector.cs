@@ -1,8 +1,5 @@
 ﻿namespace Caduhd.UserInterface
 {
-    using Caduhd.Common;
-    using Caduhd.Drone;
-    using Caduhd.Drone.Command;
     using System.ComponentModel;
     using System.Drawing;
     using System.Drawing.Imaging;
@@ -10,14 +7,17 @@
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
+    using Caduhd.Common;
+    using Caduhd.Drone;
+    using Caduhd.Drone.Command;
 
     /// <summary>
     /// User interface connector for data binding between the view model and the UI.
     /// </summary>
     public class UserInterfaceConnector : ICaduhdUIConnector, INotifyPropertyChanged
     {
-        private BitmapSource currentWebCameraFrame;
-        private BitmapSource currentDroneCameraFrame;
+        private BitmapSource webCameraFrame;
+        private BitmapSource droneCameraFrame;
         private string tuningState;
         private string leftHand;
         private string rightHand;
@@ -35,12 +35,12 @@
         /// <summary>
         /// Gets the current web camera frame.
         /// </summary>
-        public BitmapSource CurrentWebCameraFrame => this.currentWebCameraFrame;
+        public BitmapSource CurrentWebCameraFrame => this.webCameraFrame;
 
         /// <summary>
         /// Gets the current drone camera frame.
         /// </summary>
-        public BitmapSource CurrentDroneCameraFrame => this.currentDroneCameraFrame;
+        public BitmapSource CurrentDroneCameraFrame => this.droneCameraFrame;
 
         /// <summary>
         /// Gets or sets the state of the tuning.
@@ -110,7 +110,6 @@
             }
         }
 
-
         /// <summary>
         /// Gets the speed as string with metric unit.
         /// </summary>
@@ -131,14 +130,10 @@
         /// </summary>
         public string BatteryPercentage => $"{this.batteryLevel}%";
 
-        public int WiFiSnr => this.wiFiSnr;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserInterfaceConnector"/> class.
+        /// Gets the Wi-Fi's signal-to-noise ratio.
         /// </summary>
-        public UserInterfaceConnector()
-        {
-        }
+        public int WiFiSnr => this.wiFiSnr;
 
         /// <summary>
         /// Sets the current web camera frame.
@@ -146,7 +141,7 @@
         /// <param name="bitmap">Web camera frame as <see cref="Bitmap"/>.</param>
         public void SetCurrentWebCameraFrame(Bitmap bitmap)
         {
-            this.currentWebCameraFrame = this.BitmapToBitmapSource(bitmap, PixelFormats.Bgr24);
+            this.webCameraFrame = this.BitmapToBitmapSource(bitmap, PixelFormats.Bgr24);
             this.OnPropertyChanged(nameof(this.CurrentWebCameraFrame));
         }
 
@@ -158,14 +153,10 @@
         {
             if (bitmap != null)
             {
-                this.currentDroneCameraFrame = this.BitmapToBitmapSource(bitmap, PixelFormats.Bgr24);
+                this.droneCameraFrame = this.BitmapToBitmapSource(bitmap, PixelFormats.Bgr24);
                 this.OnPropertyChanged(nameof(this.CurrentDroneCameraFrame));
             }
         }
-
-
-
-
 
         /// <summary>
         /// Sets the speed.
@@ -180,13 +171,17 @@
         /// <summary>
         /// Sets the height.
         /// </summary>
-        /// <param name="height"></param>
+        /// <param name="height">The height of the flight.</param>
         public void SetHeight(int height)
         {
             this.height = height;
             this.OnPropertyChanged(nameof(this.Height));
         }
 
+        /// <summary>
+        /// Sets the Wi-Fi's signal-to-noise ratio.
+        /// </summary>
+        /// <param name="wiFiSnr">Wi-Fi signal-to-noise ratio.</param>
         public void SetWiFiSnr(int wiFiSnr)
         {
             this.wiFiSnr = wiFiSnr;
@@ -196,16 +191,64 @@
         /// <summary>
         /// Sets the battery level.
         /// </summary>
-        /// <param name="batteryLevel">Battery level</param>
-        public void SetBatteryPercentage(int batteryLevel)
+        /// <param name="batteryLevel">Battery level.</param>
+        public void SetBatteryLevel(int batteryLevel)
         {
-            this.batteryLevel = this.batteryLevel;
-            this.OnPropertyChanged(nameof(BatteryLevel));
-            this.OnPropertyChanged(nameof(BatteryPercentage));
+            this.batteryLevel = batteryLevel;
+            this.OnPropertyChanged(nameof(this.BatteryLevel));
+            this.OnPropertyChanged(nameof(this.BatteryPercentage));
         }
 
+        /// <summary>
+        /// Sets the image coming from the drone's camera.
+        /// </summary>
+        /// <param name="image">The image received from the drone's camera.</param>
+        public void SetDroneCameraImage(BgrImage image)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                this.droneCameraFrame = this.BitmapToBitmapSource(image.Bitmap, PixelFormats.Bgr24);
+                this.OnPropertyChanged(nameof(this.CurrentDroneCameraFrame));
+            });
+        }
 
+        /// <summary>
+        /// Sets the image coming from the computer's primary camera.
+        /// </summary>
+        /// <param name="image">The image from the computer's primary camera.</param>
+        public void SetComputerCameraImage(BgrImage image)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                this.webCameraFrame = this.BitmapToBitmapSource(image.Bitmap, PixelFormats.Bgr24);
+                this.OnPropertyChanged(nameof(this.CurrentWebCameraFrame));
+            });
+        }
 
+        /// <summary>
+        /// Sets the state of the drone.
+        /// </summary>
+        /// <param name="droneState">The state of the drone.</param>
+        public void SetDroneState(DroneState droneState)
+        {
+            this.SetSpeed(droneState.Speed);
+            this.SetHeight(droneState.Height > 0 ? droneState.Height : droneState.ToF);
+            this.SetWiFiSnr(droneState.WiFiSnr);
+            this.SetBatteryLevel(droneState.BatteryPercentage);
+        }
+
+        /// <summary>
+        /// Sets the evaluated hands input.
+        /// </summary>
+        /// <param name="handsInputEvaluated">The evaluated hands input as <see cref="MoveCommand"/>.</param>
+        public void SetEvaluatedHandsInput(MoveCommand handsInputEvaluated)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                 this.Direction = handsInputEvaluated == null ? "l/r:0 f/b:0 u/d:0 yaw:0" :
+                 $"l/r:{handsInputEvaluated.Lateral} f/b:{handsInputEvaluated.Longitudinal} u/d:{handsInputEvaluated.Vertical} yaw:{handsInputEvaluated.Yaw}";
+            });
+        }
 
         /// <summary>
         /// Fires the <see cref="PropertyChanged"/> event to notify the UI about a change.
@@ -222,41 +265,6 @@
             var bitmapSource = BitmapSource.Create(bitmapData.Width, bitmapData.Height, 96, 96, pixelFormat, null, bitmapData.Scan0, bitmapData.Stride * bitmapData.Height, bitmapData.Stride);
             bitmap.UnlockBits(bitmapData);
             return bitmapSource;
-        }
-
-        public void SetDroneCameraImage(BgrImage image)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                this.currentDroneCameraFrame = this.BitmapToBitmapSource(image.Bitmap, PixelFormats.Bgr24);
-                this.OnPropertyChanged(nameof(this.CurrentDroneCameraFrame));
-            });
-        }
-
-        public void SetComputerCameraImage(BgrImage image)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                this.currentWebCameraFrame = this.BitmapToBitmapSource(image.Bitmap, PixelFormats.Bgr24);
-                this.OnPropertyChanged(nameof(this.CurrentWebCameraFrame));
-            });
-        }
-
-        public void SetEvaluatedHandsInput(MoveCommand handsInputEvaluated)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                 Direction = handsInputEvaluated == null ? "l/r:0 f/b:0 u/d:0 yaw:0" :
-                 $"l/r:{handsInputEvaluated.Lateral} f/b:{handsInputEvaluated.Longitudinal} u/d:{handsInputEvaluated.Vertical} yaw:{handsInputEvaluated.Yaw}";
-            });
-        }
-
-        public void SetDroneState(DroneState droneState)
-        {
-            SetSpeed(droneState.Speed);
-            SetHeight(droneState.Height);
-            SetWiFiSnr(droneState.WiFiSnr);
-            SetBatteryPercentage(droneState.BatteryPercentage);
         }
     }
 }

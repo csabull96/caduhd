@@ -3,5 +3,7 @@
     /// <summary>
     /// Movement drone command.
     /// </summary>
-    public abstract class MovementCommand : DroneCommand { }
+    public abstract class MovementCommand : DroneCommand
+    {
+    }
 }

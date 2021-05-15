@@ -17,5 +17,14 @@
         /// <param name="obj">The comparand.</param>
         /// <returns>True if this <see cref="StopStreamingVideoCommand"/> and the provided <paramref name="obj"/> are equal.</returns>
         public override bool Equals(object obj) => obj is StopStreamingVideoCommand;
+
+        /// <summary>
+        /// The overriden <see cref="GetHashCode"/> method.
+        /// </summary>
+        /// <returns>The hascode of this instance.</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

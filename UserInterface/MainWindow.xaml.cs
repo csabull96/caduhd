@@ -1,33 +1,39 @@
-﻿using Caduhd.UserInterface.ViewModel;
-using System;
-using System.Windows;
-using System.Windows.Input;
-
-namespace Caduhd.UserInterface
+﻿namespace Caduhd.UserInterface
 {
+    using System;
+    using System.Windows;
+    using System.Windows.Input;
+    using Caduhd.UserInterface.ViewModel;
+
+    /// <summary>
+    /// The main window of the application.
+    /// </summary>
     public partial class MainWindow : Window
     {
-        private MainViewModel _mainViewModel;
+        private readonly MainViewModel mainViewModel;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow"/> class.
+        /// </summary>
         public MainWindow()
         {
-            InitializeComponent();
-            _mainViewModel = Resources["MainViewModel"] as MainViewModel;
+            this.InitializeComponent();
+            this.mainViewModel = this.Resources["MainViewModel"] as MainViewModel;
         }
 
         private void Connect(object sender, RoutedEventArgs e)
         {
-            _mainViewModel.ConnectToDrone();
+            this.mainViewModel.ConnectToDrone();
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            HandleKeyEvent(e);
+            this.HandleKeyEvent(e);
         }
 
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            HandleKeyEvent(e);
+            this.HandleKeyEvent(e);
         }
 
         private void HandleKeyEvent(KeyEventArgs keyEventArgs)
@@ -35,25 +41,17 @@ namespace Caduhd.UserInterface
             keyEventArgs.Handled = true;
 
             // if a key is held down, this (PreviewKeyDown) will keep being raised
-            // not sure this makes any sense with the PreviewKeyUp event
-            if (keyEventArgs.IsRepeat) return;
+            if (keyEventArgs.IsRepeat)
+            {
+                return;
+            }
 
-            _mainViewModel.HandleKeyEvent(keyEventArgs);
-        }
-
-        private void StartStreamingDroneVideo(object sender, RoutedEventArgs e)
-        {
-            _mainViewModel.StartStreamingDroneVideo();
-        }
-
-        private void StopStreamingDroneVideo(object sender, RoutedEventArgs e)
-        {
-            _mainViewModel.StopStreamingDroneVideo();
+            this.mainViewModel.HandleKeyEvent(keyEventArgs);
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            _mainViewModel.Dispose();
+            this.mainViewModel.Dispose();
         }
     }
 }

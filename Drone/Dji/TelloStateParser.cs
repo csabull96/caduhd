@@ -11,7 +11,7 @@
         /// <summary>
         /// Parses the state of the Tello received as a sequence of bytes.
         /// After converting the bytes into ASCII characters it has to match the following pattern:
-        /// “pitch:%d;roll:%d;yaw:%d;vgx:%d;vgy%d;vgz:%d;templ:%d;temph:%d;tof:%d;h:%d;bat:%d;baro:%.2f; time:%d;agx:%.2f;agy:%.2f;agz:%.2f;\r\n”
+        /// “pitch:%d;roll:%d;yaw:%d;vgx:%d;vgy%d;vgz:%d;templ:%d;temph:%d;tof:%d;h:%d;bat:%d;baro:%.2f; time:%d;agx:%.2f;agy:%.2f;agz:%.2f;\r\n”.
         /// </summary>
         /// <param name="stateData">The Tello's state as a sequence of bytes.</param>
         /// <returns>Tello's parsed state information as <see cref="DroneState"/>.</returns>

@@ -12,6 +12,26 @@
         private Bgr pixel;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="BgrPixel"/> class.
+        /// </summary>
+        /// <param name="color">The color of the pixel.</param>
+        public BgrPixel(Color color)
+            : this(color.B, color.G, color.R)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BgrPixel"/> class.
+        /// </summary>
+        /// <param name="blue">The blue channal value.</param>
+        /// <param name="green">The green channal value.</param>
+        /// <param name="red">The red channal value.</param>
+        public BgrPixel(int blue, int green, int red)
+        {
+            this.pixel = new Bgr(blue, green, red);
+        }
+
+        /// <summary>
         /// Gets the blue channal value of the pixel.
         /// </summary>
         public int Blue => Convert.ToInt32(this.pixel.Blue);
@@ -27,40 +47,32 @@
         public int Red => Convert.ToInt32(this.pixel.Red);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BgrPixel"/> class.
+        /// The overriden <see cref="Equals(object)"/> method.
         /// </summary>
-        /// <param name="color">The color of the pixel.</param>
-        public BgrPixel(Color color) : this(color.B, color.G, color.R) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BgrPixel"/> class.
-        /// </summary>
-        /// <param name="blue">The blue channal value.</param>
-        /// <param name="green">The green channal value.</param>
-        /// <param name="red">The red channal value.</param>
-        public BgrPixel(int blue, int green, int red)
-        {
-            this.pixel = new Bgr(blue, green, red);
-        }
-
+        /// <param name="comparand">The comparand.</param>
+        /// <returns>True if they are equals, false otherwise.</returns>
         public override bool Equals(object comparand)
         {
             if (comparand is BgrPixel bgrPixel)
             {
-                return Blue == bgrPixel.Blue && Green == bgrPixel.Green && Red == bgrPixel.Red;
+                return this.Blue == bgrPixel.Blue && this.Green == bgrPixel.Green && this.Red == bgrPixel.Red;
             }
             else if (comparand is Color color)
             {
-                return Blue == color.B && Green == color.G && Red == color.R;
+                return this.Blue == color.B && this.Green == color.G && this.Red == color.R;
             }
             else if (comparand is Bgr bgr)
             {
-                return Blue == bgr.Blue && Green == bgr.Green && Red == bgr.Red;
+                return this.Blue == bgr.Blue && this.Green == bgr.Green && this.Red == bgr.Red;
             }
 
             return false;
         }
 
+        /// <summary>
+        /// The overriden <see cref="GetHashCode"/> method.
+        /// </summary>
+        /// <returns>The hash code of this instance.</returns>
         public override int GetHashCode()
         {
             return base.GetHashCode();

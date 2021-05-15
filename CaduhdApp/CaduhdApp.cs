@@ -1,31 +1,42 @@
-﻿using Caduhd.Common;
-using Caduhd.Controller;
-using Caduhd.Controller.InputAnalyzer;
-using Caduhd.Controller.InputEvaluator;
-using Caduhd.Drone;
-using Caduhd.Drone.Command;
-using Caduhd.HandsDetector;
-using Caduhd.Input.Keyboard;
-using System;
-using System.Drawing;
-using System.Threading;
-using System.Windows.Input;
-
-namespace Caduhd
+﻿namespace Caduhd
 {
+    using System;
+    using System.Drawing;
+    using System.Threading;
+    using System.Windows.Input;
+    using Caduhd.Common;
+    using Caduhd.Controller;
+    using Caduhd.Controller.InputAnalyzer;
+    using Caduhd.Controller.InputEvaluator;
+    using Caduhd.Drone;
+    using Caduhd.Drone.Command;
+    using Caduhd.HandsDetector;
+    using Caduhd.Input.Keyboard;
+
+    /// <summary>
+    /// The Caduhd App.
+    /// </summary>
     public class CaduhdApp : IDisposable
     {
         private const int YES = 1;
         private const int NO = 0;
 
-        private int _isWebCameraFrameProcessorBusy;
+        private readonly IHandsAnalyzer handsAnalyzer;
+        private readonly ISkinColorHandsDetector skinColorHandsDetector;
+        private readonly HandsDroneController handsDroneController;
 
-        private IHandsAnalyzer _handsAnalyzer;
-        private ISkinColorHandsDetector _skinColorHandsDetector;
-        private HandsDroneController _handsDroneController;
+        private int isWebCameraFrameProcessorBusy;
 
-        private ICaduhdUIConnector _uiConnector;
+        private ICaduhdUIConnector uiConnector;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CaduhdApp"/> class.
+        /// </summary>
+        /// <param name="handsAnalyzer">A hands analyzer.</param>
+        /// <param name="skinColorHandsDetector">A skin color based hands detector.</param>
+        /// <param name="drone">A drone.</param>
+        /// <param name="droneControllerKeyInputEvaluator">A drone controller key input evaluator.</param>
+        /// <param name="droneControllerHandsInputEvaluator">A drone controller hands input evaluator.</param>
         public CaduhdApp(
             IHandsAnalyzer handsAnalyzer,
             ISkinColorHandsDetector skinColorHandsDetector,
@@ -33,119 +44,132 @@ namespace Caduhd
             IDroneControllerKeyInputEvaluator droneControllerKeyInputEvaluator,
             IDroneControllerHandsInputEvaluator droneControllerHandsInputEvaluator)
         {
-            _isWebCameraFrameProcessorBusy = 0;
+            this.isWebCameraFrameProcessorBusy = 0;
 
-            _handsAnalyzer = handsAnalyzer;
-            _skinColorHandsDetector = skinColorHandsDetector;
+            this.handsAnalyzer = handsAnalyzer;
+            this.skinColorHandsDetector = skinColorHandsDetector;
 
             if (drone is IStreamer streamer)
             {
-                streamer.NewCameraFrame += StreamerNewCameraFrame;
+                streamer.NewCameraFrame += this.StreamerNewCameraFrame;
             }
 
             if (drone is IStateful stateful)
             {
-                stateful.StateChanged += StatefulStateChanged; ;
+                stateful.StateChanged += this.StatefulStateChanged;
             }
 
-            _handsDroneController = new HandsDroneController(drone, droneControllerHandsInputEvaluator, droneControllerKeyInputEvaluator);
+            this.handsDroneController = new HandsDroneController(drone, droneControllerHandsInputEvaluator, droneControllerKeyInputEvaluator);
         }
 
-        private void StatefulStateChanged(object source, Drone.Event.DroneStateChangedEventArgs args)
-        {
-            _uiConnector.SetDroneState(args.DroneState);
-        }
-
-        private void StreamerNewCameraFrame(object source, Drone.Event.NewDroneCameraFrameEventArgs args)
-        {
-            _uiConnector.SetDroneCameraImage(args.Frame);
-        }
-
+        /// <summary>
+        /// Binds the Caduhd App to a user interface connector.
+        /// </summary>
+        /// <param name="uiConnector">The user interface connector.</param>
         public void Bind(ICaduhdUIConnector uiConnector)
         {
-            _uiConnector = uiConnector;
+            this.uiConnector = uiConnector;
         }
 
+        /// <summary>
+        /// Disposing this object.
+        /// </summary>
         public void Dispose()
         {
-            _handsDroneController.Dispose();
+            this.handsDroneController.Dispose();
         }
 
+        /// <summary>
+        /// This is the entry point of the key inputs into the Caduhd App.
+        /// </summary>
+        /// <param name="keyInfo">The key info of the key event.</param>
         public void Input(KeyInfo keyInfo)
         {
             if (keyInfo.Key == Key.Back)
             {
                 if (keyInfo.KeyState == KeyState.Down)
                 {
-                    if (_skinColorHandsDetector.Tuned)
+                    if (this.skinColorHandsDetector.Tuned)
                     {
-                        _skinColorHandsDetector.InvalidateTuning();
-                        _handsAnalyzer.Reset();
+                        this.skinColorHandsDetector.InvalidateTuning();
+                        this.handsAnalyzer.Reset();
                     }
                     else
                     {
-                        _handsAnalyzer.AdvanceState();
+                        this.handsAnalyzer.AdvanceState();
                     }
                 }
             }
             else
             {
-                _handsDroneController.ProcessKeyInput(keyInfo);
+                this.handsDroneController.ProcessKeyInput(keyInfo);
             }
         }
 
+        /// <summary>
+        /// This is the entry point of the hands into the Caduhd App.
+        /// </summary>
+        /// <param name="image">The image, possibly containing hands.</param>
         public void Input(BgrImage image)
         {
-            if (Interlocked.CompareExchange(ref _isWebCameraFrameProcessorBusy, YES, NO) == NO)
+            if (Interlocked.CompareExchange(ref this.isWebCameraFrameProcessorBusy, YES, NO) == NO)
             {
                 BgrImage frame = image;
-                NormalizedHands hands = null;
                 MoveCommand moveCommand = null;
 
-                if (_skinColorHandsDetector.Tuned)
+                if (this.skinColorHandsDetector.Tuned)
                 {
-                    HandsDetectorResult result = _skinColorHandsDetector.DetectHands(frame);
+                    HandsDetectorResult result = this.skinColorHandsDetector.DetectHands(frame);
                     frame = result.Image;
-                    hands = result.Hands;
+                    var hands = result.Hands;
                     moveCommand =
-                        (_handsDroneController.ProcessHandsInput(hands) as DroneControllerHandsInputProcessResult)?.Result;
+                        (this.handsDroneController.ProcessHandsInput(hands) as DroneControllerHandsInputProcessResult)?.Result;
                 }
                 else
                 {
-                    if (_handsAnalyzer.State == HandsAnalyzerState.ReadyToAnalyzeLeft || _handsAnalyzer.State == HandsAnalyzerState.AnalyzingLeft)
+                    if (this.handsAnalyzer.State == HandsAnalyzerState.ReadyToAnalyzeLeft || this.handsAnalyzer.State == HandsAnalyzerState.AnalyzingLeft)
                     {
-                        if (_handsAnalyzer.State == HandsAnalyzerState.AnalyzingLeft)
+                        if (this.handsAnalyzer.State == HandsAnalyzerState.AnalyzingLeft)
                         {
-                            _handsAnalyzer.AnalyzeLeft(frame, _handsDroneController.HandsInputEvaluator.TunerHands["left"]["poi"]);
-                            _handsAnalyzer.AdvanceState();
+                            this.handsAnalyzer.AnalyzeLeft(frame, this.handsDroneController.HandsInputEvaluator.TunerHands["left"]["poi"]);
+                            this.handsAnalyzer.AdvanceState();
                         }
 
-                        frame.MarkPoints(_handsDroneController.HandsInputEvaluator.TunerHands["left"]["outline"], Color.Yellow);
+                        frame.MarkPoints(this.handsDroneController.HandsInputEvaluator.TunerHands["left"]["outline"], Color.Yellow);
                     }
-                    else if (_handsAnalyzer.State == HandsAnalyzerState.ReadyToAnalyzeRight || _handsAnalyzer.State == HandsAnalyzerState.AnalyzingRight)
+                    else if (this.handsAnalyzer.State == HandsAnalyzerState.ReadyToAnalyzeRight || this.handsAnalyzer.State == HandsAnalyzerState.AnalyzingRight)
                     {
-                        if (_handsAnalyzer.State == HandsAnalyzerState.AnalyzingRight)
+                        if (this.handsAnalyzer.State == HandsAnalyzerState.AnalyzingRight)
                         {
-                            _handsAnalyzer.AnalyzeRight(frame, _handsDroneController.HandsInputEvaluator.TunerHands["right"]["poi"]);
-                            _handsAnalyzer.AdvanceState();
+                            this.handsAnalyzer.AnalyzeRight(frame, this.handsDroneController.HandsInputEvaluator.TunerHands["right"]["poi"]);
+                            this.handsAnalyzer.AdvanceState();
                         }
 
-                        frame.MarkPoints(_handsDroneController.HandsInputEvaluator.TunerHands["right"]["outline"], Color.Yellow);
+                        frame.MarkPoints(this.handsDroneController.HandsInputEvaluator.TunerHands["right"]["outline"], Color.Yellow);
                     }
-                    else if (_handsAnalyzer.State == HandsAnalyzerState.Tuning)
+                    else if (this.handsAnalyzer.State == HandsAnalyzerState.Tuning)
                     {
-                        HandsAnalyzerResult result = _handsAnalyzer.Result;
-                        NormalizedHands neutralHands = _skinColorHandsDetector.Tune(result);
-                        _handsDroneController.HandsInputEvaluator.Tune(neutralHands);
+                        HandsAnalyzerResult result = this.handsAnalyzer.Result;
+                        NormalizedHands neutralHands = this.skinColorHandsDetector.Tune(result);
+                        this.handsDroneController.HandsInputEvaluator.Tune(neutralHands);
                     }
                 }
 
-                _uiConnector?.SetComputerCameraImage(frame);
-                _uiConnector?.SetEvaluatedHandsInput(moveCommand);
+                this.uiConnector?.SetComputerCameraImage(frame);
+                this.uiConnector?.SetEvaluatedHandsInput(moveCommand);
 
-                Interlocked.Exchange(ref _isWebCameraFrameProcessorBusy, NO);
+                Interlocked.Exchange(ref this.isWebCameraFrameProcessorBusy, NO);
             }
         }
 
+        private void StatefulStateChanged(object source, Drone.Event.DroneStateChangedEventArgs args)
+        {
+            this.uiConnector.SetDroneState(args.DroneState);
+        }
+
+        private void StreamerNewCameraFrame(object source, Drone.Event.NewDroneCameraFrameEventArgs args)
+        {
+            this.uiConnector.SetDroneCameraImage(args.Frame);
+        }
     }
 }

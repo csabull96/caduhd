@@ -20,45 +20,19 @@
         private ICapture videoCapture;
 
         /// <summary>
-        /// An event that is fired whenever a new web camera frame is available.
-        /// </summary>
-        public event NewWebCameraFrameEventHandler NewFrame;
-
-        /// <summary>
-        /// Gets the desired FPS that is set for the web camera.
-        /// </summary>
-        public int Fps { get; private set; }
-
-        /// <summary>
-        /// Gets the width of the frames delivered by the web camera.
-        /// </summary>
-        public int Width { get; private set; }
-
-        /// <summary>
-        /// Gets the height of the frames delivered by the web camera.
-        /// </summary>
-        public int Height { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether the web camera is on or not.
-        /// </summary>
-        public bool IsOn { get; private set; }
-
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="WebCamera"/> class.
         /// </summary>
         /// <param name="width">The width of the frames delivered by the web camera.</param>
         /// <param name="height">The height of the frames delivered by the web camera.</param>
         public WebCamera(int width, int height)
-            : this(new VideoCapture(0, VideoCapture.API.DShow), 30, width, height) 
+            : this(new VideoCapture(0, VideoCapture.API.DShow), 30, width, height)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebCamera"/> class.
         /// </summary>
-        /// <param name="capture">An implementation of the <see cref="ICapture" interface/> that is going to fetch the web camera frames.</param>
+        /// <param name="capture">An implementation of the <see cref="ICapture"/> interface that is going to fetch the web camera frames.</param>
         /// <param name="fps">The desired FPS of the web camera capture.</param>
         /// <param name="width">The width of the web camera capture.</param>
         /// <param name="height">The height of the web camera capture.</param>
@@ -85,6 +59,31 @@
             this.timer = new Timer(interval);
             this.timer.Elapsed += this.QueryFrame;
         }
+
+        /// <summary>
+        /// An event that is fired whenever a new web camera frame is available.
+        /// </summary>
+        public event NewWebCameraFrameEventHandler NewFrame;
+
+        /// <summary>
+        /// Gets the desired FPS that is set for the web camera.
+        /// </summary>
+        public int Fps { get; private set; }
+
+        /// <summary>
+        /// Gets the width of the frames delivered by the web camera.
+        /// </summary>
+        public int Width { get; private set; }
+
+        /// <summary>
+        /// Gets the height of the frames delivered by the web camera.
+        /// </summary>
+        public int Height { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the web camera is on or not.
+        /// </summary>
+        public bool IsOn { get; private set; }
 
         /// <summary>
         /// Turns on the web camera.
@@ -118,6 +117,7 @@
             this.timer.Dispose();
             (this.videoCapture as IDisposable)?.Dispose();
         }
+
         private void QueryFrame(object sender, ElapsedEventArgs e)
         {
             try
@@ -131,7 +131,6 @@
             }
             catch (Exception)
             {
-
             }
         }
     }

@@ -16,12 +16,10 @@
     using Timer = System.Timers.Timer;
 
     /// <summary>
-    /// The implementation of the <see cref="IControllableDrone"/> for the DJI Tello.
+    /// The implementation of the <see cref="AbstractDrone"/> for the DJI Tello.
     /// </summary>
-    public class Tello : AbstractDrone, IStreamer
+    public class Tello : AbstractDrone, IStreamer, IStateful
     {
-        private bool disposing;
-
         private const int YES = 1;
         private const int NO = 0;
 
@@ -40,65 +38,58 @@
         private const string STOP_STREAMING_VIDEO = "streamoff";
         private const string REQUEST_WIFI_SNR = "wifi?";
 
+        private const string TELLO_IP = "192.168.10.1";
+        private const int TELLO_PORT = 8889;
+
+        private const int MIN_SPEED = 0;
+        private const int MAX_SPEED = 100;
+        private const int DEFAULT_SPEED = 60;
+
+        private const int ALLOWED_NUMBER_OF_CONSECUTIVE_EMPTY_FRAMES = 10;
+
+        private readonly UdpClient tello;
+        private readonly UdpClient telloStateReceiver;
+
+        private readonly Timer snrChecker;
+
+        private bool disposing;
+
         // what connected really means is that there was a handshake after the initial connect message
         private bool connected;
 
         private ConcurrentQueue<string> commandQueue;
 
-        private const string TELLO_IP = "192.168.10.1";
-        private const int TELLO_PORT = 8889;
         private IPEndPoint telloIPEndPoint;
 
         // to send messages to Tello and receive their response
-        private readonly UdpClient tello;
         private int isReceivingTelloResponse;
 
         // to receive Tello's state
-        private readonly UdpClient telloStateReceiver;
         private int isReceivingTelloState;
         private TelloStateParser telloStateParser;
 
-        // the connection with Tello is UDP based so
-        // instead of "connected" vs "not connected"
-        // I went with "responding" vs "not responding"
-        public bool IsReachable { get; private set; }
-
         private DroneState droneState;
-        private readonly Timer snrChecker;
         private int snr;
 
-        private const int MIN_SPEED = 0;
-        private const int MAX_SPEED = 100;
-        private const int DEFAULT_SPEED = 60;
         private int speed = DEFAULT_SPEED;
-        public int Speed 
-        {
-            get => speed;
-            set => speed = AdjustSpeed(value);
-        }
-
-        public event NewDroneVideoFrameEventHandler NewCameraFrame;
-
-        public event DroneStateEventHandler StateChanged;
 
         private int isStreaming;
-        private CancellationTokenSource videoStreamCancellationTokenSource;
         private int numberOfConsecutiveEmtpyFrames;
-        private const int ALLOWED_NUMBER_OF_CONSECUTIVE_EMPTY_FRAMES = 10;
-
-        /// <summary>
-        /// Gets a value indicating whether the Tello is streaming video at the moment or not.
-        /// </summary>
-        public bool IsStreamingVideo { get; private set; } = false;
+        private CancellationTokenSource videoStreamCancellationTokenSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tello"/> class.
         /// </summary>
         public Tello()
             : this(TELLO_IP, TELLO_PORT)
-        { 
+        {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Tello"/> class.
+        /// </summary>
+        /// <param name="ip">The IP addres of the Tello.</param>
+        /// <param name="port">The port number.</param>
         public Tello(string ip, int port)
         {
             this.disposing = false;
@@ -125,6 +116,39 @@
             this.videoStreamCancellationTokenSource = new CancellationTokenSource();
             this.numberOfConsecutiveEmtpyFrames = 0;
         }
+
+        /// <summary>
+        /// This event fires whenever there is a new available drone camera frame.
+        /// </summary>
+        public event NewDroneVideoFrameEventHandler NewCameraFrame;
+
+        /// <summary>
+        /// This event fires whenever the Tello's state has been updated.
+        /// </summary>
+        public event DroneStateChangedEventHandler StateChanged;
+
+        // the connection with Tello is UDP based so
+        // instead of "connected" vs "not connected"
+        // I went with "responding" vs "not responding"
+
+        /// <summary>
+        /// Gets a value indicating whether the Telli is reachable or not.
+        /// </summary>
+        public bool IsReachable { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the speed of the Tello. Maximum 100, minimum 0. (Not in real-life speed unit.)
+        /// </summary>
+        public int Speed
+        {
+            get => this.speed;
+            set => this.speed = this.AdjustSpeed(value);
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the Tello is streaming video at the moment or not.
+        /// </summary>
+        public bool IsStreamingVideo { get; private set; } = false;
 
         /// <summary>
         /// Disposes Tello.
@@ -288,8 +312,9 @@
                 }
 
                 Interlocked.Exchange(ref this.isStreaming, NO);
-
-            }, this.videoStreamCancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            }, this.videoStreamCancellationTokenSource.Token,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Default);
         }
 
         private void StopStreamingVideo()
@@ -335,7 +360,7 @@
                         string responseString = string.Empty;
                         try
                         {
-                            byte[] responseBytes = tello.Receive(ref this.telloIPEndPoint);
+                            byte[] responseBytes = this.tello.Receive(ref this.telloIPEndPoint);
                             this.IsReachable = true;
                             responseString = responseBytes.AsString().Trim();
                             this.ProcessResponse(commandString, responseString);
@@ -360,7 +385,6 @@
                         File.AppendAllText("responses.txt", $"{commandString,-20} >> {responseString}\n");
                     }
                 }
-
             }, TaskCreationOptions.LongRunning);
         }
 
@@ -396,17 +420,17 @@
 
             await Task.Factory.StartNew(() =>
             {
-                while (!disposing && connected)
+                while (!this.disposing && this.connected)
                 {
                     try
                     {
-                        byte[] stateBytes = telloStateReceiver.Receive(ref this.telloIPEndPoint);
+                        byte[] stateBytes = this.telloStateReceiver.Receive(ref this.telloIPEndPoint);
                         this.IsReachable = true;
-                        this.droneState = telloStateParser.Parse(stateBytes);
-                        this.droneState.WiFiSnr = snr;
+                        this.droneState = this.telloStateParser.Parse(stateBytes);
+                        this.droneState.WiFiSnr = this.snr;
 
-                        this.StateChanged?.Invoke(this, new DroneStateChangedEventArgs(droneState));
-                        
+                        this.StateChanged?.Invoke(this, new DroneStateChangedEventArgs(this.droneState));
+
                         // should we restart video streaming and wifi checker if Tello is reachable again?
                     }
                     catch (SocketException e)
@@ -415,14 +439,14 @@
                         {
                             // Tello stopped sharing its state, probably Tello is not reachable
                             this.IsReachable = false;
+                            this.droneState = new DroneState();
+                            this.StateChanged?.Invoke(this, new DroneStateChangedEventArgs(this.droneState));
                         }
                     }
                     catch (Exception)
                     {
-
                     }
                 }
-
             }, TaskCreationOptions.LongRunning);
         }
 

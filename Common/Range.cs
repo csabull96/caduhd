@@ -7,16 +7,6 @@
     public abstract class Range<T>
     {
         /// <summary>
-        /// Gets the lower bound of the range.
-        /// </summary>
-        public T LowerBound { get; private set; }
-
-        /// <summary>
-        /// Gets the upper bound of the range.
-        /// </summary>
-        public T UpperBound { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Range{T}"/> class.
         /// </summary>
         /// <param name="lowerBound">The lower bound of the range.</param>
@@ -26,6 +16,16 @@
             this.LowerBound = lowerBound;
             this.UpperBound = upperBound;
         }
+
+        /// <summary>
+        /// Gets the lower bound of the range.
+        /// </summary>
+        public T LowerBound { get; private set; }
+
+        /// <summary>
+        /// Gets the upper bound of the range.
+        /// </summary>
+        public T UpperBound { get; private set; }
 
         /// <summary>
         /// Determines whether the provided value is within the range or not.

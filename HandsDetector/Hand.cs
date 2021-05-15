@@ -6,21 +6,6 @@
     public class Hand
     {
         /// <summary>
-        /// Gets the x coordinate of the hand's position.
-        /// </summary>
-        public int X { get; private set; }
-
-        /// <summary>
-        /// Gets the y coordinate of the hand's position.
-        /// </summary>
-        public int Y { get; private set; }
-
-        /// <summary>
-        /// Gets the weight of the hand.
-        /// </summary>
-        public int Weight { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Hand"/> class.
         /// </summary>
         public Hand()
@@ -40,5 +25,20 @@
             this.Y = y;
             this.Weight = weight;
         }
+
+        /// <summary>
+        /// Gets the x coordinate of the hand's position.
+        /// </summary>
+        public int X { get; private set; }
+
+        /// <summary>
+        /// Gets the y coordinate of the hand's position.
+        /// </summary>
+        public int Y { get; private set; }
+
+        /// <summary>
+        /// Gets the weight of the hand.
+        /// </summary>
+        public int Weight { get; private set; }
     }
 }

@@ -26,6 +26,29 @@
         private int yaw;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MoveCommand"/> class.
+        /// </summary>
+        public MoveCommand()
+            : this(NEUTRAL, NEUTRAL, NEUTRAL, NEUTRAL)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MoveCommand"/> class.
+        /// </summary>
+        /// <param name="lateral">The lateral component of the move.</param>
+        /// <param name="longitudinal">The longitudinal component of the move.</param>
+        /// <param name="vertical">The vertical component of the move.</param>
+        /// <param name="yaw">The yaw component of the move.</param>
+        public MoveCommand(int lateral, int longitudinal, int vertical, int yaw)
+        {
+            this.Lateral = this.AdjustValueIfWrong(lateral);
+            this.Longitudinal = this.AdjustValueIfWrong(longitudinal);
+            this.Vertical = this.AdjustValueIfWrong(vertical);
+            this.Yaw = this.AdjustValueIfWrong(yaw);
+        }
+
+        /// <summary>
         /// Gets a newly constructed <see cref="MoveCommand"/> instance that represents a still state.
         /// </summary>
         public static MoveCommand Idle => new MoveCommand();
@@ -77,29 +100,6 @@
         public bool Moving => !this.Still;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MoveCommand"/> class.
-        /// </summary>
-        public MoveCommand()
-            : this(NEUTRAL, NEUTRAL, NEUTRAL, NEUTRAL)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MoveCommand"/> class.
-        /// </summary>
-        /// <param name="lateral">The lateral component of the move.</param>
-        /// <param name="longitudinal">The longitudinal component of the move.</param>
-        /// <param name="vertical">The vertical component of the move.</param>
-        /// <param name="yaw">The yaw component of the move.</param>
-        public MoveCommand(int lateral, int longitudinal, int vertical, int yaw)
-        {
-            this.Lateral = this.AdjustValueIfWrong(lateral);
-            this.Longitudinal = this.AdjustValueIfWrong(longitudinal);
-            this.Vertical = this.AdjustValueIfWrong(vertical);
-            this.Yaw = this.AdjustValueIfWrong(yaw);
-        }
-
-        /// <summary>
         /// Gets a copy of this <see cref="MoveCommand"/>.
         /// </summary>
         /// <returns>The copy of this <see cref="MoveCommand"/> as a <see cref="DroneCommand"/>.</returns>
@@ -107,26 +107,13 @@
         {
             DroneCommand moveCommand = new MoveCommand()
             {
-                Longitudinal = Longitudinal,
-                Lateral = Lateral,
-                Vertical = Vertical,
-                Yaw = Yaw
+                Longitudinal = this.Longitudinal,
+                Lateral = this.Lateral,
+                Vertical = this.Vertical,
+                Yaw = this.Yaw,
             };
 
             return moveCommand;
-        }
-
-        private int AdjustValueIfWrong(int original)
-        {
-            if (original < MIN)
-            {
-                return MIN;
-            }
-            else if (MAX < original)
-            {
-                return MAX;
-            }
-            return original;
         }
 
         /// <summary>
@@ -139,5 +126,28 @@
             this.Longitudinal.Equals(other.Longitudinal) &&
             this.Vertical.Equals(other.Vertical) &&
             this.Yaw.Equals(other.Yaw);
+
+        /// <summary>
+        /// The overriden <see cref="GetHashCode"/> method.
+        /// </summary>
+        /// <returns>The hashcode of this instance.</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        private int AdjustValueIfWrong(int original)
+        {
+            if (original < MIN)
+            {
+                return MIN;
+            }
+            else if (MAX < original)
+            {
+                return MAX;
+            }
+
+            return original;
+        }
     }
 }

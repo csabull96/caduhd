@@ -6,7 +6,7 @@
     using Caduhd.Input.Keyboard;
 
     /// <summary>
-    /// A drone controller that is used to control a <see cref="IControllableDrone"/> with the keyboard.
+    /// A drone controller that is used to control a <see cref="AbstractDrone"/> with the keyboard.
     /// </summary>
     public class KeyboardDroneController : AbstractDroneController, IKeyInputHandler
     {
@@ -16,20 +16,20 @@
         private readonly IDroneControllerKeyInputEvaluator keyInputEvaluator;
 
         /// <summary>
-        /// Gets or sets the result of the latest key input evaluation as <see cref="DroneCommand"/>.
-        /// </summary>
-        protected DroneCommand LatestKeyInputEvaluated { get; set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="KeyboardDroneController"/> class.
         /// </summary>
-        /// <param name="drone">The <see cref="IControllableDrone"/> drone that we would like to control with this controller.</param>
+        /// <param name="drone">The <see cref="AbstractDrone"/> drone that we would like to control with this controller.</param>
         /// <param name="keyInputEvaluator">The desired implementation of the <see cref="IDroneControllerKeyInputEvaluator"/> interface.</param>
         public KeyboardDroneController(AbstractDrone drone, IDroneControllerKeyInputEvaluator keyInputEvaluator)
             : base(drone)
         {
             this.keyInputEvaluator = keyInputEvaluator;
         }
+
+        /// <summary>
+        /// Gets or sets the result of the latest key input evaluation as <see cref="DroneCommand"/>.
+        /// </summary>
+        protected DroneCommand LatestKeyInputEvaluated { get; set; }
 
         /// <summary>
         /// Processes a key input.

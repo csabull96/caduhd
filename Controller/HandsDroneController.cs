@@ -6,32 +6,33 @@
     using Caduhd.HandsDetector;
 
     /// <summary>
-    /// A drone controller that is used to control a <see cref="IControllableDrone"/> with hands and the keyboard.
+    /// A drone controller that is used to control a <see cref="AbstractDrone"/> with hands and the keyboard.
     /// </summary>
     public class HandsDroneController : KeyboardDroneController, IHandsInputHandler
     {
         private readonly IDroneControllerHandsInputEvaluator handsInputEvaluator;
 
-
-        public ITuneableDroneControllerHandsInputEvaluator HandsInputEvaluator => handsInputEvaluator as ITuneableDroneControllerHandsInputEvaluator;
-
-
-        /// <summary>
-        /// Gets or sets the result of the latest hands input evaluation as <see cref="MoveCommand"/>.
-        /// </summary>
-        protected MoveCommand LatestHandsInputEvaluated { get; set; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HandsDroneController"/> class.
         /// </summary>
-        /// <param name="drone">The <see cref="IControllableDrone"/> drone that we would like to control with this controller.</param>
+        /// <param name="drone">The <see cref="AbstractDrone"/> drone that we would like to control with this controller.</param>
         /// <param name="handsInputEvaluator">The desired implementation of the <see cref="IDroneControllerHandsInputEvaluator"/> interface.</param>
-        /// <param name="keyInputEvaluator">The desired implementation of the <see cref="IDroneKeyInputEvaluator"/> interface.</param>
+        /// <param name="keyInputEvaluator">The desired implementation of the <see cref="IDroneControllerKeyInputEvaluator"/> interface.</param>
         public HandsDroneController(AbstractDrone drone, IDroneControllerHandsInputEvaluator handsInputEvaluator, IDroneControllerKeyInputEvaluator keyInputEvaluator)
             : base(drone, keyInputEvaluator)
         {
             this.handsInputEvaluator = handsInputEvaluator;
         }
+
+        /// <summary>
+        /// Gets the inner hands input evaluator as a tuneable hands input evaluator.
+        /// </summary>
+        public ITuneableDroneControllerHandsInputEvaluator HandsInputEvaluator => this.handsInputEvaluator as ITuneableDroneControllerHandsInputEvaluator;
+
+        /// <summary>
+        /// Gets or sets the result of the latest hands input evaluation as <see cref="MoveCommand"/>.
+        /// </summary>
+        protected MoveCommand LatestHandsInputEvaluated { get; set; }
 
         /// <summary>
         /// Processes a hands input.
@@ -69,7 +70,7 @@
                 // unless it's a MoveCommand which represents a moving state.
                 // Why?
                 // Imagine the following scenario:
-                // The hand detector is enabled but we want to control the drone using the keyboard.               
+                // The hand detector is enabled but we want to control the drone using the keyboard.
                 // We are pressing the left key arrow (nothing else).
                 // We are going to enter the KeyboardDroneController.ProcessKeyInput method only once.
                 // Right after the key is evaluated the _latestKeyInputEvaluated is set to null.

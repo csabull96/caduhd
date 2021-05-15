@@ -8,16 +8,6 @@
     public class KeyInfo
     {
         /// <summary>
-        /// Gets the key.
-        /// </summary>
-        public Key Key { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the state of the key, whether it's down or up.
-        /// </summary>
-        public KeyState KeyState { get; set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="KeyInfo"/> class.
         /// </summary>
         /// <param name="key">The key.</param>
@@ -27,5 +17,15 @@
             this.Key = key;
             this.KeyState = keyState;
         }
+
+        /// <summary>
+        /// Gets the key.
+        /// </summary>
+        public Key Key { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the state of the key, whether it's down or up.
+        /// </summary>
+        public KeyState KeyState { get; set; }
     }
 }

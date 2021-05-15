@@ -1,11 +1,11 @@
 ﻿namespace Caduhd.Controller.InputEvaluator
 {
-    using Caduhd.Drone.Command;
-    using Caduhd.Input.Keyboard;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Windows.Input;
+    using Caduhd.Drone.Command;
+    using Caduhd.Input.Keyboard;
 
     /// <summary>
     /// The specific key input evaluator for the Tello.
